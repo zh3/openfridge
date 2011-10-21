@@ -1,17 +1,12 @@
 package com.photoshimona.openfridge;
 
-import java.io.IOException;
+
 import java.net.URL;
+import java.util.ArrayList;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
@@ -24,35 +19,26 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class MainActivity extends ListActivity {
-    String tag = "Events";
-    String[] presidents = {
-               "Dwight D. Eisenhower",
-               "John F. Kennedy",
-               "Lyndon B. Johnson",
-               "Richard Nixon",
-               "Gerald Ford",
-               "Jimmy Carter",
-               "Ronald Reagan",
-               "George H. W. Bush",
-               "Bill Clinton",
-               "George W. Bush",
-               "Barack Obama"
-       };
+    
+    //Tag for debug log
+    String tag = "Openfridge";
+    
+    //Arraylist for data from XML
+    ArrayList<String> dataArray; 
    
-   
-   //String[] presidents;     
    
    /** Called when the activity is first created. */
    @Override
    public void onCreate(Bundle savedInstanceState) {
        super.onCreate(savedInstanceState);
-       //setContentView(R.layout.main);
+
        Log.d(tag, "checkpoint");
-       getPage("test");
        
+       //This code gets the xml and sets up the SAX Parser
        try {
            /* Create a URL we want to load some xml-data from. */
-           URL url = new URL("http://openfridge.heroku.com/users/1.xml");
+           /* If you check this url, it's a mini xml from elvin's db */
+           URL url = new URL("http://openfridge.heroku.com/users.xml");
 
            /* Get a SAXParser from the SAXPArserFactory. */
            SAXParserFactory spf = SAXParserFactory.newInstance();
@@ -60,35 +46,32 @@ public class MainActivity extends ListActivity {
 
            /* Get the XMLReader of the SAXParser we created. */
            XMLReader xr = sp.getXMLReader();
+           
            /* Create a new ContentHandler and apply it to the XML-Reader*/ 
-           XMLHandler myExampleHandler = new XMLHandler();
-           xr.setContentHandler(myExampleHandler);
+           XMLHandler userXmlHandler = new XMLHandler();
+           xr.setContentHandler(userXmlHandler);
            
            /* Parse the xml-data from our URL. */
            xr.parse(new InputSource(url.openStream()));
            /* Parsing has finished. */
 
            /* Our ExampleHandler now provides the parsed data to us. */
-           String myResult =  myExampleHandler.getParsedData();
+           dataArray = userXmlHandler.getParsedData();
 
-           /* Set the result to be displayed in our GUI. */
-           presidents[0] = myResult;
            
    } catch (Exception e) {
            /* Display any Error to the GUI. */
-
+           /* [sc] I don't remember how to handle exceptions gracefully in Java. Help? */
    }
 
+       //Setup the Listview
        ListView lstView = getListView();
-       //lstView.setChoiceMode(0); //CHOICE_MODE_NONE
-       //lstView.setChoiceMode(1); //CHOICE_MODE_SINGLE
        lstView.setChoiceMode(2);   //CHOICE_MODE_MULTIPLE
        lstView.setTextFilterEnabled(true);
-       Log.d(tag, "another fucking debug msg");
-       //presidents = getResources().getStringArray(R.array.presidents_array);
        
+       //Attach our data Array to the listview
        setListAdapter(new ArrayAdapter<String>(this,
-               android.R.layout.simple_list_item_checked, presidents));
+               android.R.layout.simple_list_item_checked, dataArray));
    }
    
    public void onListItemClick(
@@ -98,28 +81,8 @@ public class MainActivity extends ListActivity {
        parent.setItemChecked(position, parent.isItemChecked(position));    
        
        Toast.makeText(this, 
-           "You have selected " + presidents[position], 
+           "You have selected " + dataArray.get(position), 
            Toast.LENGTH_SHORT).show();
    }  
    
-   private String getPage(String url) {
-       String str = "***";
-
-       try
-       {
-           HttpClient hc = new DefaultHttpClient();
-           HttpPost post = new HttpPost("http://openfridge.heroku.com/users/1.xml");
-
-           HttpResponse rp = hc.execute(post);
-
-           if(rp.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
-           {
-               str = EntityUtils.toString(rp.getEntity());
-           }
-       }catch(IOException e){
-           e.printStackTrace();
-       }  
-       Log.d(tag, str);
-       return str;
-   }
 }

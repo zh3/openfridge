@@ -1,5 +1,7 @@
 package com.photoshimona.openfridge;
 
+import java.util.ArrayList;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -10,19 +12,17 @@ public class XMLHandler extends DefaultHandler
     // ===========================================================
     // Fields
     // ===========================================================
-    
-    private boolean in_user = false;
+    private boolean in_user  = false;
     private boolean in_uname = false;
-    private String myString = "oh yeah";
-    
+    private ArrayList<String> users;
 
 
     // ===========================================================
     // Getter & Setter
     // ===========================================================
 
-    public String getParsedData() {
-        return this.myString;
+    public ArrayList<String> getParsedData() {
+        return this.users;
     }
 
     // ===========================================================
@@ -30,7 +30,7 @@ public class XMLHandler extends DefaultHandler
     // ===========================================================
     @Override
     public void startDocument() throws SAXException {
-        this.myString = "start";
+        users = new ArrayList<String>();
     }
 
     @Override
@@ -69,7 +69,7 @@ public class XMLHandler extends DefaultHandler
     @Override
     public void characters(char ch[], int start, int length) {
         if(this.in_uname){
-            this.myString = new String(ch, start, length);
+            this.users.add(new String(ch, start, length));
         }
     }
 }
