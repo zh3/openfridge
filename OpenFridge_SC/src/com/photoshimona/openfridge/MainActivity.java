@@ -11,6 +11,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +26,8 @@ public class MainActivity extends ListActivity {
     
     //Arraylist for data from XML
     ArrayList<String> dataArray; 
+    
+    
    
    
    /** Called when the activity is first created. */
@@ -32,6 +35,7 @@ public class MainActivity extends ListActivity {
    public void onCreate(Bundle savedInstanceState) {
        super.onCreate(savedInstanceState);
 
+       
        Log.d(tag, "checkpoint");
        
        //This code gets the xml and sets up the SAX Parser
@@ -83,6 +87,8 @@ public class MainActivity extends ListActivity {
        Toast.makeText(this, 
            "You have selected " + dataArray.get(position), 
            Toast.LENGTH_SHORT).show();
+       
+       startActivity(new Intent("com.photoshimona.MAIN2"));
    }  
    
 }
