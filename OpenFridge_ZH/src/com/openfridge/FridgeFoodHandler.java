@@ -9,10 +9,6 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class FridgeFoodHandler extends DefaultHandler
 {
-    
-    
-
-
     // ===========================================================
     // Getter & Setter
     // ===========================================================
@@ -27,11 +23,22 @@ public class FridgeFoodHandler extends DefaultHandler
     @Override
     public void startDocument() throws SAXException {
         foods = new ArrayList<FridgeFood>();
+        parseState = FridgeFoodTagParseState.NO_TAG;
+        clearBuffers();
     }
 
     @Override
     public void endDocument() throws SAXException {
         // Nothing to do
+    }
+    
+    private void clearBuffers() {
+        createdDateTime = "";
+        description = "";
+        expirationDate = "";
+        id = "";
+        lastUpdatedDateTime = "";
+        userId = "";
     }
 
     /** Gets be called on opening tags like: 
@@ -41,10 +48,18 @@ public class FridgeFoodHandler extends DefaultHandler
     @Override
     public void startElement(String namespaceURI, String localName,
             String qName, Attributes atts) throws SAXException {
-        if (localName.equals("user")) {
-            this.in_user = true;
-        }else if (localName.equals("uname")) {
-            this.in_uname = true;
+        if (localName.equals("created-at")) {
+            parseState = FridgeFoodTagParseState.CREATE_TIME;
+        } else if (localName.equals("desc")) {
+            parseState = FridgeFoodTagParseState.DESCRIPTION;
+        } else if (localName.equals("expiration")) {
+            parseState = FridgeFoodTagParseState.EXPIRATION;
+        } else if (localName.equals("id")) {
+            parseState = FridgeFoodTagParseState.ID;
+        } else if (localName.equals("updated-at")) {
+            parseState = FridgeFoodTagParseState.LAST_UPDATE_TIME;
+        } else if (localName.equals("user-id")) {
+            parseState = FridgeFoodTagParseState.USER_ID;
         }
     }
     
@@ -53,10 +68,12 @@ public class FridgeFoodHandler extends DefaultHandler
     @Override
     public void endElement(String namespaceURI, String localName, String qName)
             throws SAXException {
-        if (localName.equals("user")) {
-            this.in_user = false;
-        }else if (localName.equals("uname")) {
-            this.in_uname = false;
+        if (localName.equals("fridge-food")) {
+            FridgeFood newFood = new FridgeFood(createdDateTime, description, 
+                    expirationDate, id, lastUpdatedDateTime, userId);
+            this.foods.add(newFood);
+            parseState = FridgeFoodTagParseState.NO_TAG;
+            clearBuffers();
         }
     }
     
@@ -64,8 +81,26 @@ public class FridgeFoodHandler extends DefaultHandler
      * <tag>characters</tag> */
     @Override
     public void characters(char ch[], int start, int length) {
-        if(this.in_uname){
-            this.foods.add(new String(ch, start, length));
+        switch (parseState) {
+        case CREATE_TIME:
+            createdDateTime += new String(ch, start, length);
+            break;
+        case DESCRIPTION:
+            description += new String(ch, start, length);
+            break;
+        case EXPIRATION:
+            expirationDate += new String(ch, start, length);
+            break;
+        case ID:
+            id += new String(ch, start, length);
+            break;
+        case LAST_UPDATE_TIME:
+            lastUpdatedDateTime += new String(ch, start, length);
+            break;
+        case USER_ID:
+            userId += new String(ch, start, length);
+            break;
+        default:
         }
     }
     
@@ -77,6 +112,5 @@ public class FridgeFoodHandler extends DefaultHandler
     private String userId;
     
     private ArrayList<FridgeFood> foods;
-    private boolean in_user  = false;
-    private boolean in_uname = false;
+    private FridgeFoodTagParseState parseState;
 }
