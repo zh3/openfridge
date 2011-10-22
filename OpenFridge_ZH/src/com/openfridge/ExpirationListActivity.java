@@ -10,7 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class MainActivity extends ListActivity {
+public class ExpirationListActivity extends ListActivity {
     //Tag for debug log
    private static final String DEBUG_TAG = "Openfridge";
 
