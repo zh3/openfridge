@@ -4,4 +4,10 @@
     <string name="app_name">OpenFridge</string>
     <string name="exp_button">Expiration List</string>
     <string name="shopping_button">Shopping List</string>
+    <string name="EditPost_button">Edit/Postpone Item</string>
+    <string name="Done_button">Done</string>
+    <string name="Cancel_button">Cancel</string>
+    <string name="Send_Shopping">Send to Shopping List</string>
+    <string name="Item_disposed">Item was disposed</string>
+    <string name="Item_consumed">Item was consumed</string>
 </resources>
