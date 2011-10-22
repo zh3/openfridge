@@ -56,8 +56,7 @@ public class FridgeFoodDataClient {
      * 
      * @return A list of foods from the website.
      */
-    private ArrayList<FridgeFood> getFoods() throws IOException, 
-            MalformedURLException, ParserConfigurationException, SAXException {
+    private ArrayList<FridgeFood> getFoods() {
         ArrayList<FridgeFood> copy = new ArrayList<FridgeFood>();
         for (FridgeFood f: foods) {
             copy.add((FridgeFood) f.clone());

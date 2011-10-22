@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+    <Button 
+    	android:text="@string/EditPost_button" android:id="@+id/button1" android:layout_width="fill_parent" android:layout_height="75dp" onClick="EditPostponeClick"></Button>
+    <LinearLayout android:id="@+id/linearLayout2" android:layout_width="fill_parent" android:layout_height="100dp">
+        <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/textView1" android:layout_weight="2" android:textAppearance="?android:attr/textAppearanceLarge" android:text="@string/Send_Shopping"></TextView>
+        <CheckBox android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/checkBox1"></CheckBox>
+    </LinearLayout>
+    <LinearLayout android:id="@+id/linearLayout3" android:layout_width="fill_parent" android:layout_height="100dp">
+        <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/textView1" android:layout_weight="2" android:textAppearance="?android:attr/textAppearanceLarge" android:text="@string/Item_disposed"></TextView>
+        <CheckBox android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/checkBox1"></CheckBox>
+    </LinearLayout>
+    <LinearLayout android:id="@+id/linearLayout4" android:layout_width="fill_parent" android:layout_height="100dp">
+        <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/textView1" android:layout_weight="2" android:textAppearance="?android:attr/textAppearanceLarge" android:text="@string/Item_consumed"></TextView>
+        <CheckBox android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/checkBox1"></CheckBox>
+    </LinearLayout>
+	<LinearLayout android:id="@+id/linearLayout1" android:layout_height="wrap_content" android:layout_width="fill_parent">
+		<Button android:layout_width="fill_parent" android:layout_weight="1" android:text="@string/Done_button" android:id="@+id/button2" android:layout_height="75dp" onClick="DoneClick"></Button>
+		<Button android:layout_width="fill_parent" android:layout_weight="1" android:text="@string/Cancel_button" android:id="@+id/button3" android:layout_height="75dp" onClick="CancelClick"></Button>
+	</LinearLayout>
+</LinearLayout>

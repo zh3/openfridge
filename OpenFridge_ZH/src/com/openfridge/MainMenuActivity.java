@@ -1,6 +1,7 @@
 package com.openfridge;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -30,7 +31,8 @@ public class MainMenuActivity extends Activity {
 	}
 	
 	public void loadExpiration(View view){
-	    //TODO Change current activity to ExpirationListActivity
+		Intent intent = new Intent(this, ExpirationListActivity.class);
+		startActivity(intent);
 	}
 	
 	public void loadShopping(View view){
