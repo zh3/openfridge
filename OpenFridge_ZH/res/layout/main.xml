@@ -4,9 +4,21 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     >
-<TextView  
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="@string/hello"
-    />
+   	<ImageButton 
+   		android:id="@+id/Exp_button"
+		android:src="@drawable/apple_001"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:onClick="loadExpiration"
+		android:layout_weight="1"/>	
+		
+	<ImageButton 
+		android:id="@+id/Sho_button"
+		android:src="@drawable/cart"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:onClick="loadShopping"
+		android:layout_weight="1"/>	
+
+
 </LinearLayout>

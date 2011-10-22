@@ -2,4 +2,6 @@
 <resources>
     <string name="hello">Hello World, MainActivity!</string>
     <string name="app_name">OpenFridge</string>
+    <string name="exp_button">Expiration List</string>
+    <string name="shopping_button">Shopping List</string>
 </resources>
