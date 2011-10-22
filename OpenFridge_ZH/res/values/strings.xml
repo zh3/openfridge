@@ -10,4 +10,11 @@
     <string name="Send_Shopping">Send to Shopping List</string>
     <string name="Item_disposed">Item was disposed</string>
     <string name="Item_consumed">Item was consumed</string>
+    <string-array name="Common_items">
+        <item>Choose from common items:</item>
+        <item>Eggs</item>
+        <item>Milk</item>
+        <item>Cheese</item>
+        <item>Tomatoes</item>
+    </string-array>
 </resources>
