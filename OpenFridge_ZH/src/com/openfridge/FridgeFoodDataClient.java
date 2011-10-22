@@ -56,7 +56,7 @@ public class FridgeFoodDataClient {
      * 
      * @return A list of foods from the website.
      */
-    public ArrayList<FridgeFood> getFoods() throws IOException, 
+    private ArrayList<FridgeFood> getFoods() throws IOException, 
             MalformedURLException, ParserConfigurationException, SAXException {
         ArrayList<FridgeFood> copy = new ArrayList<FridgeFood>();
         for (FridgeFood f: foods) {
@@ -65,7 +65,30 @@ public class FridgeFoodDataClient {
         
         return copy;
     }
-    
+    public ArrayList<FridgeFood> getPastFoods() {
+		try {
+			return getFoods();
+		} catch (Exception e) {
+			return new ArrayList<FridgeFood>();
+		}
+}
+
+    public ArrayList<FridgeFood> getNearFoods() {
+		try {
+			return getFoods();
+		} catch (Exception e) {
+			return new ArrayList<FridgeFood>();
+		}
+}
+
+    public ArrayList<FridgeFood> getGoodFoods() {
+    		try {
+    			return getFoods();
+    		} catch (Exception e) {
+    			return new ArrayList<FridgeFood>();
+    		}
+    }
+
     /**
      * Post an item of food to the website database. If the id of the given
      * food exists already, the existing record will be updated on the website.

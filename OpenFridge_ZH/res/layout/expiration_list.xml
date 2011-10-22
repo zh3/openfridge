@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:weightSum="1">
+    <TextView android:text="Expired Food" android:id="@+id/textView1" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+	<ListView android:id="@+id/pastLV" android:layout_width="fill_parent"
+		android:layout_height="195dp" />
+	<TextView android:text="Nearly Expired" android:id="@+id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+	<ListView android:id="@+id/nearLV" android:layout_width="fill_parent"
+		android:layout_height="116dp" />
+	<TextView android:text="Good to Go" android:id="@+id/textView3" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+	<ListView android:id="@+id/goodLV" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" />
+
+</LinearLayout>
