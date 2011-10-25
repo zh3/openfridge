@@ -20,27 +20,26 @@ public class ExpirationListActivity extends Activity {
 		Log.d(DEBUG_TAG, "checkpoint");
 
 		//This code gets the xml and sets up the SAX Parser
+		FridgeFoodDataClient client = new FridgeFoodDataClient();
 		try {
-			FridgeFoodDataClient client = new FridgeFoodDataClient();
-
-			setContentView(R.layout.expiration_list);
-
-			//Attach our data Array to the listview
-
-			//TODO: need to have 3 separate arrays, but this should
-			//be wrapped in the DataClient class, not here.
-
-
-			((ListView)findViewById(R.id.pastLV)).setAdapter(new ArrayAdapter<FridgeFood>(this,
-					android.R.layout.simple_list_item_checked, client.getPastFoods()));
-			((ListView)findViewById(R.id.nearLV)).setAdapter(new ArrayAdapter<FridgeFood>(this,
-					android.R.layout.simple_list_item_checked, client.getNearFoods()));
-			((ListView)findViewById(R.id.goodLV)).setAdapter(new ArrayAdapter<FridgeFood>(this,
-					android.R.layout.simple_list_item_checked, client.getGoodFoods()));
+			client.reloadFoods();
 		} catch (Exception e) {
 			// For debugging
 			e.printStackTrace();
 		}
+
+		setContentView(R.layout.expiration_list);
+
+		//Attach our data Array to the listview
+
+
+
+		((ListView)findViewById(R.id.pastLV)).setAdapter(new ArrayAdapter<FridgeFood>(this,
+				android.R.layout.simple_list_item_checked, client.getPastFoods()));
+		((ListView)findViewById(R.id.nearLV)).setAdapter(new ArrayAdapter<FridgeFood>(this,
+				android.R.layout.simple_list_item_checked, client.getNearFoods()));
+		((ListView)findViewById(R.id.goodLV)).setAdapter(new ArrayAdapter<FridgeFood>(this,
+				android.R.layout.simple_list_item_checked, client.getGoodFoods()));
 
 	}
 

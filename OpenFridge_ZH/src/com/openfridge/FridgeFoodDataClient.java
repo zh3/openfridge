@@ -21,9 +21,8 @@ import org.xml.sax.XMLReader;
  */
 public class FridgeFoodDataClient {
     
-    public FridgeFoodDataClient() throws IOException, MalformedURLException, 
-            ParserConfigurationException, SAXException {
-        reloadFoods();
+    public FridgeFoodDataClient() {
+   
     }
     
     public void reloadFoods() throws IOException, MalformedURLException, 
