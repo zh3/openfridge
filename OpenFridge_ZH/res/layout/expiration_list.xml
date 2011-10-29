@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:fillViewport="true"
-        android:layout_weight="1">
-		<LinearLayout
+        android:layout_weight="1"
+        android:orientation="vertical">
+		<LinearLayout 
 		    android:layout_width="fill_parent"
 		    android:layout_height="wrap_content"
 		    android:orientation="horizontal" >
@@ -18,11 +18,7 @@
 		        android:text="New Item" 
 		        android:onClick="loadItemEdit"/>
 		</LinearLayout>
-	<LinearLayout
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
-	    android:orientation="vertical" android:layout_weight="1">
-	    
+    	    
 	<TextView android:text="Expired Food" android:id="@+id/textView1"
 		android:layout_width="fill_parent" android:layout_height="wrap_content" />
 	<ListView android:id="@+id/pastLV" android:layout_width="fill_parent"
@@ -35,7 +31,6 @@
 	
 	<TextView android:text="Good to Go" android:id="@+id/textView3"
 		android:layout_width="fill_parent" android:layout_height="wrap_content" />
-	<ListView android:id="@+id/goodLV" android:layout_width="fill_parent"
+    <ListView android:id="@+id/goodLV" android:layout_width="fill_parent"
 		android:layout_height="0px" android:layout_weight="1" />
 </LinearLayout>
-</ScrollView>
