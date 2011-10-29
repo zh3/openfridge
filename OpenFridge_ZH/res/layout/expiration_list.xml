@@ -16,18 +16,24 @@
 	        android:layout_weight="0.70"
 	        android:text="New Item" />
 	</LinearLayout>
-
+	<LinearLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:orientation="vertical" android:layout_weight="1">
+	    
 	<TextView android:text="Expired Food" android:id="@+id/textView1"
 		android:layout_width="fill_parent" android:layout_height="wrap_content" />
 	<ListView android:id="@+id/pastLV" android:layout_width="fill_parent"
-		android:layout_height="wrap_content" />
+		android:layout_height="0px"  android:layout_weight="2"/>
+	
 	<TextView android:text="Nearly Expired" android:id="@+id/textView2"
 		android:layout_width="fill_parent" android:layout_height="wrap_content" />
 	<ListView android:id="@+id/nearLV" android:layout_width="fill_parent"
-		android:layout_height="wrap_content" />
+		android:layout_height="0px"  android:layout_weight="1"/>
+	
 	<TextView android:text="Good to Go" android:id="@+id/textView3"
 		android:layout_width="fill_parent" android:layout_height="wrap_content" />
 	<ListView android:id="@+id/goodLV" android:layout_width="fill_parent"
-		android:layout_height="wrap_content" />
-
+		android:layout_height="0px" android:layout_weight="1" />
+</LinearLayout>
 </LinearLayout>

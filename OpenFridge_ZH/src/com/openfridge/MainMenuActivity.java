@@ -25,7 +25,7 @@ public class MainMenuActivity extends Activity {
 	}
 	
 	public int getShoppingColor(){
-		//TODO Use this method to check the state of the shopping listand return the appropriate color to set the button
+		//TODO Use this method to check the state of the shopping list and return the appropriate color to set the button
 		
 		return Color.parseColor("#FFFFFF");
 	}

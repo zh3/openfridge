@@ -35,14 +35,17 @@ public class ExpirationListActivity extends Activity {
 
 
 		((ListView)findViewById(R.id.pastLV)).setAdapter(new ArrayAdapter<FridgeFood>(this,
-				android.R.layout.simple_list_item_checked, client.getPastFoods()));
+				R.layout.expiration_list_item, R.id.text, client.getPastFoods()));
 		((ListView)findViewById(R.id.nearLV)).setAdapter(new ArrayAdapter<FridgeFood>(this,
-				android.R.layout.simple_list_item_checked, client.getNearFoods()));
+				R.layout.expiration_list_item, R.id.text, client.getNearFoods()));
 		((ListView)findViewById(R.id.goodLV)).setAdapter(new ArrayAdapter<FridgeFood>(this,
-				android.R.layout.simple_list_item_checked, client.getGoodFoods()));
+				R.layout.expiration_list_item, R.id.text, client.getGoodFoods()));
 
 	}
-
+	 public void removeItem(View view) {
+		 Toast.makeText(this, "remove clicked!", 
+					Toast.LENGTH_SHORT).show();
+	 }
 	public void onListItemClick(
 			ListView parent, View v, int position, long id) 
 	{   
