@@ -5,14 +5,17 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
 public class ExpirationListActivity extends Activity {
 	//Tag for debug log
 	private static final String DEBUG_TAG = "Openfridge";
-
+	private static final int ROW_HEIGHT = 100;
+	
 	/** Called when the activity is first created. */
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -52,5 +55,16 @@ public class ExpirationListActivity extends Activity {
         listView.setAdapter(new ArrayAdapter<FridgeFood>(this,
                 android.R.layout.simple_list_item_checked, foods));
         listView.setOnItemClickListener(listener);
+        
+        ListAdapter listAdapter = listView.getAdapter();
+
+        int rows = listAdapter.getCount();
+        int height = ROW_HEIGHT * rows;
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = height;
+        listView.setLayoutParams(params);
+        listView.requestLayout();
+
 	}
 }
