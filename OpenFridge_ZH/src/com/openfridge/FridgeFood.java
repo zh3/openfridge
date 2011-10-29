@@ -1,6 +1,7 @@
 package com.openfridge;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
 
@@ -12,6 +13,7 @@ import java.util.Scanner;
  *
  */
 public class FridgeFood implements Cloneable {
+    private static final int YEAR_OFFSET = 1900;
     
     public FridgeFood(String creationDateTimeString, String descriptionString, 
             String expirationDateString, String idString, 
@@ -78,7 +80,9 @@ public class FridgeFood implements Cloneable {
     }
     
     public String getExpirationDateString() {
-        return expirationDate.toString();
+        return expirationDate.get(Calendar.YEAR) + "-" 
+                + expirationDate.get(Calendar.MONTH) + "-" 
+                + expirationDate.get(Calendar.DAY_OF_MONTH);
     }
     
     public int getId() {

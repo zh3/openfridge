@@ -1,19 +1,19 @@
 package com.openfridge;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class ExpirationListActivity extends Activity {
 	//Tag for debug log
 	private static final String DEBUG_TAG = "Openfridge";
 
 	/** Called when the activity is first created. */
-	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -29,30 +29,28 @@ public class ExpirationListActivity extends Activity {
 
 			//TODO: need to have 3 separate arrays, but this should
 			//be wrapped in the DataClient class, not here.
-
-
-			((ListView)findViewById(R.id.pastLV)).setAdapter(new ArrayAdapter<FridgeFood>(this,
-					android.R.layout.simple_list_item_checked, client.getPastFoods()));
-			((ListView)findViewById(R.id.nearLV)).setAdapter(new ArrayAdapter<FridgeFood>(this,
-					android.R.layout.simple_list_item_checked, client.getNearFoods()));
-			((ListView)findViewById(R.id.goodLV)).setAdapter(new ArrayAdapter<FridgeFood>(this,
-					android.R.layout.simple_list_item_checked, client.getGoodFoods()));
+			//Setup the Listview
+			
+			initFridgeFoodListView(R.id.pastLV, client.getPastFoods(), 
+			        new PastFridgeItemClickListener());
+			initFridgeFoodListView(R.id.nearLV, client.getPastFoods(), 
+                    new PastFridgeItemClickListener());
+			initFridgeFoodListView(R.id.goodLV, client.getPastFoods(), 
+                    new PastFridgeItemClickListener());
 		} catch (Exception e) {
 			// For debugging
 			e.printStackTrace();
 		}
 
 	}
-
-	public void onListItemClick(
-			ListView parent, View v, int position, long id) 
-	{   
-		//---toggle the check displayed next to the item---
-		parent.setItemChecked(position, parent.isItemChecked(position));    
-
-		if (parent.isItemChecked(position)) {
-			Toast.makeText(this, "hahaha", 
-					Toast.LENGTH_SHORT).show();
-		}
-	}  
+	
+	private void initFridgeFoodListView(int viewId, ArrayList<FridgeFood> foods,
+	        OnItemClickListener listener) {
+	    ListView listView = (ListView) findViewById(viewId);
+        listView.setChoiceMode(2);   //CHOICE_MODE_MULTIPLE
+        listView.setTextFilterEnabled(true);
+        listView.setAdapter(new ArrayAdapter<FridgeFood>(this,
+                android.R.layout.simple_list_item_checked, foods));
+        listView.setOnItemClickListener(listener);
+	}
 }
