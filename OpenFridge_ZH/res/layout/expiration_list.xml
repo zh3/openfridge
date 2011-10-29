@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical" android:layout_width="fill_parent"
-	android:layout_height="fill_parent" android:weightSum="1">
-
-	<LinearLayout
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="horizontal" >
-
-	    <Button
-	        android:id="@+id/newItemButton"
-	        android:layout_width="wrap_content"
-	        android:layout_height="fill_parent"
-	        android:layout_gravity="right"
-	        android:layout_weight="0.70"
-	        android:text="New Item" />
-	</LinearLayout>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:fillViewport="true"
+        android:layout_weight="1">
+		<LinearLayout
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="horizontal" >
+	
+		    <Button
+		        android:id="@+id/newItemButton"
+		        android:layout_width="wrap_content"
+		        android:layout_height="fill_parent"
+		        android:layout_gravity="right"
+		        android:layout_weight="0.70"
+		        android:text="New Item" 
+		        android:onClick="loadItemEdit"/>
+		</LinearLayout>
 	<LinearLayout
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"
@@ -36,4 +38,4 @@
 	<ListView android:id="@+id/goodLV" android:layout_width="fill_parent"
 		android:layout_height="0px" android:layout_weight="1" />
 </LinearLayout>
-</LinearLayout>
+</ScrollView>
