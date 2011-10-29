@@ -9,7 +9,7 @@ import android.widget.Spinner;
 public class ItemEditActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.itemedit);
+        setContentView(R.layout.item_edit);
         
         Spinner spinner = (Spinner) findViewById(R.id.common_items_dropdown);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
@@ -18,7 +18,7 @@ public class ItemEditActivity extends Activity {
         spinner.setAdapter(adapter);
     }
 	
-	public void DoneEditClick(View view){
+	public void doneEditClick(View view){
 		//TODO Add done button click functionality
 	}
 }

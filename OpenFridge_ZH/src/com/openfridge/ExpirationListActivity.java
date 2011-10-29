@@ -3,8 +3,10 @@ package com.openfridge;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -66,5 +68,10 @@ public class ExpirationListActivity extends Activity {
         listView.setLayoutParams(params);
         listView.requestLayout();
 
+	}
+	
+	public void loadItemEdit(View view) {
+	    Intent intent = new Intent(this, ItemEditActivity.class);
+        startActivity(intent);
 	}
 }

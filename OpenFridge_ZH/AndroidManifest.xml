@@ -13,6 +13,7 @@
 			</intent-filter>
 		</activity>
 		<activity android:name="ExpirationListActivity" android:launchMode="standard"></activity>
+		<activity android:name="ItemEditActivity"></activity>
 
 	</application>
 </manifest>

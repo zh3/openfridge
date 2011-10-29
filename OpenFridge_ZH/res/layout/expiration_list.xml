@@ -18,7 +18,8 @@
 		        android:layout_height="fill_parent"
 		        android:layout_gravity="right"
 		        android:layout_weight="0.70"
-		        android:text="New Item" />
+		        android:text="New Item" 
+		        android:onClick="loadItemEdit"/>
 		</LinearLayout>
 	
 		<TextView android:text="Expired Food" android:id="@+id/textView1"
