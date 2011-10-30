@@ -15,6 +15,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class ExpirationListActivity extends Activity {
+    private static final int ROW_HEIGHT = 100;
+    
 	// Tag for debug log
 	private static final String DEBUG_TAG = "Openfridge";
 
@@ -56,12 +58,15 @@ public class ExpirationListActivity extends Activity {
 		listView.setTextFilterEnabled(true);
 		listView.setAdapter(new ArrayAdapter<FridgeFood>(this,
 				R.layout.expiration_list_item, R.id.text, foods));
-		//listView.setOnItemClickListener(listener);
+		listView.setOnItemClickListener(listener);
 		
         ListAdapter listAdapter = listView.getAdapter();
 
         int rows = listAdapter.getCount();
-        int height = android.R.attr.listPreferredItemHeight * rows;
+        //int height = android.R.attr.listPreferredItemHeight * rows;
+        // for some reason listPreferredItemHeight didn't have a reasonable
+        // value...
+        int height = ROW_HEIGHT * rows;
 
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         params.height = height;
