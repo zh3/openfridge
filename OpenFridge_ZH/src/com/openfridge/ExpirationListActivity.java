@@ -60,6 +60,9 @@ public class ExpirationListActivity extends Activity {
 				R.layout.expiration_list_item, R.id.text, foods));
 		listView.setOnItemClickListener(listener);
 		
+		// Make items not focusable to avoid listitem / button conflicts
+		listView.setItemsCanFocus(false);
+		
         ListAdapter listAdapter = listView.getAdapter();
 
         int rows = listAdapter.getCount();

@@ -13,16 +13,11 @@ public class PastFridgeItemClickListener implements OnItemClickListener {
         if (parent.getClass() == ListView.class) {
             ListView parentList = (ListView) parent;
             
-            //---toggle the check displayed next to the item---
-            parentList.setItemChecked(position, 
-                    parentList.isItemChecked(position));  
+            FridgeFood food = (FridgeFood) parentList.getItemAtPosition(position);
+            Toast.makeText(parentList.getContext(), 
+                    "Expiration Date: " + food.getExpirationDateString(), 
+                    Toast.LENGTH_SHORT).show();
             
-            if (parentList.isItemChecked(position)) {
-                FridgeFood food = (FridgeFood) parentList.getItemAtPosition(position);
-                Toast.makeText(parentList.getContext(), 
-                        "Expiration Date: " + food.getExpirationDateString(), 
-                        Toast.LENGTH_SHORT).show();
-            }
         }
     }
 
