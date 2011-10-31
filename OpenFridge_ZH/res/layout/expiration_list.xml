@@ -1,41 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_weight="1"
-        android:fillViewport="true">
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_weight="1"
-        android:orientation="vertical">
-		<LinearLayout 
-		    android:layout_width="fill_parent"
-		    android:layout_height="wrap_content"
-		    android:orientation="horizontal" >
-		    <Button
-		        android:id="@+id/newItemButton"
-		        android:layout_width="wrap_content"
-		        android:layout_height="fill_parent"
-		        android:layout_gravity="right"
-		        android:layout_weight="0.70"
-		        android:text="New Item" 
-		        android:onClick="loadItemEdit"/>
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:layout_weight="1" android:fillViewport="true">
+
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="fill_parent" android:layout_height="fill_parent"
+		android:layout_weight="1" android:orientation="vertical">
+
+		<LinearLayout android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:orientation="horizontal">
+
+			<Button android:id="@+id/newItemButton" android:layout_width="wrap_content"
+				android:layout_height="fill_parent" android:layout_gravity="right"
+				android:layout_weight="0.70" android:onClick="loadItemEdit"
+				android:text="New Item" />
 		</LinearLayout>
-    	    
-	<TextView android:text="Expired Food" android:id="@+id/textView1"
-		android:layout_width="fill_parent" android:layout_height="wrap_content" />
-	<ListView android:id="@+id/pastLV" android:layout_width="fill_parent"
-		android:layout_height="0px"  android:layout_weight="2"/>
-	
-	<TextView android:text="Nearly Expired" android:id="@+id/textView2"
-		android:layout_width="fill_parent" android:layout_height="wrap_content" />
-	<ListView android:id="@+id/nearLV" android:layout_width="fill_parent"
-		android:layout_height="0px"  android:layout_weight="1"/>
-	
-	<TextView android:text="Good to Go" android:id="@+id/textView3"
-		android:layout_width="fill_parent" android:layout_height="wrap_content" />
-    <ListView android:id="@+id/goodLV" android:layout_width="fill_parent"
-		android:layout_height="0px" android:layout_weight="1" />
-</LinearLayout>
+
+		<TextView android:id="@+id/textView1" android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:text="Expired Food" />
+
+		<ListView android:id="@+id/pastLV" android:layout_width="fill_parent"
+			android:layout_height="0px" android:layout_weight="2"
+			>
+		    <!-- Preview: listitem=@layout/expiration_list_item -->
+		</ListView>
+		<!-- red: #ED1C24 -->
+		<TextView android:id="@+id/textView2" android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:text="Nearly Expired" 
+			android:background="#FFD300"/>
+
+		<ListView android:id="@+id/nearLV" android:layout_width="fill_parent"
+			android:layout_height="0px" android:layout_weight="1"
+			android:background="#FFD300"
+			/>
+
+		<TextView android:id="@+id/textView3" android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:text="Good to Go" 
+			android:background="#228B22"/>
+
+		<ListView android:id="@+id/goodLV" android:layout_width="fill_parent"
+			android:layout_height="0px" android:layout_weight="1" 
+			android:background="#228B22"/>
+	</LinearLayout>
+
 </ScrollView>
