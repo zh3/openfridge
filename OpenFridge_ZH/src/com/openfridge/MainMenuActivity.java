@@ -21,7 +21,7 @@ public class MainMenuActivity extends Activity {
 	public int getExpiredColor(){
 		//TODO Use this method to check the state of expired goods and return the appropriate color to set the button
 		
-		return Color.parseColor("#00DD00");
+		return Color.parseColor("#FFD300");
 	}
 	
 	public int getShoppingColor(){

@@ -1,6 +1,8 @@
 package com.openfridge;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -34,12 +36,25 @@ public class ExpirationListActivity extends Activity {
 
 			setContentView(R.layout.expiration_list);
 			// Setup the Listview
+			List<FridgeFood> good = Arrays.asList(new FridgeFood("2011-10-28",
+					"Milk", "2011-11-01", "2", "2011-10-28", "1"),
+					new FridgeFood("2011-10-28", "Eggs", "2011-11-01", "2",
+							"2011-10-28", "1"), new FridgeFood("2011-10-28",
+							"Leftovers", "2011-11-01", "2", "2011-10-28", "1"),
+					new FridgeFood("2011-10-28", "Kale", "2011-11-01", "2",
+							"2011-10-28", "1"), new FridgeFood("2011-10-28",
+							"Beef", "2011-11-01", "2", "2011-10-28", "1")
 
-			initFridgeFoodListView(R.id.pastLV, client.getPastFoods(),
+			);
+			List<FridgeFood> nearly = Arrays.asList(
+					new FridgeFood("2011-10-28","Leftovers",
+							"2011-11-01", "1","2011-10-28","1"));
+			List<FridgeFood> past = Collections.<FridgeFood>emptyList();
+			initFridgeFoodListView(R.id.pastLV, past,
 					new PastFridgeItemClickListener());
-			initFridgeFoodListView(R.id.nearLV, client.getPastFoods(),
+			initFridgeFoodListView(R.id.nearLV, nearly,
 					new PastFridgeItemClickListener());
-			initFridgeFoodListView(R.id.goodLV, client.getPastFoods(),
+			initFridgeFoodListView(R.id.goodLV, good,
 					new PastFridgeItemClickListener());
 		} catch (Exception e) {
 			// For debugging
@@ -53,7 +68,7 @@ public class ExpirationListActivity extends Activity {
 	}
 
 	private void initFridgeFoodListView(int viewId,
-			ArrayList<FridgeFood> foods, OnItemClickListener listener) {
+			List<FridgeFood> foods, OnItemClickListener listener) {
 		ListView listView = (ListView) findViewById(viewId);
 		listView.setTextFilterEnabled(true);
 		listView.setAdapter(new ArrayAdapter<FridgeFood>(this,
@@ -75,7 +90,6 @@ public class ExpirationListActivity extends Activity {
         params.height = height;
         listView.setLayoutParams(params);
         listView.requestLayout();
-
 	}
 
 	public void loadItemEdit(View view) {
