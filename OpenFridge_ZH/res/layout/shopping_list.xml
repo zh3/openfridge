@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/shoppingTitle" />
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
 
     <Button
         android:id="@+id/newItemButton"
@@ -14,6 +10,11 @@
         android:layout_height="wrap_content"
         android:onClick="loadItemEdit"
         android:text="@string/New_Item" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/shoppingTitle" />
 
     <ListView
         android:id="@+id/shoppingLV"

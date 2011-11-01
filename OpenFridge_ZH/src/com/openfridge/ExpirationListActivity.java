@@ -16,8 +16,8 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 public class ExpirationListActivity extends Activity {
-    private static final int ROW_HEIGHT = 100;
-    
+	private static final int ROW_HEIGHT = 100;
+
 	// Tag for debug log
 	private static final String DEBUG_TAG = "Openfridge";
 
@@ -32,34 +32,32 @@ public class ExpirationListActivity extends Activity {
 		FridgeFoodDataClient client = new FridgeFoodDataClient();
 		try {
 			client.reloadFoods();
-
-			setContentView(R.layout.expiration_list);
-			// Setup the Listview
-			List<FridgeFood> good = Arrays.asList(new FridgeFood("2011-10-28",
-					"Milk", "2011-11-01", "2", "2011-10-28", "1"),
-					new FridgeFood("2011-10-28", "Eggs", "2011-11-01", "2",
-							"2011-10-28", "1"), new FridgeFood("2011-10-28",
-							"Leftovers", "2011-11-01", "2", "2011-10-28", "1"),
-					new FridgeFood("2011-10-28", "Kale", "2011-11-01", "2",
-							"2011-10-28", "1"), new FridgeFood("2011-10-28",
-							"Beef", "2011-11-01", "2", "2011-10-28", "1")
-
-			);
-			List<FridgeFood> nearly = Arrays.asList(
-					new FridgeFood("2011-10-28","Leftovers",
-							"2011-11-01", "1","2011-10-28","1"));
-			List<FridgeFood> past = Collections.<FridgeFood>emptyList();
-			initFridgeFoodListView(R.id.pastLV, past,
-					new PastFridgeItemClickListener());
-			initFridgeFoodListView(R.id.nearLV, nearly,
-					new PastFridgeItemClickListener());
-			initFridgeFoodListView(R.id.goodLV, good,
-					new PastFridgeItemClickListener());
 		} catch (Exception e) {
 			// For debugging
 			e.printStackTrace();
 		}
+		setContentView(R.layout.expiration_list);
+		// Setup the Listview
+		List<FridgeFood> good = Arrays.asList(new FridgeFood("2011-10-28",
+				"Milk", "2011-11-01", "2", "2011-10-28", "1"), new FridgeFood(
+				"2011-10-28", "Eggs", "2011-11-01", "2", "2011-10-28", "1"),
+				new FridgeFood("2011-10-28", "Leftovers", "2011-11-01", "2",
+						"2011-10-28", "1"), new FridgeFood("2011-10-28",
+						"Kale", "2011-11-01", "2", "2011-10-28", "1"),
+				new FridgeFood("2011-10-28", "Beef", "2011-11-01", "2",
+						"2011-10-28", "1")
 
+		);
+		List<FridgeFood> nearly = Arrays.asList(new FridgeFood("2011-10-28",
+				"Leftovers", "2011-11-01", "1", "2011-10-28", "1"));
+		List<FridgeFood> past = Collections.<FridgeFood> emptyList();
+		
+		initFridgeFoodListView(R.id.pastLV, past,
+				new PastFridgeItemClickListener());
+		initFridgeFoodListView(R.id.nearLV, nearly,
+				new PastFridgeItemClickListener());
+		initFridgeFoodListView(R.id.goodLV, good,
+				new PastFridgeItemClickListener());
 	}
 
 	public void removeItem(View view) {
@@ -67,29 +65,29 @@ public class ExpirationListActivity extends Activity {
 		startActivity(intent);
 	}
 
-	private void initFridgeFoodListView(int viewId,
-			List<FridgeFood> foods, OnItemClickListener listener) {
+	private void initFridgeFoodListView(int viewId, List<FridgeFood> foods,
+			OnItemClickListener listener) {
 		ListView listView = (ListView) findViewById(viewId);
 		listView.setTextFilterEnabled(true);
 		listView.setAdapter(new ArrayAdapter<FridgeFood>(this,
 				R.layout.list_item_with_remove, R.id.text, foods));
 		listView.setOnItemClickListener(listener);
-		
+
 		// Make items not focusable to avoid listitem / button conflicts
 		listView.setItemsCanFocus(false);
-		
-        ListAdapter listAdapter = listView.getAdapter();
 
-        int rows = listAdapter.getCount();
-        //int height = android.R.attr.listPreferredItemHeight * rows;
-        // for some reason listPreferredItemHeight didn't have a reasonable
-        // value...
-        int height = ROW_HEIGHT * rows;
+		ListAdapter listAdapter = listView.getAdapter();
 
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = height;
-        listView.setLayoutParams(params);
-        listView.requestLayout();
+		int rows = listAdapter.getCount();
+		// int height = android.R.attr.listPreferredItemHeight * rows;
+		// for some reason listPreferredItemHeight didn't have a reasonable
+		// value...
+		int height = ROW_HEIGHT * rows;
+
+		ViewGroup.LayoutParams params = listView.getLayoutParams();
+		params.height = height;
+		listView.setLayoutParams(params);
+		listView.requestLayout();
 	}
 
 	public void loadItemEdit(View view) {
