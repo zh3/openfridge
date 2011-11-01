@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/shoppingTitle" />
+
+    <Button
+        android:id="@+id/newItemButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:onClick="loadItemEdit"
+        android:text="@string/New_Item" />
+
+    <ListView
+        android:id="@+id/shoppingLV"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <!-- Preview: listitem=@layout/list_item_with_remove -->
+    </ListView>
+
+</LinearLayout>
