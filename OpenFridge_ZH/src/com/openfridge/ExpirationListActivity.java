@@ -14,7 +14,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class ExpirationListActivity extends Activity {
     private static final int ROW_HEIGHT = 100;
@@ -64,7 +63,8 @@ public class ExpirationListActivity extends Activity {
 	}
 
 	public void removeItem(View view) {
-		Toast.makeText(this, "remove clicked!", Toast.LENGTH_SHORT).show();
+		Intent intent = new Intent(this, ExpireActivity.class);
+		startActivity(intent);
 	}
 
 	private void initFridgeFoodListView(int viewId,

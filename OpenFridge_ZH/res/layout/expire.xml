@@ -1,25 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    >
-    <Button 
-    	android:text="@string/EditPost_button" android:id="@+id/button1" android:layout_width="fill_parent" android:layout_height="75dp" onClick="EditPostponeClick"></Button>
-    <LinearLayout android:id="@+id/linearLayout2" android:layout_width="fill_parent" android:layout_height="100dp">
-        <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/textView1" android:layout_weight="2" android:textAppearance="?android:attr/textAppearanceLarge" android:text="@string/Send_Shopping"></TextView>
-        <CheckBox android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/checkBox1"></CheckBox>
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="fill_parent"
+        android:layout_height="75dp"
+        onClick="EditPostponeClick"
+        android:text="@string/EditPost_button" >
+    </Button>
+
+    <CheckBox
+        android:id="@+id/checkBox1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Send_Shopping"
+        android:textAppearance="?android:attr/textAppearanceLarge" >
+    </CheckBox>
+
+    <RadioGroup
+        android:id="@+id/radioGroup1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <RadioButton
+            android:id="@+id/radioButton1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Item_disposed"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <RadioButton
+            android:id="@+id/radioButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Item_consumed"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </RadioGroup>
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="fill_parent"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            onClick="DoneClick"
+            android:text="@string/Done_button" >
+        </Button>
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="fill_parent"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            onClick="CancelClick"
+            android:text="@string/Cancel_button" >
+        </Button>
     </LinearLayout>
-    <LinearLayout android:id="@+id/linearLayout3" android:layout_width="fill_parent" android:layout_height="100dp">
-        <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/textView1" android:layout_weight="2" android:textAppearance="?android:attr/textAppearanceLarge" android:text="@string/Item_disposed"></TextView>
-        <CheckBox android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/checkBox1"></CheckBox>
-    </LinearLayout>
-    <LinearLayout android:id="@+id/linearLayout4" android:layout_width="fill_parent" android:layout_height="100dp">
-        <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/textView1" android:layout_weight="2" android:textAppearance="?android:attr/textAppearanceLarge" android:text="@string/Item_consumed"></TextView>
-        <CheckBox android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/checkBox1"></CheckBox>
-    </LinearLayout>
-	<LinearLayout android:id="@+id/linearLayout1" android:layout_height="wrap_content" android:layout_width="fill_parent">
-		<Button android:layout_width="fill_parent" android:layout_weight="1" android:text="@string/Done_button" android:id="@+id/button2" android:layout_height="75dp" onClick="DoneClick"></Button>
-		<Button android:layout_width="fill_parent" android:layout_weight="1" android:text="@string/Cancel_button" android:id="@+id/button3" android:layout_height="75dp" onClick="CancelClick"></Button>
-	</LinearLayout>
+
 </LinearLayout>
