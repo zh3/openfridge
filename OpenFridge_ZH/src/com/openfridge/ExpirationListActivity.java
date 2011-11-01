@@ -72,7 +72,7 @@ public class ExpirationListActivity extends Activity {
 		ListView listView = (ListView) findViewById(viewId);
 		listView.setTextFilterEnabled(true);
 		listView.setAdapter(new ArrayAdapter<FridgeFood>(this,
-				R.layout.expiration_list_item, R.id.text, foods));
+				R.layout.list_item_with_remove, R.id.text, foods));
 		listView.setOnItemClickListener(listener);
 		
 		// Make items not focusable to avoid listitem / button conflicts

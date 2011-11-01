@@ -21,6 +21,7 @@
         </activity>
         <activity android:name="ItemEditActivity"></activity>
         <activity android:name="ExpireActivity"></activity>
+        <activity android:name="ShoppingListActivity"></activity>
     </application>
 
 </manifest>

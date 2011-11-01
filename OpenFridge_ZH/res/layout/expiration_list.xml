@@ -12,20 +12,12 @@
         android:layout_weight="1"
         android:orientation="vertical" >
 
-        <LinearLayout
+        <Button
+            android:id="@+id/newItemButton"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <Button
-                android:id="@+id/newItemButton"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_gravity="right"
-                android:layout_weight="0.70"
-                android:onClick="loadItemEdit"
-                android:text="@string/New_Item" />
-        </LinearLayout>
+            android:onClick="loadItemEdit"
+            android:text="@string/New_Item" />
 
         <TextView
             android:id="@+id/textView1"
@@ -39,7 +31,7 @@
             android:layout_height="0px"
             android:layout_weight="2" >
 
-            <!-- Preview: listitem=@layout/expiration_list_item -->
+            <!-- Preview: listitem=@layout/list_item_with_remove -->
         </ListView>
         <!-- red: #ED1C24 -->
 
@@ -55,7 +47,10 @@
             android:layout_width="fill_parent"
             android:layout_height="0px"
             android:layout_weight="1"
-            android:background="#FFD300" />
+            android:background="#FFD300" >
+
+            <!-- Preview: listitem=@layout/list_item_with_remove -->
+        </ListView>
 
         <TextView
             android:id="@+id/textView3"
@@ -69,7 +64,10 @@
             android:layout_width="fill_parent"
             android:layout_height="0px"
             android:layout_weight="1"
-            android:background="#228B22" />
+            android:background="#228B22" >
+
+            <!-- Preview: listitem=@layout/list_item_with_remove -->
+        </ListView>
     </LinearLayout>
 
 </ScrollView>

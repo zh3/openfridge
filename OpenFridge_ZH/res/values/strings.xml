@@ -14,7 +14,7 @@
     <string name="expiredTitle">Spoiled Food</string>
     <string name="nearlyTitle">Old Food</string>
     <string name="goodTitle">Fresh Food</string>
-
+<string name="shoppingTitle">Shopping List</string>
     <string-array name="Common_items">
         <item>Choose from common items:</item>
         <item>Eggs</item>
