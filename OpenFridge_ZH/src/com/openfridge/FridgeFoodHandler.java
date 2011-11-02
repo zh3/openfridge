@@ -6,6 +6,8 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import android.util.Log;
+
 
 public class FridgeFoodHandler extends DefaultHandler
 {
@@ -13,8 +15,16 @@ public class FridgeFoodHandler extends DefaultHandler
     // Getter & Setter
     // ===========================================================
 
-    public ArrayList<FridgeFood> getParsedData() {
-        return this.foods;
+    public ArrayList<FridgeFood> getGoodFoods() {
+        return goodFoods;
+    }
+    
+    public ArrayList<FridgeFood> getNearFoods() {
+        return nearFoods;
+    }
+    
+    public ArrayList<FridgeFood> getExpiredFoods() {
+        return expiredFoods;
     }
 
     // ===========================================================
@@ -22,8 +32,12 @@ public class FridgeFoodHandler extends DefaultHandler
     // ===========================================================
     @Override
     public void startDocument() throws SAXException {
-        foods = new ArrayList<FridgeFood>();
+        goodFoods = new ArrayList<FridgeFood>();
+        nearFoods = new ArrayList<FridgeFood>();
+        expiredFoods = new ArrayList<FridgeFood>();
+        
         parseState = FridgeFoodTagParseState.NO_TAG;
+        expirationState = FridgeFoodExpirationParseState.NO_EXPIRATION_STATE;
         clearBuffers();
     }
 
@@ -58,8 +72,14 @@ public class FridgeFoodHandler extends DefaultHandler
             parseState = FridgeFoodTagParseState.ID;
         } else if (localName.equals("updated-at")) {
             parseState = FridgeFoodTagParseState.LAST_UPDATE_TIME;
-        } else if (localName.equals("user-id")) {
+        } else if (localName.equals("user_id")) {
             parseState = FridgeFoodTagParseState.USER_ID;
+        } else if (localName.equals("good")) {
+            expirationState = FridgeFoodExpirationParseState.GOOD;
+        } else if (localName.equals("near")) {
+            expirationState = FridgeFoodExpirationParseState.NEAR;
+        } else if (localName.equals("expired")) {
+            expirationState = FridgeFoodExpirationParseState.EXPIRED;
         }
     }
     
@@ -68,10 +88,31 @@ public class FridgeFoodHandler extends DefaultHandler
     @Override
     public void endElement(String namespaceURI, String localName, String qName)
             throws SAXException {
-        if (localName.equals("fridge-food")) {
-            FridgeFood newFood = new FridgeFood(createdDateTime, description, 
-                    expirationDate, id, lastUpdatedDateTime, userId);
-            this.foods.add(newFood);
+        if (localName.equals("food")) {
+            // Uncomment for long format FridgeFood record
+            //FridgeFood newFood = new FridgeFood(createdDateTime, description, 
+            //        expirationDate, id, lastUpdatedDateTime, userId);
+            
+            FridgeFood newFood = new FridgeFood(description, expirationDate, 
+                    userId);
+            
+            switch (expirationState) {
+            case NEAR:
+                Log.d("food", "added near food");
+                nearFoods.add(newFood);
+                break;
+            case GOOD:
+                Log.d("food", "added good food");
+                goodFoods.add(newFood);
+                break;
+            case EXPIRED:
+                Log.d("food", "added expired food");
+                expiredFoods.add(newFood);
+                break;
+            default:
+                throw new RuntimeException();
+            }
+            
             parseState = FridgeFoodTagParseState.NO_TAG;
             clearBuffers();
         }
@@ -111,6 +152,9 @@ public class FridgeFoodHandler extends DefaultHandler
     private String lastUpdatedDateTime;
     private String userId;
     
-    private ArrayList<FridgeFood> foods;
+    private ArrayList<FridgeFood> goodFoods;
+    private ArrayList<FridgeFood> nearFoods;
+    private ArrayList<FridgeFood> expiredFoods;
     private FridgeFoodTagParseState parseState;
+    private FridgeFoodExpirationParseState expirationState;
 }

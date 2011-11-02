@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
 
+import android.util.Log;
+
 /**
  * Encapsulates the data associated with an item of food, including description
  * and expiry date.
@@ -12,6 +14,15 @@ import java.util.Scanner;
  *
  */
 public class FridgeFood implements Cloneable {
+    
+    public FridgeFood(String descriptionString, String expirationDateString,
+                      String userIdString) {
+        description = descriptionString.trim();
+        userId = Integer.parseInt(userIdString.trim());
+        expirationDate = parseSimpleDateTime(expirationDateString);
+        lastUpdateDateTime = null;
+        creationDateTime = null;
+    }
     
     public FridgeFood(String creationDateTimeString, String descriptionString, 
             String expirationDateString, String idString, 
@@ -50,6 +61,23 @@ public class FridgeFood implements Cloneable {
         int second = s.nextInt();
         
         return new GregorianCalendar(year, month, day, hour, minute, second);
+    }
+    
+    /**
+     * Parse a simple date time string into a GregorianCalendar object
+     * 
+     * @param dateTime A date time string in the form YYYY-MM-DD
+     * @return a GregorianCalendar object representing the given string
+     */
+    public static GregorianCalendar parseSimpleDateTime(String dateTime) {
+        String spacedDateTime = getSpaceDelimitedDateTime(dateTime);
+        Scanner s = new Scanner(spacedDateTime);
+        
+        int year = s.nextInt();
+        int month = s.nextInt();
+        int day = s.nextInt();
+        
+        return new GregorianCalendar(year, month, day);
     }
     
     private static String getSpaceDelimitedDateTime(String xmlDateTime) {
@@ -130,10 +158,21 @@ public class FridgeFood implements Cloneable {
     public Object clone() {
         try {
             FridgeFood o = (FridgeFood) super.clone();
-            o.creationDateTime = (GregorianCalendar) creationDateTime.clone();
+            o.creationDateTime = null;
+            o.lastUpdateDateTime = null;
+            
+            if (creationDateTime != null) {
+                o.creationDateTime 
+                    = (GregorianCalendar) creationDateTime.clone();
+            }
+            
+            if (lastUpdateDateTime != null) {
+                o.lastUpdateDateTime 
+                    = (GregorianCalendar) lastUpdateDateTime.clone();
+            }
+            
             o.expirationDate = (GregorianCalendar) expirationDate.clone();
-            o.lastUpdateDateTime 
-                = (GregorianCalendar) lastUpdateDateTime.clone();
+            
             return o;
         } catch (CloneNotSupportedException e) {
             // Should never happen
