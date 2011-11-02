@@ -94,8 +94,16 @@ public class FridgeFoodDataClient {
      * @param food The FridgeFood object with the fields to be posted to
      * database.
      */
-    public void postFood(FridgeFood food) {
-        // TODO need elvin
+    public void postFood(FridgeFood food) throws MalformedURLException, 
+            IOException {
+        String urlString 
+            = "http://openfridge.heroku.com/fridge_foods/push/" 
+              + food.getUserId() + "/" + food.getDescription() + "/" 
+              + food.getExpirationYear()+ "/" + food.getExpirationMonth()
+              + "/" + food.getExpirationDay();
+        URL pushUrl = new URL(urlString);
+        
+        pushUrl.openStream().read();
     }
     
     //Arraylist for data from XML

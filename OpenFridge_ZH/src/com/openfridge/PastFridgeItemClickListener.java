@@ -14,10 +14,18 @@ public class PastFridgeItemClickListener implements OnItemClickListener {
             ListView parentList = (ListView) parent;
             
             FridgeFood food = (FridgeFood) parentList.getItemAtPosition(position);
+            
             Toast.makeText(parentList.getContext(), 
                     "Expiration Date: " + food.getExpirationDateString(), 
                     Toast.LENGTH_SHORT).show();
             
+            FridgeFoodDataClient client = new FridgeFoodDataClient();
+            try {
+                client.postFood(food);
+            } catch (Exception e) {
+                Toast.makeText(parentList.getContext(), 
+                        "Connection error occurred", Toast.LENGTH_SHORT);
+            }
         }
     }
 
