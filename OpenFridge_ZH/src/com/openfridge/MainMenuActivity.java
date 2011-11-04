@@ -44,7 +44,7 @@ public class MainMenuActivity extends Activity {
 		startActivity(MainMenuActivity.expirationList);
 	}
 	
-	public void loadShopping(View view){
+	public void loadShopping(View view) {
 		startActivity(MainMenuActivity.shoppingList);
 	}
 }
@@ -58,4 +58,4 @@ public class MainMenuActivity extends Activity {
  * ShoppingList -> Shopping (adding items handled on-page)
  * Shopping -> ShopingList
  * */
- */
+ 
