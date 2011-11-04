@@ -48,3 +48,14 @@ public class MainMenuActivity extends Activity {
 		startActivity(MainMenuActivity.shoppingList);
 	}
 }
+/* 
+ * Notes about what connects to what:
+ * 
+ * MainMenu -> ExpirationList & ShoppingList (if it has items)
+ * ExpirationList -> Expire, ItemEdit (as a new item)
+ * Expire -> ExpirationList & ItemEdit (to edit the item in question)
+ * ItemEdit -> ExpirationList
+ * ShoppingList -> Shopping (adding items handled on-page)
+ * Shopping -> ShopingList
+ * */
+ */
