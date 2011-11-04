@@ -4,12 +4,27 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <Button
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/editText1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+        
+        <Button
         android:id="@+id/newItemButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:onClick="loadItemEdit"
+        android:onClick="addItemToList"
+        android:layout_weight="3"
         android:text="@string/New_Item" />
+
+    </LinearLayout>
 
     <TextView
         android:layout_width="fill_parent"
