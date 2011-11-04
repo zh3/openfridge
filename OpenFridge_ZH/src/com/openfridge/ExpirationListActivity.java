@@ -36,6 +36,8 @@ public class ExpirationListActivity extends Activity {
 			e.printStackTrace();
 		}
 		setContentView(R.layout.expiration_list);
+		
+		/*
 		// Setup the Listview
 		List<FridgeFood> good = Arrays.asList(new FridgeFood("2011-10-28",
 				"Milk", "2011-11-01", "2", "2011-10-28", "1"), new FridgeFood(
@@ -49,9 +51,15 @@ public class ExpirationListActivity extends Activity {
 		);
 		List<FridgeFood> nearly = Arrays.asList(new FridgeFood("2011-10-28",
 				"Leftovers", "2011-11-01", "1", "2011-10-28", "1"));
-		List<FridgeFood> past = Collections.<FridgeFood> emptyList();
+		List<FridgeFood> expired = Collections.<FridgeFood> emptyList();
+		*/
 		
-		initFridgeFoodListView(R.id.pastLV, past,
+		List<FridgeFood> good = client.getGoodFoods();
+		List<FridgeFood> nearly = client.getNearFoods();
+		List<FridgeFood> expired = client.getExpiredFoods();
+		Log.d(DEBUG_TAG, "number of good items: " + good.size());
+		
+		initFridgeFoodListView(R.id.pastLV, expired,
 				new PastFridgeItemClickListener());
 		initFridgeFoodListView(R.id.nearLV, nearly,
 				new PastFridgeItemClickListener());

@@ -13,6 +13,8 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
+import android.util.Log;
+
 /**
  * A class which facilitates communication with the server, allowing the
  * retrieving and updating of fridge food items on the database server.
@@ -46,45 +48,73 @@ public class FridgeFoodDataClient {
         xr.parse(new InputSource(url.openStream()));
         /* Parsing has finished. */
 
-        foods = userXmlHandler.getParsedData();
+        goodFoods = userXmlHandler.getGoodFoods();
+        nearFoods = userXmlHandler.getNearFoods();
+        expiredFoods = userXmlHandler.getExpiredFoods();
     }
     
     /**
-     * Get a list of containing records of all the foods on the website 
-     * database.
+     * Copy a given ArrayList of FridgeFoods
      * 
-     * @return A list of foods from the website.
+     * @param source The ArrayList to be copied
+     * @return A deep copy of the source ArrayList
      */
-    private ArrayList<FridgeFood> getFoods() {
+    private ArrayList<FridgeFood> copyFoods(ArrayList<FridgeFood> source) {
+        
         ArrayList<FridgeFood> copy = new ArrayList<FridgeFood>();
-        for (FridgeFood f: foods) {
-            copy.add((FridgeFood) f.clone());
+        for (FridgeFood f: source) {
+            if (f != null) {
+                copy.add((FridgeFood) f.clone());
+            }
         }
         
         return copy;
     }
-    public ArrayList<FridgeFood> getPastFoods() {
-		try {
-			return getFoods();
-		} catch (Exception e) {
-			return new ArrayList<FridgeFood>();
-		}
-}
+    
+    /**
+     * Get an ArrayList containing records of all the Foods that have expired,
+     * based on the information from the server available at the last call to
+     * reloadFoods()
+     * 
+     * @return An ArrayList of expired foods
+     */
+    public ArrayList<FridgeFood> getExpiredFoods() {
+		//try {
+			return copyFoods(expiredFoods);
+		//} catch (Exception e) {
+		//	return new ArrayList<FridgeFood>();
+		//}
+    }
 
+    /**
+     * Get an ArrayList containing records of all the Foods that are close to,
+     * expiration based on the information from the server available at the last
+     * call to reloadFoods()
+     * 
+     * @return An ArrayList of foods soon to expire
+     */
     public ArrayList<FridgeFood> getNearFoods() {
 		try {
-			return getFoods();
+			return copyFoods(nearFoods);
 		} catch (Exception e) {
 			return new ArrayList<FridgeFood>();
 		}
-}
+    }
 
+    /**
+     * Get an ArrayList containing records of all the Foods that are fresh,
+     * based on the information from the server available at the last call to
+     * reloadFoods()
+     * 
+     * @return An ArrayList of fresh foods
+     */
     public ArrayList<FridgeFood> getGoodFoods() {
-    		try {
-    			return getFoods();
-    		} catch (Exception e) {
-    			return new ArrayList<FridgeFood>();
-    		}
+    		//try {
+        Log.d("dataclientff", "good foods size is: " + goodFoods.size());
+    			return copyFoods(goodFoods);
+    		//} catch (Exception e) {
+    		//	return new ArrayList<FridgeFood>();
+    		//}
     }
 
     /**
@@ -94,12 +124,22 @@ public class FridgeFoodDataClient {
      * @param food The FridgeFood object with the fields to be posted to
      * database.
      */
-    public void postFood(FridgeFood food) {
-        // TODO need elvin
+    public void postFood(FridgeFood food) throws MalformedURLException, 
+            IOException {
+        String urlString 
+            = "http://openfridge.heroku.com/fridge_foods/push/" 
+              + food.getUserId() + "/" + food.getDescription() + "/" 
+              + food.getExpirationYear()+ "/" + food.getExpirationMonth()
+              + "/" + food.getExpirationDay();
+        URL pushUrl = new URL(urlString);
+        
+        pushUrl.openStream().read();
     }
     
     //Arraylist for data from XML
-    private ArrayList<FridgeFood> foods;
+    private ArrayList<FridgeFood> goodFoods;
+    private ArrayList<FridgeFood> nearFoods;
+    private ArrayList<FridgeFood> expiredFoods;
     private XMLReader xr;
     private SAXParser sp;
     private SAXParserFactory spf;
