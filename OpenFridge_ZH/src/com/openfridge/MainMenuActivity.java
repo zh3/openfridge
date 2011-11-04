@@ -7,8 +7,18 @@ import android.os.Bundle;
 import android.view.View;
 
 public class MainMenuActivity extends Activity {
+	public static Intent mainMenu, expirationList, expire, itemEdit, shopping, shoppingList;
+	
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        MainMenuActivity.mainMenu = new Intent(this, MainMenuActivity.class);
+        MainMenuActivity.expirationList = new Intent(this, ExpirationListActivity.class);
+        MainMenuActivity.expire = new Intent(this, ExpireActivity.class);
+        MainMenuActivity.itemEdit = new Intent(this, ItemEditActivity.class);
+        MainMenuActivity.shopping = new Intent(this, ShoppingActivity.class);
+        MainMenuActivity.shoppingList = new Intent(this, ShoppingListActivity.class);
+        
         setContentView(R.layout.main);
 
         View expB = findViewById(R.id.Exp_button);
@@ -31,11 +41,10 @@ public class MainMenuActivity extends Activity {
 	}
 	
 	public void loadExpiration(View view){
-		Intent intent = new Intent(this, ExpirationListActivity.class);
-		startActivity(intent);
+		startActivity(MainMenuActivity.expirationList);
 	}
 	
 	public void loadShopping(View view){
-		//TODO Change current activity to ShoppingListActivity
+		startActivity(MainMenuActivity.shoppingList);
 	}
 }

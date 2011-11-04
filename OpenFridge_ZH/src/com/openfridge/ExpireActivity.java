@@ -1,7 +1,6 @@
 package com.openfridge;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -13,17 +12,14 @@ public class ExpireActivity extends Activity {
 	}
 	
 	public void EditPostponeClick(View view){
-		Intent intent = new Intent(this, ItemEditActivity.class);
-		startActivity(intent);
+		startActivity(MainMenuActivity.itemEdit);
 	}
 	
 	public void DoneClick(View view){
-		Intent intent = new Intent(this, ExpirationListActivity.class);
-		startActivity(intent);
+		startActivity(MainMenuActivity.expirationList);
 	}
 	
 	public void CancelClick(View view){
-		Intent intent = new Intent(this, ExpirationListActivity.class);
-		startActivity(intent);
+		startActivity(MainMenuActivity.expirationList);
 	}
 }

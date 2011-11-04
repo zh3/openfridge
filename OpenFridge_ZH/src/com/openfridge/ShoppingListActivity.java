@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
 
 public class ShoppingListActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
@@ -45,12 +44,11 @@ public class ShoppingListActivity extends Activity {
 		// Make items not focusable to avoid listitem / button conflicts
 		listView.setItemsCanFocus(false);
 	}
-	public void loadItemEdit(View view) {
-		Intent intent = new Intent(this, ItemEditActivity.class);
-		startActivity(intent);
-	}
 	public void removeItem(View view) {
-		Intent intent = new Intent(this, ShoppingActivity.class);
-		startActivity(intent);
+		startActivity(MainMenuActivity.expire);
+	}
+
+	public void loadItemEdit(View view) {
+		startActivity(MainMenuActivity.itemEdit);
 	}
 }

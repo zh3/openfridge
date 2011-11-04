@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -60,11 +59,6 @@ public class ExpirationListActivity extends Activity {
 				new PastFridgeItemClickListener());
 	}
 
-	public void removeItem(View view) {
-		Intent intent = new Intent(this, ExpireActivity.class);
-		startActivity(intent);
-	}
-
 	private void initFridgeFoodListView(int viewId, List<FridgeFood> foods,
 			OnItemClickListener listener) {
 		ListView listView = (ListView) findViewById(viewId);
@@ -90,8 +84,11 @@ public class ExpirationListActivity extends Activity {
 		listView.requestLayout();
 	}
 
+	public void removeItem(View view) {
+		startActivity(MainMenuActivity.expire);
+	}
+
 	public void loadItemEdit(View view) {
-		Intent intent = new Intent(this, ItemEditActivity.class);
-		startActivity(intent);
+		startActivity(MainMenuActivity.itemEdit);
 	}
 }

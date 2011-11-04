@@ -19,6 +19,10 @@ public class ItemEditActivity extends Activity {
     }
 	
 	public void doneEditClick(View view){
-		//TODO Add done button click functionality
+		if (getIntent().getAction().equals("com.openfridge.expirationList")) {
+			startActivity(MainMenuActivity.expirationList);
+		} else {
+			startActivity(MainMenuActivity.shoppingList);
+		}
 	}
 }
