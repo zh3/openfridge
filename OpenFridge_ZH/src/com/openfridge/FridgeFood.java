@@ -111,16 +111,16 @@ public class FridgeFood implements Cloneable {
                 + expirationDate.get(Calendar.DAY_OF_MONTH);
     }
     
-    public String getExpirationYear() {
-        return Integer.toString(expirationDate.get(Calendar.YEAR));
+    public int getExpirationYear() {
+        return expirationDate.get(Calendar.YEAR);
     }
     
-    public String getExpirationMonth() {
-        return Integer.toString(expirationDate.get(Calendar.MONTH));
+    public int getExpirationMonth() {
+        return expirationDate.get(Calendar.MONTH);
     }
     
-    public String getExpirationDay() {
-        return Integer.toString(expirationDate.get(Calendar.DAY_OF_MONTH));
+    public int getExpirationDay() {
+        return expirationDate.get(Calendar.DAY_OF_MONTH);
     }
     
     public int getId() {

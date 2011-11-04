@@ -3,6 +3,7 @@ package com.openfridge;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -29,9 +30,6 @@ public class FridgeFoodDataClient {
     
     public void reloadFoods() throws IOException, MalformedURLException, 
             ParserConfigurationException, SAXException {
-        /* Create a URL we want to load some xml-data from. */
-        /* If you check this url, it's a mini xml from elvin's db */
-        url = new URL("http://openfridge.heroku.com/fridge_foods.xml");
 
         /* Get a SAXParser from the SAXPArserFactory. */
         spf = SAXParserFactory.newInstance();
@@ -44,31 +42,16 @@ public class FridgeFoodDataClient {
         FridgeFoodHandler userXmlHandler = new FridgeFoodHandler();
         xr.setContentHandler(userXmlHandler);
         
+        /* Create a URL we want to load some xml-data from. */
+        /* If you check this url, it's a mini xml from elvin's db */
+        
         /* Parse the xml-data from our URL. */
-        xr.parse(new InputSource(url.openStream()));
+        xr.parse(new InputSource(dataURL.openStream()));
         /* Parsing has finished. */
 
         goodFoods = userXmlHandler.getGoodFoods();
         nearFoods = userXmlHandler.getNearFoods();
         expiredFoods = userXmlHandler.getExpiredFoods();
-    }
-    
-    /**
-     * Copy a given ArrayList of FridgeFoods
-     * 
-     * @param source The ArrayList to be copied
-     * @return A deep copy of the source ArrayList
-     */
-    private ArrayList<FridgeFood> copyFoods(ArrayList<FridgeFood> source) {
-        
-        ArrayList<FridgeFood> copy = new ArrayList<FridgeFood>();
-        for (FridgeFood f: source) {
-            if (f != null) {
-                copy.add((FridgeFood) f.clone());
-            }
-        }
-        
-        return copy;
     }
     
     /**
@@ -79,11 +62,7 @@ public class FridgeFoodDataClient {
      * @return An ArrayList of expired foods
      */
     public ArrayList<FridgeFood> getExpiredFoods() {
-		//try {
-			return copyFoods(expiredFoods);
-		//} catch (Exception e) {
-		//	return new ArrayList<FridgeFood>();
-		//}
+    	return expiredFoods;
     }
 
     /**
@@ -94,11 +73,7 @@ public class FridgeFoodDataClient {
      * @return An ArrayList of foods soon to expire
      */
     public ArrayList<FridgeFood> getNearFoods() {
-		try {
-			return copyFoods(nearFoods);
-		} catch (Exception e) {
-			return new ArrayList<FridgeFood>();
-		}
+    	return nearFoods;
     }
 
     /**
@@ -109,39 +84,36 @@ public class FridgeFoodDataClient {
      * @return An ArrayList of fresh foods
      */
     public ArrayList<FridgeFood> getGoodFoods() {
-    		//try {
-        Log.d("dataclientff", "good foods size is: " + goodFoods.size());
-    			return copyFoods(goodFoods);
-    		//} catch (Exception e) {
-    		//	return new ArrayList<FridgeFood>();
-    		//}
+    	return goodFoods;
     }
 
     /**
-     * Post an item of food to the website database. If the id of the given
-     * food exists already, the existing record will be updated on the website.
+     * Post an item of food to the cloud database. If the id of the given
+     * food exists already, the existing record will be updated in the database.
      * 
      * @param food The FridgeFood object with the fields to be posted to
      * database.
      */
     public void postFood(FridgeFood food) throws MalformedURLException, 
             IOException {
-        String urlString 
-            = "http://openfridge.heroku.com/fridge_foods/push/" 
-              + food.getUserId() + "/" + food.getDescription() + "/" 
-              + food.getExpirationYear()+ "/" + food.getExpirationMonth()
-              + "/" + food.getExpirationDay();
-        URL pushUrl = new URL(urlString);
-        
-        pushUrl.openStream().read();
+        (new URL(String.format("http://openfridge.heroku.com/fridge_foods/push/%d/%s/%d/%d/%d", 
+                food.getUserId(), URLEncoder.encode(food.getDescription(),"UTF-8"), 
+                food.getExpirationYear(), food.getExpirationMonth(),
+                food.getExpirationDay()))).openStream().read();
     }
     
-    //Arraylist for data from XML
+    //ArrayLists for the data from the XML
     private ArrayList<FridgeFood> goodFoods;
     private ArrayList<FridgeFood> nearFoods;
     private ArrayList<FridgeFood> expiredFoods;
+    //Parsing stuff
     private XMLReader xr;
     private SAXParser sp;
     private SAXParserFactory spf;
-    private URL url;
+    private URL dataURL;
+    {
+    	try {
+    		dataURL = new URL("http://openfridge.heroku.com/fridge_foods.xml");
+    	} catch (MalformedURLException e) {}
+    }
 }
