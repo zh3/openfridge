@@ -17,6 +17,10 @@ public class ShoppingItem {
 	public int getUserId() {
 		return userId;
 	}
+	
+	public String toString(){
+		return description;
+	}
 
 	private String description;
     private int id;

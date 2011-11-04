@@ -7,7 +7,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class ShoppingListActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
@@ -19,25 +21,17 @@ public class ShoppingListActivity extends Activity {
 			// For debugging
 			e.printStackTrace();
 		}
-		List<FridgeFood> good = Arrays.asList(new FridgeFood("2011-10-28",
-				"Milk", "2011-11-01", "2", "2011-10-28", "1"), new FridgeFood(
-				"2011-10-28", "Eggs", "2011-11-01", "2", "2011-10-28", "1"),
-				new FridgeFood("2011-10-28", "Leftovers", "2011-11-01", "2",
-						"2011-10-28", "1"), new FridgeFood("2011-10-28",
-						"Kale", "2011-11-01", "2", "2011-10-28", "1"),
-				new FridgeFood("2011-10-28", "Beef", "2011-11-01", "2",
-						"2011-10-28", "1")
-
-		);
-
+		List<ShoppingItem> good = Arrays.asList(new ShoppingItem("Milk",1,1), new ShoppingItem("Eggs",2,1),
+				new ShoppingItem("Kale",3,1), new ShoppingItem("Beer",4,1), new ShoppingItem("Beef",5,1));
+		
         setContentView(R.layout.shopping_list);
-		initFridgeFoodListView(R.id.shoppingLV, good);
+		initShoppingListView(R.id.shoppingLV, good);
 
 	}
-	private void initFridgeFoodListView(int viewId, List<FridgeFood> foods) {
+	private void initShoppingListView(int viewId, List<ShoppingItem> foods) {
 		ListView listView = (ListView) findViewById(viewId);
 		listView.setTextFilterEnabled(true);
-		listView.setAdapter(new ArrayAdapter<FridgeFood>(this,
+		listView.setAdapter(new ArrayAdapter<ShoppingItem>(this,
 				R.layout.list_item_with_remove, R.id.text, foods));
 		
 		// Make items not focusable to avoid listitem / button conflicts
@@ -47,7 +41,14 @@ public class ShoppingListActivity extends Activity {
 		startActivity(MainMenuActivity.expire);
 	}
 
-	public void loadItemEdit(View view) {
-		startActivity(MainMenuActivity.itemEdit);
+	public void addItemToList(View view) {
+		String itemToAdd = ((EditText)findViewById(R.id.editText1)).getText().toString();
+		
+		ListView listView = (ListView) findViewById(R.id.shoppingLV);
+		((ArrayAdapter<ShoppingItem>)listView.getAdapter()).add(new ShoppingItem(itemToAdd,9,1));
+		
+		Toast.makeText(view.getContext(), 
+                "Added Item: " + itemToAdd, 
+                Toast.LENGTH_SHORT).show();
 	}
 }
