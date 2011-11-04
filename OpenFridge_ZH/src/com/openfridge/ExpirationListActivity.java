@@ -52,16 +52,13 @@ public class ExpirationListActivity extends Activity {
 		List<FridgeFood> expired = Collections.<FridgeFood> emptyList();
 		*/
 		
-		List<FridgeFood> good = client.getGoodFoods();
-		List<FridgeFood> nearly = client.getNearFoods();
-		List<FridgeFood> expired = client.getExpiredFoods();
-		Log.d(DEBUG_TAG, "number of good items: " + good.size());
+		//Log.d(DEBUG_TAG, "number of good items: " + good.size());
 		
-		initFridgeFoodListView(R.id.pastLV, expired,
+		initFridgeFoodListView(R.id.pastLV, client.getExpiredFoods(),
 				new PastFridgeItemClickListener());
-		initFridgeFoodListView(R.id.nearLV, nearly,
+		initFridgeFoodListView(R.id.nearLV, client.getNearFoods(),
 				new PastFridgeItemClickListener());
-		initFridgeFoodListView(R.id.goodLV, good,
+		initFridgeFoodListView(R.id.goodLV, client.getGoodFoods(),
 				new PastFridgeItemClickListener());
 	}
 
