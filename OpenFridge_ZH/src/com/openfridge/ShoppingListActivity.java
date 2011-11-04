@@ -1,5 +1,6 @@
 package com.openfridge;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,8 +22,8 @@ public class ShoppingListActivity extends Activity {
 			// For debugging
 			e.printStackTrace();
 		}
-		List<ShoppingItem> good = Arrays.asList(new ShoppingItem("Milk",1,1), new ShoppingItem("Eggs",2,1),
-				new ShoppingItem("Kale",3,1), new ShoppingItem("Beer",4,1), new ShoppingItem("Beef",5,1));
+		List<ShoppingItem> good = new ArrayList<ShoppingItem>(Arrays.asList(new ShoppingItem("Milk",1,1), new ShoppingItem("Eggs",2,1),
+				new ShoppingItem("Kale",3,1), new ShoppingItem("Beer",4,1), new ShoppingItem("Beef",5,1)));
 		
         setContentView(R.layout.shopping_list);
 		initShoppingListView(R.id.shoppingLV, good);
