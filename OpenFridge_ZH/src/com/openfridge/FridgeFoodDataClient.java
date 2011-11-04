@@ -28,15 +28,7 @@ public class FridgeFoodDataClient {
    
     }
     
-    public void reloadFoods() throws IOException, MalformedURLException, 
-            ParserConfigurationException, SAXException {
-
-        /* Get a SAXParser from the SAXPArserFactory. */
-        spf = SAXParserFactory.newInstance();
-        sp = spf.newSAXParser();
-
-        /* Get the XMLReader of the SAXParser we created. */
-        xr = sp.getXMLReader();
+    public void reloadFoods() throws IOException, SAXException {
         
         /* Create a new ContentHandler and apply it to the XML-Reader*/ 
         FridgeFoodHandler userXmlHandler = new FridgeFoodHandler();
@@ -49,9 +41,14 @@ public class FridgeFoodDataClient {
         xr.parse(new InputSource(dataURL.openStream()));
         /* Parsing has finished. */
 
-        goodFoods = userXmlHandler.getGoodFoods();
-        nearFoods = userXmlHandler.getNearFoods();
-        expiredFoods = userXmlHandler.getExpiredFoods();
+        //Changes the contents of the ArrayList's, 
+        //rather than re-assigning them.
+        goodFoods.clear();
+        goodFoods.addAll(userXmlHandler.getGoodFoods());
+        nearFoods.clear(); 
+        nearFoods.addAll(userXmlHandler.getNearFoods());
+        expiredFoods.clear(); 
+        expiredFoods.addAll(userXmlHandler.getExpiredFoods());
     }
     
     /**
@@ -115,5 +112,13 @@ public class FridgeFoodDataClient {
     	try {
     		dataURL = new URL("http://openfridge.heroku.com/fridge_foods.xml");
     	} catch (MalformedURLException e) {}
+        /* Get a SAXParser from the SAXPArserFactory. */
+        spf = SAXParserFactory.newInstance();
+        try {
+            /* Get the XMLReader of the SAXParser we created. */
+        	sp = spf.newSAXParser();
+			xr = sp.getXMLReader();
+		} catch (ParserConfigurationException e) {
+		} catch (SAXException e) {}
     }
 }
