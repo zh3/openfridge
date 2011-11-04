@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">OpenFridge</string>
-    <string name="New_Item">New Item</string>
+    <string name="New_Item">Add Item</string>
     <string name="exp_button">Expiration List</string>
     <string name="shopping_button">Shopping List</string>
     <string name="EditPost_button">Edit/Postpone</string>
