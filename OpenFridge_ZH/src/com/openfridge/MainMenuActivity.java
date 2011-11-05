@@ -7,17 +7,18 @@ import android.os.Bundle;
 import android.view.View;
 
 public class MainMenuActivity extends Activity {
-	public static Intent mainMenu, expirationList, expire, itemEdit, shopping, shoppingList;
+	private Intent expirationList, shoppingList;
+	public static final FridgeFoodDataClient client = new FridgeFoodDataClient();
 	
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        MainMenuActivity.mainMenu = new Intent(this, MainMenuActivity.class);
-        MainMenuActivity.expirationList = new Intent(this, ExpirationListActivity.class);
-        MainMenuActivity.expire = new Intent(this, ExpireActivity.class);
-        MainMenuActivity.itemEdit = new Intent(this, ItemEditActivity.class);
-        MainMenuActivity.shopping = new Intent(this, ShoppingActivity.class);
-        MainMenuActivity.shoppingList = new Intent(this, ShoppingListActivity.class);
+        //mainMenu = new Intent(this, MainMenuActivity.class);
+        expirationList = new Intent(this, ExpirationListActivity.class);
+        //expire = new Intent(this, ExpireActivity.class);
+        //itemEdit = new Intent(this, ItemEditActivity.class);
+        //shopping = new Intent(this, ShoppingActivity.class);
+        shoppingList = new Intent(this, ShoppingListActivity.class);
         
         setContentView(R.layout.main);
 
@@ -41,11 +42,11 @@ public class MainMenuActivity extends Activity {
 	}
 	
 	public void loadExpiration(View view){
-		startActivity(MainMenuActivity.expirationList);
+		startActivity(expirationList);
 	}
 	
 	public void loadShopping(View view) {
-		startActivity(MainMenuActivity.shoppingList);
+		startActivity(shoppingList);
 	}
 }
 /* 

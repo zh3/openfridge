@@ -11,6 +11,35 @@ import android.util.Log;
 
 public class FridgeFoodHandler extends DefaultHandler
 {
+    private String createdDateTime;
+    private String description;
+    private String expirationDate;
+    private String id;
+    private String lastUpdatedDateTime;
+    private String userId;
+    
+    private ArrayList<FridgeFood> goodFoods = new ArrayList<FridgeFood>();
+    private ArrayList<FridgeFood> nearFoods = new ArrayList<FridgeFood>();
+    private ArrayList<FridgeFood> expiredFoods = new ArrayList<FridgeFood>();
+    private TagParseState parseState;
+    private ParseState expirationState;
+
+    private enum ParseState {
+        NO_EXPIRATION_STATE,
+        NEAR,
+        GOOD,
+        EXPIRED
+    }
+    private enum TagParseState {
+        NO_TAG,
+        CREATE_TIME,
+        DESCRIPTION,
+        EXPIRATION,
+        ID,
+        LAST_UPDATE_TIME,
+        USER_ID
+    }
+
     // ===========================================================
     // Getter & Setter
     // ===========================================================
@@ -32,12 +61,12 @@ public class FridgeFoodHandler extends DefaultHandler
     // ===========================================================
     @Override
     public void startDocument() throws SAXException {
-        goodFoods = new ArrayList<FridgeFood>();
-        nearFoods = new ArrayList<FridgeFood>();
-        expiredFoods = new ArrayList<FridgeFood>();
+        goodFoods.clear();
+        nearFoods.clear();
+        expiredFoods.clear();
         
-        parseState = FridgeFoodTagParseState.NO_TAG;
-        expirationState = FridgeFoodExpirationParseState.NO_EXPIRATION_STATE;
+        parseState = TagParseState.NO_TAG;
+        expirationState = ParseState.NO_EXPIRATION_STATE;
         clearBuffers();
     }
 
@@ -63,23 +92,23 @@ public class FridgeFoodHandler extends DefaultHandler
     public void startElement(String namespaceURI, String localName,
             String qName, Attributes atts) throws SAXException {
         if (localName.equals("created-at")) {
-            parseState = FridgeFoodTagParseState.CREATE_TIME;
+            parseState = TagParseState.CREATE_TIME;
         } else if (localName.equals("desc")) {
-            parseState = FridgeFoodTagParseState.DESCRIPTION;
+            parseState = TagParseState.DESCRIPTION;
         } else if (localName.equals("expiration")) {
-            parseState = FridgeFoodTagParseState.EXPIRATION;
+            parseState = TagParseState.EXPIRATION;
         } else if (localName.equals("id")) {
-            parseState = FridgeFoodTagParseState.ID;
+            parseState = TagParseState.ID;
         } else if (localName.equals("updated-at")) {
-            parseState = FridgeFoodTagParseState.LAST_UPDATE_TIME;
+            parseState = TagParseState.LAST_UPDATE_TIME;
         } else if (localName.equals("user_id")) {
-            parseState = FridgeFoodTagParseState.USER_ID;
+            parseState = TagParseState.USER_ID;
         } else if (localName.equals("good")) {
-            expirationState = FridgeFoodExpirationParseState.GOOD;
+            expirationState = ParseState.GOOD;
         } else if (localName.equals("near")) {
-            expirationState = FridgeFoodExpirationParseState.NEAR;
+            expirationState = ParseState.NEAR;
         } else if (localName.equals("expired")) {
-            expirationState = FridgeFoodExpirationParseState.EXPIRED;
+            expirationState = ParseState.EXPIRED;
         }
     }
     
@@ -113,7 +142,7 @@ public class FridgeFoodHandler extends DefaultHandler
                 throw new RuntimeException();
             }
             
-            parseState = FridgeFoodTagParseState.NO_TAG;
+            parseState = TagParseState.NO_TAG;
             clearBuffers();
         }
     }
@@ -144,17 +173,5 @@ public class FridgeFoodHandler extends DefaultHandler
         default:
         }
     }
-    
-    private String createdDateTime;
-    private String description;
-    private String expirationDate;
-    private String id;
-    private String lastUpdatedDateTime;
-    private String userId;
-    
-    private ArrayList<FridgeFood> goodFoods;
-    private ArrayList<FridgeFood> nearFoods;
-    private ArrayList<FridgeFood> expiredFoods;
-    private FridgeFoodTagParseState parseState;
-    private FridgeFoodExpirationParseState expirationState;
+
 }

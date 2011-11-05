@@ -1,55 +1,55 @@
 package com.openfridge;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
 public class ShoppingListActivity extends Activity {
+	private ArrayAdapter<ShoppingItem> adapter;
+
 	public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        FridgeFoodDataClient client = new FridgeFoodDataClient();
+		super.onCreate(savedInstanceState);
 		try {
-			client.reloadFoods();
+			MainMenuActivity.client.reloadFoods();
 		} catch (Exception e) {
 			// For debugging
 			e.printStackTrace();
 		}
-		List<ShoppingItem> good = new ArrayList<ShoppingItem>(Arrays.asList(new ShoppingItem("Milk",1,1), new ShoppingItem("Eggs",2,1),
-				new ShoppingItem("Kale",3,1), new ShoppingItem("Beer",4,1), new ShoppingItem("Beef",5,1)));
-		
-        setContentView(R.layout.shopping_list);
-		initShoppingListView(R.id.shoppingLV, good);
+		setContentView(R.layout.shopping_list);
 
-	}
-	private void initShoppingListView(int viewId, List<ShoppingItem> foods) {
-		ListView listView = (ListView) findViewById(viewId);
-		listView.setTextFilterEnabled(true);
-		listView.setAdapter(new ArrayAdapter<ShoppingItem>(this,
-				R.layout.list_item_with_remove, R.id.text, foods));
-		
+		adapter = new ArrayAdapter<ShoppingItem>(this,
+				android.R.layout.simple_list_item_1,
+				MainMenuActivity.client.getShoppingList());
+
+		ListView lv = (ListView) findViewById(R.id.shoppingLV);
+		lv.setTextFilterEnabled(true);
+		lv.setAdapter(adapter);
+		lv.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				ShoppingListActivity.this.startActivity(new Intent(ShoppingListActivity.this, ShoppingActivity.class));
+			}
+		});
 		// Make items not focusable to avoid listitem / button conflicts
-		listView.setItemsCanFocus(false);
-	}
-	public void removeItem(View view) {
-		startActivity(MainMenuActivity.expire);
+		lv.setItemsCanFocus(false);
+
 	}
 
 	public void addItemToList(View view) {
-		String itemToAdd = ((EditText)findViewById(R.id.editText1)).getText().toString();
-		
-		ListView listView = (ListView) findViewById(R.id.shoppingLV);
-		((ArrayAdapter<ShoppingItem>)listView.getAdapter()).add(new ShoppingItem(itemToAdd,9,1));
-		
-		Toast.makeText(view.getContext(), 
-                "Added Item: " + itemToAdd, 
-                Toast.LENGTH_SHORT).show();
+		String itemToAdd = ((EditText) findViewById(R.id.editText1)).getText()
+				.toString();
+
+		adapter.add(new ShoppingItem(itemToAdd, 9, 1));
+
+		Toast.makeText(view.getContext(), "Added Item: " + itemToAdd,
+				Toast.LENGTH_SHORT).show();
 	}
 }

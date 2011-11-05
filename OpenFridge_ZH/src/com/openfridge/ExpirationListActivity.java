@@ -3,18 +3,21 @@ package com.openfridge;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class ExpirationListActivity extends Activity {
 	private static final int ROW_HEIGHT = 100;
-
+	private Intent expire, itemEdit;
 	// Tag for debug log
 	private static final String DEBUG_TAG = "Openfridge";
 
@@ -23,12 +26,15 @@ public class ExpirationListActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+        expire = new Intent(this, ExpireActivity.class);
+        itemEdit = new Intent(this, ItemEditActivity.class);
+
 		Log.d(DEBUG_TAG, "checkpoint");
 
 		// This code gets the xml and sets up the SAX Parser
-		FridgeFoodDataClient client = new FridgeFoodDataClient();
+		
 		try {
-			client.reloadFoods();
+			MainMenuActivity.client.reloadFoods();
 		} catch (Exception e) {
 			// For debugging
 			e.printStackTrace();
@@ -54,11 +60,11 @@ public class ExpirationListActivity extends Activity {
 		
 		//Log.d(DEBUG_TAG, "number of good items: " + good.size());
 		
-		initFridgeFoodListView(R.id.pastLV, client.getExpiredFoods(),
+		initFridgeFoodListView(R.id.pastLV, MainMenuActivity.client.getExpiredFoods(),
 				new PastFridgeItemClickListener());
-		initFridgeFoodListView(R.id.nearLV, client.getNearFoods(),
+		initFridgeFoodListView(R.id.nearLV, MainMenuActivity.client.getNearFoods(),
 				new PastFridgeItemClickListener());
-		initFridgeFoodListView(R.id.goodLV, client.getGoodFoods(),
+		initFridgeFoodListView(R.id.goodLV, MainMenuActivity.client.getGoodFoods(),
 				new PastFridgeItemClickListener());
 	}
 
@@ -67,7 +73,7 @@ public class ExpirationListActivity extends Activity {
 		ListView listView = (ListView) findViewById(viewId);
 		listView.setTextFilterEnabled(true);
 		listView.setAdapter(new ArrayAdapter<FridgeFood>(this,
-				R.layout.list_item_with_remove, R.id.text, foods));
+				android.R.layout.simple_list_item_1, foods));
 		listView.setOnItemClickListener(listener);
 
 		// Make items not focusable to avoid listitem / button conflicts
@@ -87,11 +93,32 @@ public class ExpirationListActivity extends Activity {
 		listView.requestLayout();
 	}
 
-	public void removeItem(View view) {
-		startActivity(MainMenuActivity.expire);
-	}
+	private class PastFridgeItemClickListener implements OnItemClickListener {
+	    public void onItemClick(AdapterView<?> parent, View view, int position, 
+	                            long id) {
+	        Log.d("Fridge debug", "list item clicked");
+	        if (parent.getClass() == ListView.class) {
+	            ListView parentList = (ListView) parent;
+	            
+	            FridgeFood food = (FridgeFood) parentList.getItemAtPosition(position);
+	            
+	            Toast.makeText(parentList.getContext(), 
+	                    "Expiration Date: " + food.getExpirationDateString(), 
+	                    Toast.LENGTH_SHORT).show();
 
-	public void loadItemEdit(View view) {
-		startActivity(MainMenuActivity.itemEdit);
+	            startActivity(expire);
+	            
+	            FridgeFoodDataClient client = new FridgeFoodDataClient();
+	            try {
+	                client.postFood(food);
+	            } catch (Exception e) {
+	                Toast.makeText(parentList.getContext(), 
+	                        "Connection error occurred", Toast.LENGTH_SHORT);
+	            }
+	        }
+	    }
+		public void loadItemEdit(View view) {
+	        startActivity(itemEdit);
+		}
 	}
 }

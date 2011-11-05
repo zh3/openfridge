@@ -20,7 +20,7 @@
             android:text="@string/New_Item" />
 
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/pastTV"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/expiredTitle" />
@@ -36,7 +36,7 @@
         <!-- red: #ED1C24 -->
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/nearTV"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="#FFD300"
@@ -53,7 +53,7 @@
         </ListView>
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/goodTV"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="#228B22"

@@ -4,8 +4,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
 
-import android.util.Log;
-
 /**
  * Encapsulates the data associated with an item of food, including description
  * and expiry date.
