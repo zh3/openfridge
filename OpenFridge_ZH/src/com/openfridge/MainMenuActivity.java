@@ -6,11 +6,12 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 
-//TODO no color icons
-//TODO Colors need to actually return correctly
-//TODO Checking database on regular basis
-//TODO Come up with way to link to a hidden shopping list 
-//TODO Optimize accesses 1) get data on program start
+//TODO no color icons SC
+//TODO Colors need to actually return correctly SC
+//TODO Checking database on regular basis  SC/JW
+//TODO Come up with way to link to a hidden shopping list  later
+//TODO Optimize accesses 1) get data on program start) 
+//TODO Separate network code, make more locally capable FR JW
 
 public class MainMenuActivity extends Activity {
 	private Intent expirationList, shoppingList;

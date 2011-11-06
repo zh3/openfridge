@@ -16,9 +16,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-//TODO Should prepopulate if available
-//TODO Change date picker to simpler version
-//TODO Implement saved food behaviour
+//TODO Should prepopulate if available       ZH/EL
+//TODO Change date picker to simpler version SC
+//TODO Implement saved food behaviour        ZH/EL/JW
 //
 public class ItemEditActivity extends Activity {
     private EditText descField;
@@ -142,7 +142,7 @@ public class ItemEditActivity extends Activity {
             try {
                 // Currently just add the food based on button name and
                 // datepicker
-                // TODO Lookup dates from some kind of database.
+
                 postNewFood(((Button) v).getText().toString(), 
                         getSimpleDateString(), USER_ID);
             } catch (IOException e) {

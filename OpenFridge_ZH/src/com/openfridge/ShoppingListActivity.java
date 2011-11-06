@@ -12,10 +12,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-//TODO Don't let it add blank
-//TODO Make enter enter the item
-//TODO Limit a max number of characters
-//TODO Make delete post to server
+//TODO Don't let it add blank SC
+//TODO Make enter enter the item SC
+//TODO Limit a max number of characters SC
+//TODO Make delete post to server SC/JW
+//TODO Parse shopping list JW
 
 public class ShoppingListActivity extends Activity {
 	private ArrayAdapter<ShoppingItem> adapter;

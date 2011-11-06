@@ -2,7 +2,7 @@ package com.openfridge;
 
 import java.util.List;
 
-//TODO make title text black, not white
+//TODO make title text black, not white JW
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +16,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.Toast;
-//TODO Make list headers colored only
+//TODO Make list headers colored only JW
 
 public class ExpirationListActivity extends Activity {
 	private static final int ROW_HEIGHT = 100;

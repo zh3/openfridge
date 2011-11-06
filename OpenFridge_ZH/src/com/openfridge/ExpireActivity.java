@@ -5,14 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-//TODO Add the name of the item to the activity
-//TODO Make the add to list push to shopping list
-//TODO Change add to list to add to shopping list
-//TODO Log action (Thrown/Eaten)
-//TODO Thrown/Eaten should delete from web
-//TODO Pass item info to edit/postpone
-//TODO Make edit/postpone button link to activity
-//TODO Make cancel button work
+//TODO Add the name of the item to the activity    ZH
+//TODO Make the add to list push to shopping list  EL
+//TODO Change add to list to add to shopping list  EL
+//TODO Log action (Thrown/Eaten)                   EL
+//TODO Thrown/Eaten should delete from web         EL
+//TODO Pass item info to edit/postpone             ZH
+//TODO Make edit/postpone button link to activity  ZH
+//TODO Make cancel button work                     ZH
 
 public class ExpireActivity extends Activity {
 	
