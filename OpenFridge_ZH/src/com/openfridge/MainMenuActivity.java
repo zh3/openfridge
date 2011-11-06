@@ -6,6 +6,12 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 
+//TODO no color icons
+//TODO Colors need to actually return correctly
+//TODO Checking database on regular basis
+//TODO Come up with way to link to a hidden shopping list 
+//TODO Optimize accesses 1) get data on program start
+
 public class MainMenuActivity extends Activity {
 	private Intent expirationList, shoppingList;
 	public static final FridgeFoodDataClient client 

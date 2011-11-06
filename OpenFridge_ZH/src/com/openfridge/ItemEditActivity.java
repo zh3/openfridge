@@ -16,6 +16,10 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+//TODO Should prepopulate if available
+//TODO Change date picker to simpler version
+//TODO Implement saved food behaviour
+//
 public class ItemEditActivity extends Activity {
     private EditText descField;
     private DatePicker datePicker;
