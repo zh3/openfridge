@@ -2,6 +2,7 @@ package com.openfridge;
 
 import java.util.List;
 
+//TODO make title text black, not white
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
