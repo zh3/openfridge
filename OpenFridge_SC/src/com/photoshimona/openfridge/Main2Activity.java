@@ -14,9 +14,13 @@ public class Main2Activity extends Activity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main2);
+        Button freshBtn = (Button) findViewById(R.id.freshBtn);
+        freshBtn.getBackground().setColorFilter(new LightingColorFilter(0x44dd44, 0x000000));
+        Button shopBtn = (Button) findViewById(R.id.shopBtn);
+        shopBtn.getBackground().setColorFilter(new LightingColorFilter(0xff3333, 0x000000));
+
         
-        final Button btn = (Button) findViewById(R.id.button1);
-        btn.setOnClickListener(new View.OnClickListener()
+        freshBtn.setOnClickListener(new View.OnClickListener()
         {
             
             @Override
@@ -28,8 +32,8 @@ public class Main2Activity extends Activity
                 EditText addText = (EditText) findViewById(R.id.addText);
                 mul =  Integer.parseInt(mulText.getText().toString(), 16);
                 add = Integer.parseInt(addText.getText().toString(), 16);
-                btn.getBackground().setColorFilter(new LightingColorFilter(mul, add));
-
+                Button freshBtn = (Button) findViewById(R.id.freshBtn);
+                freshBtn.getBackground().setColorFilter(new LightingColorFilter(mul, add));
             }
         });
         

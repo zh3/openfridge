@@ -14,9 +14,11 @@
 </EditText>
 <EditText android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/addText"></EditText>
 <Button 
-	android:layout_weight="0.21" 
 	android:text="Button" 
 	android:layout_height="wrap_content" 
-	android:id="@+id/button1" 
-	android:layout_width="fill_parent"/>
+	android:layout_width="fill_parent" 
+	android:layout_weight="0.47" 
+	android:id="@+id/freshBtn"
+	android:src="@drawable/shopping_basket"/>
+<Button android:text="Button" android:layout_height="wrap_content" android:layout_weight="0.51" android:layout_width="fill_parent" android:id="@+id/shopBtn"></Button>
 </LinearLayout>
