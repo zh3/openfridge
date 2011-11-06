@@ -92,6 +92,10 @@ public class ExpirationListActivity extends Activity {
 		listView.setLayoutParams(params);
 		listView.requestLayout();
 	}
+	
+	public void loadItemEdit(View view) {
+        startActivity(itemEdit);
+    }
 
 	private class PastFridgeItemClickListener implements OnItemClickListener {
 	    public void onItemClick(AdapterView<?> parent, View view, int position, 
@@ -117,8 +121,6 @@ public class ExpirationListActivity extends Activity {
 	            }
 	        }
 	    }
-		public void loadItemEdit(View view) {
-	        startActivity(itemEdit);
-		}
+		
 	}
 }

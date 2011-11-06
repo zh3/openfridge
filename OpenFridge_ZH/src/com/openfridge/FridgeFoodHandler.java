@@ -127,15 +127,12 @@ public class FridgeFoodHandler extends DefaultHandler
             
             switch (expirationState) {
             case NEAR:
-                Log.d("food", "added near food");
                 nearFoods.add(newFood);
                 break;
             case GOOD:
-                Log.d("food", "added good food");
                 goodFoods.add(newFood);
                 break;
             case EXPIRED:
-                Log.d("food", "added expired food");
                 expiredFoods.add(newFood);
                 break;
             default:
