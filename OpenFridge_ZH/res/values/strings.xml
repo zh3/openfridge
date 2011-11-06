@@ -16,12 +16,22 @@
     <string name="goodTitle">Fresh Food</string>
 <string name="shoppingTitle">Shopping List</string>
     <string-array name="Common_items">
-        <item>Choose from common items:</item>
         <item>Eggs</item>
         <item>Milk</item>
         <item>Cheese</item>
         <item>Tomatoes</item>
+        <item>aaaaaaaaa</item>
+        <item>eeeeeeeee</item>
+        <item>vvvvvvvvvvvvvv</item>
+        <item>ttttttttttttttttttttt</item>
+        <item>ddddddddddddddddd</item>
+        <item>ffffffffffffffffffff</item>
+        <item>sssssssssssssssssssssss</item>
+        <item>eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</item>
+        <item>rrrrrrr</item>
+        <item>aaaaaaaaaaaaaaaaaaaaaa</item>
     </string-array>
         <string name="deleteChecked">Delete Checked</string>
-
+    <string name="commonItemsTitle">Add Common Item</string>
+    <string name="customItemsTitle">Add Custom Item</string>
 </resources>

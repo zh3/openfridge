@@ -48,7 +48,7 @@ public class FridgeFoodDataClient {
 		} catch (SAXException e) {}
     }
 
-    public FridgeFoodDataClient() {   
+    private FridgeFoodDataClient() {   
     }
     
     public void reloadFoods() throws IOException, SAXException {
@@ -133,4 +133,13 @@ public class FridgeFoodDataClient {
 	public List<ShoppingItem> getShoppingList() {
 		return shoppingList;
 	}    
+	
+	public static FridgeFoodDataClient getInstance() {
+	    return FridgeFoodDataClientHolder.client;
+	}
+	
+	private static class FridgeFoodDataClientHolder {
+	    public static final FridgeFoodDataClient client 
+	        = new FridgeFoodDataClient();
+	}
 }
