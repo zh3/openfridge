@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">OpenFridge</string>
+    <string name="New_Item">Add Item</string>
+    <string name="exp_button">Expiration List</string>
+    <string name="shopping_button">Shopping List</string>
+    <string name="EditPost_button">Edit/Postpone</string>
+    <string name="Done_button">Apply</string>
+    <string name="Cancel_button">Cancel</string>
+    <string name="Send_Shopping">Add to list</string>
+    <string name="Item_disposed">Thrown out</string>
+    <string name="Item_consumed">Eaten</string>
+    <string name="expiredTitle">Spoiled Food</string>
+    <string name="nearlyTitle">Old Food</string>
+    <string name="goodTitle">Fresh Food</string>
+<string name="shoppingTitle">Shopping List</string>
+    <string-array name="Common_items">
+        <item>Choose from common items:</item>
+        <item>Eggs</item>
+        <item>Milk</item>
+        <item>Cheese</item>
+        <item>Tomatoes</item>
+    </string-array>
+
+</resources>
