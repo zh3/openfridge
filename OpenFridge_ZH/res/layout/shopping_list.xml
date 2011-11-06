@@ -1,42 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" android:weightSum="1">
+        <EditText
+            android:id="@+id/editText1"
+            android:layout_width="wrap_content"          
+            android:layout_height="wrap_content"
 
-    <LinearLayout
+            android:layout_weight="1" android:layout_toLeftOf="@+id/newItemButton" android:layout_alignParentLeft="true"/>
+        <Button
+	        android:id="@+id/newItemButton"
+	        android:layout_height="wrap_content"
+	        android:onClick="addItemToList"
+	        android:text="@string/New_Item" 
+	        android:layout_alignParentRight="true" 
+	        android:layout_width="100px"/>   
+        <TextView 
+        	android:layout_width="fill_parent" 
+        	android:id="@+id/textView1" 
+        	android:layout_height="wrap_content" 
+        	android:layout_below="@+id/editText1" 
+        	android:layout_alignParentLeft="true" 
+        	android:text="@string/shoppingTitle" 
+        	android:layout_alignBottom="@layout/expire"/>
+	    <ListView 
+		    android:layout_width="fill_parent" 
+		    android:id="@+id/shoppingLV" 
+		    android:layout_height="wrap_content" 
+		    android:layout_below="@+id/textView1" 
+		    android:layout_above="@+id/linearLayout1"
+		    android:layout_alignParentLeft="true"/>
+
+    <RelativeLayout
         android:id="@+id/linearLayout1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" 
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/editText1"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
+    	<Button android:id="@+id/button1" 
+    		android:layout_height="wrap_content" 
+    		android:layout_width="fill_parent" 
+    		android:text="@string/deleteChecked"
+    		android:onClick="deleteChecked"/>
+    </RelativeLayout>
         
-        <Button
-        android:id="@+id/newItemButton"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:onClick="addItemToList"
-        android:layout_weight="3"
-        android:text="@string/New_Item" />
-
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/shoppingTitle" />
-
-    <ListView
-        android:id="@+id/shoppingLV"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
-
-        <!-- Preview: listitem=@layout/list_item_with_remove -->
-    </ListView>
-
-</LinearLayout>
+    </RelativeLayout>
+    
