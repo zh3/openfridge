@@ -124,7 +124,7 @@ public class ItemEditActivity extends Activity {
 	
 	private void postNewFood(String desc, String expirationDate, int userId)
 	        throws IOException {
-	    FridgeFoodDataClient client = new FridgeFoodDataClient();
+	    FridgeFoodDataClient client = FridgeFoodDataClient.getInstance();
 	    FridgeFood food 
 	        = new FridgeFood(desc, expirationDate, Integer.toString(userId));
 

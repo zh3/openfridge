@@ -124,7 +124,8 @@ public class ExpirationListActivity extends Activity {
 
 	            startActivity(expire);
 	            
-	            FridgeFoodDataClient client = new FridgeFoodDataClient();
+	            FridgeFoodDataClient client 
+	                = FridgeFoodDataClient.getInstance();
 	            try {
 	                client.postFood(food);
 	            } catch (Exception e) {

@@ -8,7 +8,8 @@ import android.view.View;
 
 public class MainMenuActivity extends Activity {
 	private Intent expirationList, shoppingList;
-	public static final FridgeFoodDataClient client = new FridgeFoodDataClient();
+	public static final FridgeFoodDataClient client 
+	    = FridgeFoodDataClient.getInstance();
 	
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
