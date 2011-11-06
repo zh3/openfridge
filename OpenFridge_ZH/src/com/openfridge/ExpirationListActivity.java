@@ -15,6 +15,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.Toast;
+//TODO Make list headers colored only
 
 public class ExpirationListActivity extends Activity {
 	private static final int ROW_HEIGHT = 100;
