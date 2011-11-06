@@ -1,73 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:layout_weight="1"
-    android:fillViewport="true" >
-
-    <LinearLayout
+<LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_weight="1"
         android:orientation="vertical" >
+    <Button
+        android:id="@+id/newItemButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:onClick="loadItemEdit"
+        android:text="@string/New_Item" />
 
-        <Button
-            android:id="@+id/newItemButton"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:onClick="loadItemEdit"
-            android:text="@string/New_Item" />
+	<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@+id/scrollV"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:layout_weight="1"
+	    android:fillViewport="true" >
 
-        <TextView
-            android:id="@+id/pastTV"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/expiredTitle" />
+	    <LinearLayout
+	        xmlns:android="http://schemas.android.com/apk/res/android"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:layout_weight="1"
+	        android:orientation="vertical" >
+	
+	        <TextView
+	            android:id="@+id/pastTV"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:text="@string/expiredTitle" />
+	
+	        <ListView
+	            android:id="@+id/pastLV"
+	            android:layout_width="fill_parent"
+	            android:layout_height="0px"
+	            android:layout_weight="2" >
+	
+	            <!-- Preview: listitem=@layout/list_item_with_remove -->
+	        </ListView>
+	        <!-- red: #ED1C24 -->
+	
+	        <TextView
+	            android:id="@+id/nearTV"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:background="#FFD300"
+	            android:text="@string/nearlyTitle" />
+	
+	        <ListView
+	            android:id="@+id/nearLV"
+	            android:layout_width="fill_parent"
+	            android:layout_height="0px"
+	            android:layout_weight="1"
+	            android:background="#FFD300" >
+	
+	            <!-- Preview: listitem=@layout/list_item_with_remove -->
+	        </ListView>
+	
+	        <TextView
+	            android:id="@+id/goodTV"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:background="#228B22"
+	            android:text="@string/goodTitle" />
+	
+	        <ListView
+	            android:id="@+id/goodLV"
+	            android:layout_width="fill_parent"
+	            android:layout_height="0px"
+	            android:layout_weight="1"
+	            android:background="#228B22" >
+	
+	            <!-- Preview: listitem=@layout/list_item_with_remove -->
+	        </ListView>
+	    </LinearLayout>
+	
+	</ScrollView>
 
-        <ListView
-            android:id="@+id/pastLV"
-            android:layout_width="fill_parent"
-            android:layout_height="0px"
-            android:layout_weight="2" >
-
-            <!-- Preview: listitem=@layout/list_item_with_remove -->
-        </ListView>
-        <!-- red: #ED1C24 -->
-
-        <TextView
-            android:id="@+id/nearTV"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="#FFD300"
-            android:text="@string/nearlyTitle" />
-
-        <ListView
-            android:id="@+id/nearLV"
-            android:layout_width="fill_parent"
-            android:layout_height="0px"
-            android:layout_weight="1"
-            android:background="#FFD300" >
-
-            <!-- Preview: listitem=@layout/list_item_with_remove -->
-        </ListView>
-
-        <TextView
-            android:id="@+id/goodTV"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="#228B22"
-            android:text="@string/goodTitle" />
-
-        <ListView
-            android:id="@+id/goodLV"
-            android:layout_width="fill_parent"
-            android:layout_height="0px"
-            android:layout_weight="1"
-            android:background="#228B22" >
-
-            <!-- Preview: listitem=@layout/list_item_with_remove -->
-        </ListView>
-    </LinearLayout>
-
-</ScrollView>
+</LinearLayout>

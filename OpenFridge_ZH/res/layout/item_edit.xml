@@ -19,6 +19,6 @@
             android:layout_width="fill_parent" 
             android:text="@string/Done_button" 
             android:id="@+id/button1" 
-            onClick="doneEditClick"></Button>
+            android:onClick="doneEditClick"></Button>
     
 </LinearLayout>

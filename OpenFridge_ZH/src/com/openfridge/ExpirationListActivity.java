@@ -8,11 +8,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 public class ExpirationListActivity extends Activity {
@@ -20,6 +21,7 @@ public class ExpirationListActivity extends Activity {
 	private Intent expire, itemEdit;
 	// Tag for debug log
 	private static final String DEBUG_TAG = "Openfridge";
+	private ScrollView sv;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -66,6 +68,16 @@ public class ExpirationListActivity extends Activity {
 				new PastFridgeItemClickListener());
 		initFridgeFoodListView(R.id.goodLV, MainMenuActivity.client.getGoodFoods(),
 				new PastFridgeItemClickListener());
+		
+		// Correct Scroll Location
+		sv = (ScrollView) findViewById(R.id.scrollV);
+		sv.post(new Runnable() {
+		    @Override
+		    public void run() {
+		        sv.scrollTo(0, 0);
+		    } 
+		});
+
 	}
 
 	private void initFridgeFoodListView(int viewId, List<FridgeFood> foods,

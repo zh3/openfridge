@@ -1,19 +1,15 @@
 package com.openfridge;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 public class ItemEditActivity extends Activity {
-	private Intent expirationList;
 
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        expirationList = new Intent(this, ExpirationListActivity.class);
         
         setContentView(R.layout.item_edit);
         
@@ -26,6 +22,7 @@ public class ItemEditActivity extends Activity {
 	
 	public void doneEditClick(View view){
 		//if (getIntent().getAction().equals("com.openfridge.expirationList")) {
-		startActivity(expirationList);
+
+	    finish();
 	}
 }
