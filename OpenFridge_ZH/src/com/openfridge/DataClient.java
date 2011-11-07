@@ -6,7 +6,9 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -16,13 +18,15 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
+import android.widget.ArrayAdapter;
+
 /**
  * A class which facilitates communication with the server, allowing the
  * retrieving and updating of fridge food items on the database server.
  * 
  * @author Tom, Shimona
  */
-public class FridgeFoodDataClient {
+public class DataClient {
     
     //ArrayLists for the data from the XML
     private ArrayList<FridgeFood> goodFoods = new ArrayList<FridgeFood>();
@@ -34,6 +38,7 @@ public class FridgeFoodDataClient {
     private SAXParser sp;
     private SAXParserFactory spf;
     private URL dataURL;
+    private Set<ArrayAdapter<?>> listeners = new HashSet<ArrayAdapter<?>>();
     {
     	try {
     		dataURL = new URL("http://openfridge.heroku.com/fridge_foods.xml");
@@ -48,7 +53,7 @@ public class FridgeFoodDataClient {
 		} catch (SAXException e) {}
     }
 
-    private FridgeFoodDataClient() {   
+    private DataClient() {   
     }
     
     public void reloadFoods() throws IOException, SAXException {
@@ -80,6 +85,16 @@ public class FridgeFoodDataClient {
         		new ShoppingItem("Milk",1,1), new ShoppingItem("Eggs",2,1),
 				new ShoppingItem("Kale",3,1), new ShoppingItem("Beer",4,1), 
 				new ShoppingItem("Beef",5,1)));
+        
+        for (ArrayAdapter<?> a : listeners) {
+        	a.notifyDataSetChanged();
+        }
+    }
+    public void addListeningAdapter(ArrayAdapter<?> a) {
+    	listeners.add(a);
+    }
+    public void removeListeningAdapter(ArrayAdapter<?> a) {
+    	listeners.remove(a);
     }
     
     /**
@@ -134,12 +149,12 @@ public class FridgeFoodDataClient {
 		return shoppingList;
 	}    
 	
-	public static FridgeFoodDataClient getInstance() {
+	public static DataClient getInstance() {
 	    return FridgeFoodDataClientHolder.client;
 	}
 	
 	private static class FridgeFoodDataClientHolder {
-	    public static final FridgeFoodDataClient client 
-	        = new FridgeFoodDataClient();
+	    public static final DataClient client 
+	        = new DataClient();
 	}
 }

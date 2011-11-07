@@ -16,7 +16,8 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.Toast;
-//TODO Make list headers colored only JW
+
+//DONE Make list headers colored only JW
 
 public class ExpirationListActivity extends Activity {
 	private static final int ROW_HEIGHT = 100;
@@ -24,70 +25,70 @@ public class ExpirationListActivity extends Activity {
 	// Tag for debug log
 	private static final String DEBUG_TAG = "Openfridge";
 	private ScrollView sv;
+	private Intent dataClientService;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-        expire = new Intent(this, ExpireActivity.class);
-        itemEdit = new Intent(this, ItemEditActivity.class);
+		expire = new Intent(this, ExpireActivity.class);
+		itemEdit = new Intent(this, ItemEditActivity.class);
+		dataClientService = new Intent(this, DataClientIntentService.class);
 
 		Log.d(DEBUG_TAG, "checkpoint");
 
-		// This code gets the xml and sets up the SAX Parser
-		
-		try {
-			MainMenuActivity.client.reloadFoods();
-		} catch (Exception e) {
-			// For debugging
-			e.printStackTrace();
-		}
-		setContentView(R.layout.expiration_list);
-		
-		/*
-		// Setup the Listview
-		List<FridgeFood> good = Arrays.asList(new FridgeFood("2011-10-28",
-				"Milk", "2011-11-01", "2", "2011-10-28", "1"), new FridgeFood(
-				"2011-10-28", "Eggs", "2011-11-01", "2", "2011-10-28", "1"),
-				new FridgeFood("2011-10-28", "Leftovers", "2011-11-01", "2",
-						"2011-10-28", "1"), new FridgeFood("2011-10-28",
-						"Kale", "2011-11-01", "2", "2011-10-28", "1"),
-				new FridgeFood("2011-10-28", "Beef", "2011-11-01", "2",
-						"2011-10-28", "1")
+		startService(dataClientService);
 
-		);
-		List<FridgeFood> nearly = Arrays.asList(new FridgeFood("2011-10-28",
-				"Leftovers", "2011-11-01", "1", "2011-10-28", "1"));
-		List<FridgeFood> expired = Collections.<FridgeFood> emptyList();
-		*/
-		
-		//Log.d(DEBUG_TAG, "number of good items: " + good.size());
-		
-		initFridgeFoodListView(R.id.pastLV, MainMenuActivity.client.getExpiredFoods(),
+		setContentView(R.layout.expiration_list);
+
+		/*
+		 * // Setup the Listview List<FridgeFood> good = Arrays.asList(new
+		 * FridgeFood("2011-10-28", "Milk", "2011-11-01", "2", "2011-10-28",
+		 * "1"), new FridgeFood( "2011-10-28", "Eggs", "2011-11-01", "2",
+		 * "2011-10-28", "1"), new FridgeFood("2011-10-28", "Leftovers",
+		 * "2011-11-01", "2", "2011-10-28", "1"), new FridgeFood("2011-10-28",
+		 * "Kale", "2011-11-01", "2", "2011-10-28", "1"), new
+		 * FridgeFood("2011-10-28", "Beef", "2011-11-01", "2", "2011-10-28",
+		 * "1")
+		 * 
+		 * ); List<FridgeFood> nearly = Arrays.asList(new
+		 * FridgeFood("2011-10-28", "Leftovers", "2011-11-01", "1",
+		 * "2011-10-28", "1")); List<FridgeFood> expired =
+		 * Collections.<FridgeFood> emptyList();
+		 */
+
+		// Log.d(DEBUG_TAG, "number of good items: " + good.size());
+
+		initFridgeFoodListView(R.id.pastLV,
+				MainMenuActivity.client.getExpiredFoods(),
 				new PastFridgeItemClickListener());
-		initFridgeFoodListView(R.id.nearLV, MainMenuActivity.client.getNearFoods(),
+		initFridgeFoodListView(R.id.nearLV,
+				MainMenuActivity.client.getNearFoods(),
 				new PastFridgeItemClickListener());
-		initFridgeFoodListView(R.id.goodLV, MainMenuActivity.client.getGoodFoods(),
+		initFridgeFoodListView(R.id.goodLV,
+				MainMenuActivity.client.getGoodFoods(),
 				new PastFridgeItemClickListener());
-		
+
 		// Correct Scroll Location
 		sv = (ScrollView) findViewById(R.id.scrollV);
 		sv.post(new Runnable() {
-		    @Override
-		    public void run() {
-		        sv.scrollTo(0, 0);
-		    } 
+			@Override
+			public void run() {
+				sv.scrollTo(0, 0);
+			}
 		});
 
 	}
 
 	private void initFridgeFoodListView(int viewId, List<FridgeFood> foods,
 			OnItemClickListener listener) {
+		ArrayAdapter<FridgeFood> a = new ArrayAdapter<FridgeFood>(this,
+				android.R.layout.simple_list_item_1, foods);
+		MainMenuActivity.client.addListeningAdapter(a);
 		ListView listView = (ListView) findViewById(viewId);
 		listView.setTextFilterEnabled(true);
-		listView.setAdapter(new ArrayAdapter<FridgeFood>(this,
-				android.R.layout.simple_list_item_1, foods));
+		listView.setAdapter(a);
 		listView.setOnItemClickListener(listener);
 
 		// Make items not focusable to avoid listitem / button conflicts
@@ -106,36 +107,36 @@ public class ExpirationListActivity extends Activity {
 		listView.setLayoutParams(params);
 		listView.requestLayout();
 	}
-	
+
 	public void loadItemEdit(View view) {
-        startActivity(itemEdit);
-    }
+		startActivity(itemEdit);
+	}
 
 	private class PastFridgeItemClickListener implements OnItemClickListener {
-	    public void onItemClick(AdapterView<?> parent, View view, int position, 
-	                            long id) {
-	        Log.d("Fridge debug", "list item clicked");
-	        if (parent.getClass() == ListView.class) {
-	            ListView parentList = (ListView) parent;
-	            
-	            FridgeFood food = (FridgeFood) parentList.getItemAtPosition(position);
-	            
-	            Toast.makeText(parentList.getContext(), 
-	                    "Expiration Date: " + food.getExpirationDateString(), 
-	                    Toast.LENGTH_SHORT).show();
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			Log.d("Fridge debug", "list item clicked");
+			if (parent.getClass() == ListView.class) {
+				ListView parentList = (ListView) parent;
 
-	            startActivity(expire);
-	            
-	            FridgeFoodDataClient client 
-	                = FridgeFoodDataClient.getInstance();
-	            try {
-	                client.postFood(food);
-	            } catch (Exception e) {
-	                Toast.makeText(parentList.getContext(), 
-	                        "Connection error occurred", Toast.LENGTH_SHORT);
-	            }
-	        }
-	    }
-		
+				FridgeFood food = (FridgeFood) parentList
+						.getItemAtPosition(position);
+
+				Toast.makeText(parentList.getContext(),
+						"Expiration Date: " + food.getExpirationDateString(),
+						Toast.LENGTH_SHORT).show();
+
+				startActivity(expire);
+
+				DataClient client = DataClient.getInstance();
+				try {
+					client.postFood(food);
+				} catch (Exception e) {
+					Toast.makeText(parentList.getContext(),
+							"Connection error occurred", Toast.LENGTH_SHORT);
+				}
+			}
+		}
+
 	}
 }
