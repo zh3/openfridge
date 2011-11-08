@@ -15,8 +15,6 @@ import android.view.View;
 
 public class MainMenuActivity extends Activity {
 	private Intent expirationList, shoppingList;
-	public static final DataClient client 
-	    = DataClient.getInstance();
 	
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +25,8 @@ public class MainMenuActivity extends Activity {
         //itemEdit = new Intent(this, ItemEditActivity.class);
         //shopping = new Intent(this, ShoppingActivity.class);
         shoppingList = new Intent(this, ShoppingListActivity.class);
+        
+        DataClient.getInstance().reloadFoods(); //to keep the colors up to date
         
         setContentView(R.layout.main);
 

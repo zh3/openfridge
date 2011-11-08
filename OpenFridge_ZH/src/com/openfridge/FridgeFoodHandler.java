@@ -78,7 +78,7 @@ public class FridgeFoodHandler extends DefaultHandler {
 		try {
 			expirationState = ExpireState.valueOf(normalizedLocalName);
 		} catch (IllegalArgumentException e) {}
-		Log.d("Openfridge", String.format("start: localName:%s\n tagState:%s\n expireState%s\n", localName, tagState, expirationState));
+		//Log.d("Openfridge", String.format("start: localName:%s\n tagState:%s\n expireState%s\n", localName, tagState, expirationState));
 	}
 
 	/**

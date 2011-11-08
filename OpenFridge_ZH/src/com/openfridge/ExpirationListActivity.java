@@ -2,7 +2,6 @@ package com.openfridge;
 
 import java.util.List;
 
-//TODO make title text black, not white JW
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +13,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.Toast;
 
 //DONE Make list headers colored only JW
@@ -22,70 +20,50 @@ import android.widget.Toast;
 public class ExpirationListActivity extends Activity {
 	private static final int ROW_HEIGHT = 100;
 	private Intent expire, itemEdit;
-	// Tag for debug log
-	private static final String DEBUG_TAG = "Openfridge";
-	private ScrollView sv;
-	private Intent dataClientService;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		expire = new Intent(this, ExpireActivity.class);
-		itemEdit = new Intent(this, ItemEditActivity.class);
-		dataClientService = new Intent(this, DataClientIntentService.class);
-
-		Log.d(DEBUG_TAG, "checkpoint");
-
-		startService(dataClientService);
-
+	
+	    expire = new Intent(this, ExpireActivity.class);
+	    itemEdit = new Intent(this, ItemEditActivity.class);
+		
+		DataClient.getInstance().reloadFoods();
 		setContentView(R.layout.expiration_list);
-
+		
 		/*
-		 * // Setup the Listview List<FridgeFood> good = Arrays.asList(new
-		 * FridgeFood("2011-10-28", "Milk", "2011-11-01", "2", "2011-10-28",
-		 * "1"), new FridgeFood( "2011-10-28", "Eggs", "2011-11-01", "2",
-		 * "2011-10-28", "1"), new FridgeFood("2011-10-28", "Leftovers",
-		 * "2011-11-01", "2", "2011-10-28", "1"), new FridgeFood("2011-10-28",
-		 * "Kale", "2011-11-01", "2", "2011-10-28", "1"), new
-		 * FridgeFood("2011-10-28", "Beef", "2011-11-01", "2", "2011-10-28",
-		 * "1")
-		 * 
-		 * ); List<FridgeFood> nearly = Arrays.asList(new
-		 * FridgeFood("2011-10-28", "Leftovers", "2011-11-01", "1",
-		 * "2011-10-28", "1")); List<FridgeFood> expired =
-		 * Collections.<FridgeFood> emptyList();
-		 */
-
-		// Log.d(DEBUG_TAG, "number of good items: " + good.size());
-
-		initFridgeFoodListView(R.id.pastLV,
-				MainMenuActivity.client.getExpiredFoods(),
+		// Setup the Listview
+		List<FridgeFood> good = Arrays.asList(new FridgeFood("2011-10-28",
+				"Milk", "2011-11-01", "2", "2011-10-28", "1"), new FridgeFood(
+				"2011-10-28", "Eggs", "2011-11-01", "2", "2011-10-28", "1"),
+				new FridgeFood("2011-10-28", "Leftovers", "2011-11-01", "2",
+						"2011-10-28", "1"), new FridgeFood("2011-10-28",
+						"Kale", "2011-11-01", "2", "2011-10-28", "1"),
+				new FridgeFood("2011-10-28", "Beef", "2011-11-01", "2",
+						"2011-10-28", "1")
+	
+		);
+		List<FridgeFood> nearly = Arrays.asList(new FridgeFood("2011-10-28",
+				"Leftovers", "2011-11-01", "1", "2011-10-28", "1"));
+		List<FridgeFood> expired = Collections.<FridgeFood> emptyList();
+		*/
+		
+		//Log.d(DEBUG_TAG, "number of good items: " + good.size());
+		
+		initFridgeFoodListView(R.id.pastLV, DataClient.getInstance().getExpiredFoods(),
 				new PastFridgeItemClickListener());
-		initFridgeFoodListView(R.id.nearLV,
-				MainMenuActivity.client.getNearFoods(),
+		initFridgeFoodListView(R.id.nearLV, DataClient.getInstance().getNearFoods(),
 				new PastFridgeItemClickListener());
-		initFridgeFoodListView(R.id.goodLV,
-				MainMenuActivity.client.getGoodFoods(),
+		initFridgeFoodListView(R.id.goodLV, DataClient.getInstance().getGoodFoods(),
 				new PastFridgeItemClickListener());
-
-		// Correct Scroll Location
-		sv = (ScrollView) findViewById(R.id.scrollV);
-		sv.post(new Runnable() {
-			@Override
-			public void run() {
-				sv.scrollTo(0, 0);
-			}
-		});
-
 	}
 
 	private void initFridgeFoodListView(int viewId, List<FridgeFood> foods,
 			OnItemClickListener listener) {
 		ArrayAdapter<FridgeFood> a = new ArrayAdapter<FridgeFood>(this,
 				android.R.layout.simple_list_item_1, foods);
-		MainMenuActivity.client.addListeningAdapter(a);
+		DataClient.getInstance().addListeningAdapter(a);
 		ListView listView = (ListView) findViewById(viewId);
 		listView.setTextFilterEnabled(true);
 		listView.setAdapter(a);
