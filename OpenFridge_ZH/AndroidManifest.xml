@@ -43,6 +43,7 @@
         </activity>
         <activity android:name="ShoppingActivity" >
         </activity>
+        <service android:name="DataClientIntentService" android:exported="false"></service>
     </application>
 
 </manifest>

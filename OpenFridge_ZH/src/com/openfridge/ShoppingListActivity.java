@@ -23,17 +23,12 @@ public class ShoppingListActivity extends Activity {
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		try {
-			MainMenuActivity.client.reloadFoods();
-		} catch (Exception e) {
-			// For debugging
-			e.printStackTrace();
-		}
+		DataClient.getInstance().reloadFoods();
 		setContentView(R.layout.shopping_list);
 
 		adapter = new ArrayAdapter<ShoppingItem>(this,
 				android.R.layout.simple_list_item_multiple_choice,
-				MainMenuActivity.client.getShoppingList());
+				DataClient.getInstance().getShoppingList());
 
 		ListView lv = (ListView) findViewById(R.id.shoppingLV);
 		//lv.setTextFilterEnabled(true);
