@@ -5,7 +5,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -18,8 +17,8 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-import android.widget.ArrayAdapter;
 import android.os.AsyncTask;
+import android.widget.ArrayAdapter;
 
 /**
  * A class which facilitates communication with the server, allowing the
@@ -78,21 +77,23 @@ public class DataClient {
 	private DataClient() {
 	}
 
+	private void parse(Handler<?> h, URL url) {
+		xr.setContentHandler(h);
+		try {
+			xr.parse(new InputSource(url.openStream()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (SAXException e) {
+			e.printStackTrace();
+		}
+		
+	}
 	private class GetDataAsyncTask extends AsyncTask<Void, Void, Void> {
 		@Override
 		protected Void doInBackground(Void... arg0) {
 
 			FridgeFoodHandler ffH = new FridgeFoodHandler();
-			xr.setContentHandler(ffH);
-			try {
-				xr.parse(new InputSource(fridgeFoodURL.openStream()));
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (SAXException e) {
-				e.printStackTrace();
-			}
-						
-			/* Parsing has finished. */
+			parse(ffH,fridgeFoodURL);
 
 			// Changes the contents of the ArrayList's,
 			// rather than re-assigning them.
@@ -104,14 +105,7 @@ public class DataClient {
 			expiredFoods.addAll(ffH.getExpiredFoods());
 
 			ShoppingItemHandler siH = new ShoppingItemHandler();
-			xr.setContentHandler(siH);
-			try {
-				xr.parse(new InputSource(shoppingItemURL.openStream()));
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (SAXException e) {
-				e.printStackTrace();
-			}
+			parse(siH, shoppingItemURL);
 
 			shoppingList.clear();
 			shoppingList.addAll(siH.getFoods());

@@ -1,98 +1,84 @@
 package com.openfridge;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
 
-public class FridgeFoodHandler extends DefaultHandler {
+import android.util.Log;
 
-	private TagState tagState;
+import com.openfridge.TagStateEnum.FridgeFoodTagState;
+
+public class FridgeFoodHandler extends Handler<FridgeFoodTagState> {
+	{
+		buffers = new EnumMap<FridgeFoodTagState, StringBuilder>(
+				FridgeFoodTagState.class);
+		values = Arrays.asList(FridgeFoodTagState.values());
+	}
 	private ExpireState expirationState;
 
 	private enum ExpireState {
-		NO_EXPIRATION_STATE, NEAR, GOOD, EXPIRED
+		NEAR, GOOD, EXPIRED
 	}
 
-	private enum TagState {
-		NO_TAG, CREATED_AT, DESC, EXPIRATION, ID, UPDATED_AT, USER_ID
-	}
-
-	private Map<TagState, StringBuilder> buffers = new EnumMap<TagState, StringBuilder>(
-			TagState.class);
 	private Map<ExpireState, ArrayList<FridgeFood>> foodLists = new EnumMap<ExpireState, ArrayList<FridgeFood>>(
 			ExpireState.class);
 
-	// ===========================================================
-	// Getters
-	// ===========================================================
+	private void logNumber(ExpireState e) {
+		Log.d("OpenFridge", String.format("Number of %s Foods: %d\n", e,
+				foodLists.get(e).size()));
+	}
 
 	public ArrayList<FridgeFood> getGoodFoods() {
-		System.err.format("Number of Good Foods: %d\n", foodLists.get(ExpireState.GOOD).size());
+		logNumber(ExpireState.GOOD);
 		return foodLists.get(ExpireState.GOOD);
 	}
 
 	public ArrayList<FridgeFood> getNearFoods() {
-		System.err.format("Number of Near Foods: %d\n", foodLists.get(ExpireState.NEAR).size());
+		logNumber(ExpireState.NEAR);
 		return foodLists.get(ExpireState.NEAR);
 	}
 
 	public ArrayList<FridgeFood> getExpiredFoods() {
-		System.err.format("Number of Expired Foods: %d\n", foodLists.get(ExpireState.EXPIRED).size());
+		logNumber(ExpireState.EXPIRED);
 		return foodLists.get(ExpireState.EXPIRED);
 	}
 
-	// ===========================================================
-	// Overridden Methods
-	// ===========================================================
 	@Override
 	public void startDocument() throws SAXException {
-		expirationState = ExpireState.NO_EXPIRATION_STATE;
+		expirationState = null;
 		for (ExpireState key : ExpireState.values()) {
 			foodLists.put(key, new ArrayList<FridgeFood>());
-		}		
-		clearTagBuffers();
+		}
+		super.startDocument();
 	}
 
-	@Override
-	public void endDocument() throws SAXException {
-		// Nothing to do
-	}
-
-	/**
-	 * Gets be called on opening tags like: <tag> Can provide attribute(s), when
-	 * xml was like: <tag attribute="attributeValue">
-	 */
 	@Override
 	public void startElement(String namespaceURI, String localName,
 			String qName, Attributes atts) throws SAXException {
-		String normalizedLocalName = localName.replace('-', '_').toUpperCase();
+		super.startElement(namespaceURI, localName, qName, atts);
 		try {
-			tagState = TagState.valueOf(normalizedLocalName);
-		} catch (IllegalArgumentException e) {}
-		try {
-			expirationState = ExpireState.valueOf(normalizedLocalName);
-		} catch (IllegalArgumentException e) {}
-		//Log.d("Openfridge", String.format("start: localName:%s\n tagState:%s\n expireState%s\n", localName, tagState, expirationState));
+			expirationState = ExpireState.valueOf(normalize(localName));
+		} catch (IllegalArgumentException e) {
+		}
+		// Log.d("OpenFridge", String.format("expireState%s\n",
+		// expirationState));
 	}
 
-	/**
-	 * Gets be called on closing tags like: </tag>
-	 */
 	@Override
 	public void endElement(String namespaceURI, String localName, String qName)
 			throws SAXException {
 		if (localName.equals("food")) {
 			FridgeFood newFood = new FridgeFood(
-					getString(TagState.DESC),
-					getString(TagState.EXPIRATION),
-					getString(TagState.CREATED_AT),
-					getString(TagState.UPDATED_AT),
-					getString(TagState.ID),
-					getString(TagState.USER_ID));
+					getString(FridgeFoodTagState.DESC),
+					getString(FridgeFoodTagState.EXPIRATION),
+					getString(FridgeFoodTagState.CREATED_AT),
+					getString(FridgeFoodTagState.UPDATED_AT),
+					getString(FridgeFoodTagState.ID),
+					getString(FridgeFoodTagState.USER_ID));
 
 			foodLists.get(expirationState).add(newFood);
 
@@ -100,27 +86,8 @@ public class FridgeFoodHandler extends DefaultHandler {
 		}
 	}
 
-	/**
-	 * Gets be called on the following structure: <tag>characters</tag>
-	 */
 	@Override
-	public void characters(char ch[], int start, int length) {
-		buffers.get(tagState).append(new String(ch, start, length));
+	protected FridgeFoodTagState valueOf(String s) {
+		return FridgeFoodTagState.valueOf(normalize(s));
 	}
-
-	// ===========================================================
-	// Helper Methods
-	// ===========================================================
-
-	private void clearTagBuffers() {
-		tagState = TagState.NO_TAG;
-		for (TagState key : TagState.values()) {
-			buffers.put(key, new StringBuilder());
-		}
-	}
-
-	private String getString(final TagState key) {
-		return buffers.get(key).toString();
-	}
-
 }
