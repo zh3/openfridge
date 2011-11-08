@@ -16,7 +16,7 @@ import android.widget.Toast;
 //TODO Make enter enter the item SC
 //TODO Limit a max number of characters SC
 //TODO Make delete post to server SC/JW
-//TODO Parse shopping list JW
+//DONE Parse shopping list JW
 
 public class ShoppingListActivity extends Activity {
 	private ArrayAdapter<ShoppingItem> adapter;

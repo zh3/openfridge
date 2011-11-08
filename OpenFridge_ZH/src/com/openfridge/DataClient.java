@@ -53,12 +53,15 @@ public class DataClient {
 	private XMLReader xr;
 	private SAXParser sp;
 	private SAXParserFactory spf;
-	private URL dataURL;
+	private URL fridgeFoodURL, shoppingItemURL;
 	// Update notification stuff
 	private Set<ArrayAdapter<?>> listeners = new HashSet<ArrayAdapter<?>>();
 	{
+		/* Create the URLs we want to load xml-data from. */
+		/* If you check them, you'll see they are mini-xml documents generated from elvin's database. */
 		try {
-			dataURL = new URL("http://openfridge.heroku.com/fridge_foods.xml");
+			fridgeFoodURL = new URL("http://openfridge.heroku.com/fridge_foods.xml");
+			shoppingItemURL = new URL("http://openfridge.heroku.com/shopping_lists.xml");
 		} catch (MalformedURLException e) {
 		}
 		/* Get a SAXParser from the SAXPArserFactory. */
@@ -79,39 +82,43 @@ public class DataClient {
 		@Override
 		protected Void doInBackground(Void... arg0) {
 
-			/* Create a new ContentHandler and apply it to the XML-Reader */
-			FridgeFoodHandler userXmlHandler = new FridgeFoodHandler();
-			xr.setContentHandler(userXmlHandler);
-
-			/* Create a URL we want to load some xml-data from. */
-			/* If you check this url, it's a mini xml from elvin's db */
-
-			/* Parse the xml-data from our URL. */
-
+			FridgeFoodHandler ffH = new FridgeFoodHandler();
+			xr.setContentHandler(ffH);
 			try {
-				xr.parse(new InputSource(dataURL.openStream()));
+				xr.parse(new InputSource(fridgeFoodURL.openStream()));
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (SAXException e) {
+				e.printStackTrace();
+			}
+						
+			/* Parsing has finished. */
+
+			// Changes the contents of the ArrayList's,
+			// rather than re-assigning them.
+			goodFoods.clear();
+			goodFoods.addAll(ffH.getGoodFoods());
+			nearFoods.clear();
+			nearFoods.addAll(ffH.getNearFoods());
+			expiredFoods.clear();
+			expiredFoods.addAll(ffH.getExpiredFoods());
+
+			ShoppingItemHandler siH = new ShoppingItemHandler();
+			xr.setContentHandler(siH);
+			try {
+				xr.parse(new InputSource(shoppingItemURL.openStream()));
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (SAXException e) {
 				e.printStackTrace();
 			}
 
-			/* Parsing has finished. */
-
-			// Changes the contents of the ArrayList's,
-			// rather than re-assigning them.
-			goodFoods.clear();
-			goodFoods.addAll(userXmlHandler.getGoodFoods());
-			nearFoods.clear();
-			nearFoods.addAll(userXmlHandler.getNearFoods());
-			expiredFoods.clear();
-			expiredFoods.addAll(userXmlHandler.getExpiredFoods());
-
 			shoppingList.clear();
-			shoppingList.addAll(Arrays.asList(new ShoppingItem("Milk", 1, 1),
-					new ShoppingItem("Eggs", 2, 1), new ShoppingItem("Kale", 3,
-							1), new ShoppingItem("Beer", 4, 1),
-					new ShoppingItem("Beef", 5, 1)));
+			shoppingList.addAll(siH.getFoods());
+//			shoppingList.addAll(Arrays.asList(new ShoppingItem("Milk", 1, 1),
+//					new ShoppingItem("Eggs", 2, 1), new ShoppingItem("Kale", 3,
+//							1), new ShoppingItem("Beer", 4, 1),
+//					new ShoppingItem("Beef", 5, 1)));
 			return null;
 		}
 
