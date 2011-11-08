@@ -9,8 +9,9 @@ import android.view.View;
 //TODO no color icons SC
 //TODO Colors need to actually return correctly SC
 //TODO Checking database on regular basis  SC/JW
-//TODO Come up with way to link to a hidden shopping list  later
-//TODO Optimize accesses 1) get data on program start) 
+//TODO Come up with way to link to a hidden shopping list    :later
+//TODO Optimize accesses to data, get it when we need, and not otherwise   :later
+//TODO get data on program start JW
 //TODO Separate network code, make more locally capable FR JW
 
 public class MainMenuActivity extends Activity {
