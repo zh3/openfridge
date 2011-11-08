@@ -8,7 +8,7 @@ import org.xml.sax.SAXException;
 
 import com.openfridge.TagStateEnum.ShoppingItemTagState;
 
-public class ShoppingItemHandler extends Handler<ShoppingItemTagState> {
+public class ShoppingItemHandler extends SAXHandler<ShoppingItemTagState> {
 
 	{
 		buffers = new EnumMap<ShoppingItemTagState, StringBuilder>(

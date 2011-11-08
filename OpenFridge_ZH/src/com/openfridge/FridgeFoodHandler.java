@@ -12,7 +12,7 @@ import android.util.Log;
 
 import com.openfridge.TagStateEnum.FridgeFoodTagState;
 
-public class FridgeFoodHandler extends Handler<FridgeFoodTagState> {
+public class FridgeFoodHandler extends SAXHandler<FridgeFoodTagState> {
 	{
 		buffers = new EnumMap<FridgeFoodTagState, StringBuilder>(
 				FridgeFoodTagState.class);

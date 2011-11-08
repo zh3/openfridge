@@ -7,7 +7,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-public abstract class Handler<T extends Enum<T> & TagStateEnum> extends DefaultHandler {
+public abstract class SAXHandler<T extends Enum<T> & TagStateEnum> extends DefaultHandler {
 
 	protected T tagState;
 	protected Map<T, StringBuilder> buffers;

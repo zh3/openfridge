@@ -77,7 +77,7 @@ public class DataClient {
 	private DataClient() {
 	}
 
-	private void parse(Handler<?> h, URL url) {
+	private void parse(SAXHandler<?> h, URL url) {
 		xr.setContentHandler(h);
 		try {
 			xr.parse(new InputSource(url.openStream()));
