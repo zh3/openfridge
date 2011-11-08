@@ -11,8 +11,10 @@ import android.view.View;
 //TODO Checking database on regular basis  SC/JW
 //TODO Come up with way to link to a hidden shopping list    :later
 //TODO Optimize accesses to data, get it when we need, and not otherwise   :later
-//TODO get data on program start JW
+//DONE get data on program start JW
+//DONE get data asynchronously JW
 //TODO Separate network code, make more locally capable FR JW
+
 
 public class MainMenuActivity extends Activity {
 	private Intent expirationList, shoppingList;
