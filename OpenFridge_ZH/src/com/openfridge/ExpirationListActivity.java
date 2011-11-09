@@ -7,9 +7,9 @@ import java.util.Observer;
 import java.util.Set;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -23,7 +23,7 @@ import android.widget.Toast;
 
 public class ExpirationListActivity extends Activity implements Observer {
 	private static final int ROW_HEIGHT = 100;
-	private Intent expire, itemEdit;
+	private Intent itemEdit;
 	private Set<ArrayAdapter<?>> arrayAdapters = new HashSet<ArrayAdapter<?>>();
 
 	/** Called when the activity is first created. */
@@ -31,7 +31,6 @@ public class ExpirationListActivity extends Activity implements Observer {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		expire = new Intent(this, ExpireActivity.class);
 		itemEdit = new Intent(this, ItemEditActivity.class);
 		
 		setContentView(R.layout.expiration_list);
@@ -64,9 +63,6 @@ public class ExpirationListActivity extends Activity implements Observer {
 		ListAdapter listAdapter = listView.getAdapter();
 
 		int rows = listAdapter.getCount();
-		// int height = android.R.attr.listPreferredItemHeight * rows;
-		// for some reason listPreferredItemHeight didn't have a reasonable
-		// value...
 		int height = ROW_HEIGHT * rows;
 
 		ViewGroup.LayoutParams params = listView.getLayoutParams();
@@ -105,17 +101,21 @@ public class ExpirationListActivity extends Activity implements Observer {
 	private class PastFridgeItemClickListener implements OnItemClickListener {
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
-			Log.d("Fridge debug", "list item clicked");
 			if (parent.getClass() == ListView.class) {
+			    Intent expire;
+			    
 				ListView parentList = (ListView) parent;
-
+				Context parentContext = parentList.getContext();
 				FridgeFood food = (FridgeFood) parentList
-						.getItemAtPosition(position);
+						                        .getItemAtPosition(position);
+				Bundle bundledFood = FridgeFood.bundleFood(food);
 
-				Toast.makeText(parentList.getContext(),
+				Toast.makeText(parentContext,
 						"Expiration Date: " + food.getExpirationDateString(),
 						Toast.LENGTH_SHORT).show();
 
+				expire = new Intent(parentContext, ExpireActivity.class);
+				expire.putExtras(bundledFood);
 				startActivity(expire);
 
 				DataClient client = DataClient.getInstance();

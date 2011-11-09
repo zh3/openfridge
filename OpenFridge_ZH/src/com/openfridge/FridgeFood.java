@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
 
+import android.os.Bundle;
+
 /**
  * Encapsulates the data associated with an item of food, including description
  * and expiry date.
@@ -186,5 +188,32 @@ public class FridgeFood implements Cloneable {
 			// Should never happen
 			return null;
 		}
+	}
+	
+	public static Bundle bundleFood(FridgeFood f) {
+	    Bundle b = new Bundle();
+	    b.putString("foodDescription", f.getDescription());
+	    b.putString("expirationDate", f.getExpirationDateString());
+	    b.putString("userId", Integer.toString(f.getUserId()));
+	    
+	    return b;
+	}
+	
+	private static String getBundledFoodDescription(Bundle b) {
+	    return b.getString("foodDescription");
+	}
+	
+	private static String getBundledExpirationDateString(Bundle b) {
+	    return b.getString("expirationDate");
+	}
+	
+	private static String getBundledUserIdString(Bundle b) {
+	    return b.getString("userId");
+	}
+	
+	public static FridgeFood getFoodFromBundle(Bundle b) {
+	    return new FridgeFood(getBundledFoodDescription(b), 
+	                          getBundledExpirationDateString(b), 
+	                          getBundledUserIdString(b));
 	}
 }
