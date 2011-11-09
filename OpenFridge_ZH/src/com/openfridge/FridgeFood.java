@@ -212,8 +212,14 @@ public class FridgeFood implements Cloneable {
 	}
 	
 	public static FridgeFood getFoodFromBundle(Bundle b) {
-	    return new FridgeFood(getBundledFoodDescription(b), 
-	                          getBundledExpirationDateString(b), 
-	                          getBundledUserIdString(b));
+	    if (b != null && b.containsKey("foodDescription") 
+	            && b.containsKey("expirationDate")
+	            && b.containsKey("userId")) {
+	        return new FridgeFood(getBundledFoodDescription(b), 
+                    getBundledExpirationDateString(b), 
+                    getBundledUserIdString(b));
+	    } else {
+	        return null;
+	    }
 	}
 }

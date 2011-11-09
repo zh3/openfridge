@@ -1,6 +1,8 @@
 package com.openfridge;
 
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -16,7 +18,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-//TODO Should prepopulate if available       ZH/EL
+//TODO Need to post updates correctly from item edit menu rather than always
+// adding new ones ZH/EL
 //TODO Change date picker to simpler version SC
 //TODO Implement saved food behaviour        ZH/EL/JW
 //
@@ -29,10 +32,26 @@ public class ItemEditActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
+        FridgeFood prechosenFood 
+            = FridgeFood.getFoodFromBundle(getIntent().getExtras());
         setContentView(R.layout.item_edit);
 
         descField = (EditText) findViewById(R.id.editText1);
         datePicker = (DatePicker) findViewById(R.id.datePicker1);
+        // Prepopulate date and description field if this menu was accessed 
+        // from the ExpireActivity
+        if (prechosenFood != null) {
+            String description = prechosenFood.getDescription();
+            GregorianCalendar expirationDate 
+                = prechosenFood.getExpirationDate();
+            
+            descField.setText(description);
+            descField.setSelection(description.length());
+
+            datePicker.updateDate(expirationDate.get(Calendar.YEAR), 
+                    expirationDate.get(Calendar.MONTH) - 1, // Month from 0
+                    expirationDate.get(Calendar.DAY_OF_MONTH));
+        }
         
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this, R.array.Common_items, android.R.layout.simple_spinner_item);
@@ -108,8 +127,6 @@ public class ItemEditActivity extends Activity {
 	}
 	
 	public void doneEditClick(View view){
-		//if (getIntent().getAction().equals("com.openfridge.expirationList")) {
-	    //FridgeFood food = new FridgeFood(descriptionString, expirationDateString, userIdString)
 	    String description = descField.getText().toString();
 	    if (!description.equals("")) {
 	        try {
