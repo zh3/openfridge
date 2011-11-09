@@ -23,13 +23,16 @@ public class FridgeFoodHandler extends SAXHandler<FridgeFoodTagState> {
 
 	private Map<ExpState, ArrayList<FridgeFood>> foodLists = new EnumMap<ExpState, ArrayList<FridgeFood>>(
 			ExpState.class);
-
-	@Override
-	public void startDocument() throws SAXException {
-		expState = null;
+	{
 		for (ExpState key : ExpState.values()) {
 			foodLists.put(key, new ArrayList<FridgeFood>());
 		}
+	}
+
+	
+	@Override
+	public void startDocument() throws SAXException {
+		expState = null;
 		super.startDocument();
 	}
 

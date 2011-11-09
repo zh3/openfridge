@@ -6,10 +6,9 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.Observable;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -21,7 +20,6 @@ import org.xml.sax.XMLReader;
 
 import android.graphics.Color;
 import android.os.AsyncTask;
-import android.widget.ArrayAdapter;
 
 /**
  * A class which facilitates communication with the server, allowing the
@@ -30,7 +28,7 @@ import android.widget.ArrayAdapter;
  * @author Tom, Shimona, Jesse
  */
 
-public class DataClient {
+public class DataClient extends Observable {
 
 	private static final int RED = Color.parseColor("#ED1C24");
 	private static final int YELLOW = Color.parseColor("#FFD300"); 
@@ -44,7 +42,6 @@ public class DataClient {
 	private SAXParserFactory spf;
 	private URL fridgeFoodURL, shoppingItemURL;
 	// Update notification stuff
-	private Set<ArrayAdapter<?>> listeners = new HashSet<ArrayAdapter<?>>();
 	private GetDataAsyncTask getDataTask;
 	{
 		for (ExpState key : ExpState.values()) {
@@ -110,19 +107,11 @@ public class DataClient {
 		@Override
 		protected void onPostExecute(Void result) {
 			getDataTask = null;
-			for (ArrayAdapter<?> a : listeners) {
-				a.notifyDataSetChanged();
-			}
+			setChanged();
+			notifyObservers();
 		}
 	}
 
-	public void addListeningAdapter(ArrayAdapter<?> a) {
-		listeners.add(a);
-	}
-
-	public void removeListeningAdapter(ArrayAdapter<?> a) {
-		listeners.remove(a);
-	}
 
 	public void reloadFoods() {
 		if (getDataTask==null) {

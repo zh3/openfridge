@@ -1,6 +1,10 @@
 package com.openfridge;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.Set;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -17,23 +21,26 @@ import android.widget.Toast;
 
 //DONE Make list headers colored only JW
 
-public class ExpirationListActivity extends Activity {
+public class ExpirationListActivity extends Activity implements Observer {
 	private static final int ROW_HEIGHT = 100;
 	private Intent expire, itemEdit;
+	private Set<ArrayAdapter<?>> arrayAdapters = new HashSet<ArrayAdapter<?>>();
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-	
-	    expire = new Intent(this, ExpireActivity.class);
-	    itemEdit = new Intent(this, ItemEditActivity.class);
+
+		expire = new Intent(this, ExpireActivity.class);
+		itemEdit = new Intent(this, ItemEditActivity.class);
 		
+		DataClient.getInstance().addObserver(this);
 		DataClient.getInstance().reloadFoods();
 		setContentView(R.layout.expiration_list);
-				
+
 		for (ExpState key : ExpState.values()) {
-			initFridgeFoodListView(key.getListViewID(), DataClient.getInstance().getFoods(key),
+			initFridgeFoodListView(key.getListViewID(), DataClient
+					.getInstance().getFoods(key),
 					new PastFridgeItemClickListener());
 		}
 	}
@@ -42,7 +49,7 @@ public class ExpirationListActivity extends Activity {
 			OnItemClickListener listener) {
 		ArrayAdapter<FridgeFood> a = new ArrayAdapter<FridgeFood>(this,
 				android.R.layout.simple_list_item_1, foods);
-		DataClient.getInstance().addListeningAdapter(a);
+		arrayAdapters.add(a);
 		ListView listView = (ListView) findViewById(viewId);
 		listView.setTextFilterEnabled(true);
 		listView.setAdapter(a);
@@ -95,5 +102,12 @@ public class ExpirationListActivity extends Activity {
 			}
 		}
 
+	}
+
+	@Override
+	public void update(Observable observable, Object data) {
+		for (ArrayAdapter<?> a : arrayAdapters) {
+			a.notifyDataSetChanged();
+		}
 	}
 }

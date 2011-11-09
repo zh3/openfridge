@@ -1,5 +1,8 @@
 package com.openfridge;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +18,7 @@ import android.view.View;
 //TODO Separate network code, make more locally capable FR JW
 
 
-public class MainMenuActivity extends Activity {
+public class MainMenuActivity extends Activity implements Observer {
 	private Intent expirationList, shoppingList;
 	
 	public void onCreate(Bundle savedInstanceState) {
@@ -28,18 +31,19 @@ public class MainMenuActivity extends Activity {
         //shopping = new Intent(this, ShoppingActivity.class);
         shoppingList = new Intent(this, ShoppingListActivity.class);
         
-        DataClient.getInstance().reloadFoods(); //to keep the colors up to date
+        DataClient.getInstance().addObserver(this);
         
+        DataClient.getInstance().reloadFoods(); //to keep the colors up to date
         setContentView(R.layout.main);
 	}
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
-		updateColors();
     }
 
-	public void updateColors() {
+	@Override
+	public void update(Observable arg0, Object arg1) {
         View expB = findViewById(R.id.Exp_button);
         expB.setBackgroundColor(DataClient.getInstance().getExpirationListColor());
         
