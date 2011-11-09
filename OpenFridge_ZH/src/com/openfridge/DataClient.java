@@ -19,6 +19,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.widget.ArrayAdapter;
 
@@ -26,25 +27,14 @@ import android.widget.ArrayAdapter;
  * A class which facilitates communication with the server, allowing the
  * retrieving and updating of fridge food items on the database server.
  * 
- * @author Tom, Shimona
+ * @author Tom, Shimona, Jesse
  */
-
-// private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-// /** The system calls this to perform work in a worker thread and
-// * delivers it the parameters given to AsyncTask.execute() */
-// protected Bitmap doInBackground(String... urls) {
-// return loadImageFromNetwork(urls[0]);
-// }
-//
-// /** The system calls this to perform work in the UI thread and delivers
-// * the result from doInBackground() */
-// protected void onPostExecute(Bitmap result) {
-// mImageView.setImageBitmap(result);
-// }
-// }
 
 public class DataClient {
 
+	private static final int RED = Color.parseColor("#ED1C24");
+	private static final int YELLOW = Color.parseColor("#FFD300"); 
+	private static final int GREEN = Color.parseColor("#228B22");
 	// ArrayLists for the data from the XML
 	private Map<ExpState, List<FridgeFood>> foods = new HashMap<ExpState, List<FridgeFood>>(); 
 	private List<ShoppingItem> shoppingList = new ArrayList<ShoppingItem>();
@@ -55,6 +45,7 @@ public class DataClient {
 	private URL fridgeFoodURL, shoppingItemURL;
 	// Update notification stuff
 	private Set<ArrayAdapter<?>> listeners = new HashSet<ArrayAdapter<?>>();
+	private GetDataAsyncTask getDataTask;
 	{
 		for (ExpState key : ExpState.values()) {
 			foods.put(key, new ArrayList<FridgeFood>());
@@ -99,7 +90,6 @@ public class DataClient {
 		protected Void doInBackground(Void... arg0) {
 
 			FridgeFoodHandler ffH = new FridgeFoodHandler();
-			//Log.i("OpenFridge", String.format("ffH:%s\nURL:%s",ffH, fridgeFoodURL));
 			parse(ffH,fridgeFoodURL);
 
 			// Changes the contents of the ArrayList's,
@@ -114,15 +104,12 @@ public class DataClient {
 
 			shoppingList.clear();
 			shoppingList.addAll(siH.getFoods());
-//			shoppingList.addAll(Arrays.asList(new ShoppingItem("Milk", 1, 1),
-//					new ShoppingItem("Eggs", 2, 1), new ShoppingItem("Kale", 3,
-//							1), new ShoppingItem("Beer", 4, 1),
-//					new ShoppingItem("Beef", 5, 1)));
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
+			getDataTask = null;
 			for (ArrayAdapter<?> a : listeners) {
 				a.notifyDataSetChanged();
 			}
@@ -138,7 +125,10 @@ public class DataClient {
 	}
 
 	public void reloadFoods() {
-		new GetDataAsyncTask().execute();
+		if (getDataTask==null) {
+			getDataTask = new GetDataAsyncTask();
+			getDataTask.execute();
+		}
 	}
 	
 	/**
@@ -166,6 +156,20 @@ public class DataClient {
 	public List<FridgeFood> getFoods(ExpState key) {
 		return foods.get(key);
 	}
+	public int getExpirationListColor() {
+		if (!getFoods(ExpState.EXPIRED).isEmpty()) {
+			//There are expired items:
+			return RED;
+		} else if (!getFoods(ExpState.NEAR).isEmpty()) {
+			//There are stale items:
+			return YELLOW;
+		}
+		return GREEN;
+	}
+	public int getShoppingListColor() {
+		return Color.parseColor("#FFFFFF");
+	}
+	
 	public static DataClient getInstance() {
 		return DataClientHolder.client;
 	}
