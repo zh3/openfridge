@@ -2,8 +2,8 @@ package com.openfridge;
 
 public class ShoppingItem {
 	private String description;
-	private int id;
-	private int userId;
+	private int id = -1;
+	private int userId = -1;
 
 	public ShoppingItem(String des, String i, String uid) {
 		description = des;

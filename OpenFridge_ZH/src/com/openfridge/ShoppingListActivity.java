@@ -26,7 +26,6 @@ public class ShoppingListActivity extends Activity implements Observer {
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		DataClient.getInstance().reloadFoods();
 		setContentView(R.layout.shopping_list);
 
 		adapter = new ArrayAdapter<ShoppingItem>(this,
@@ -47,8 +46,6 @@ public class ShoppingListActivity extends Activity implements Observer {
                       CheckedTextView textView = (CheckedTextView)v;
                       textView.setChecked(!textView.isChecked());			}
 		}); 
-		
-
 	}
 
 	@Override
@@ -61,6 +58,7 @@ public class ShoppingListActivity extends Activity implements Observer {
 	protected void onResume() {
 		super.onResume();
 		DataClient.getInstance().addObserver(this);
+		update(null, null);
 		DataClient.getInstance().reloadFoods();
 	}
 
@@ -68,7 +66,7 @@ public class ShoppingListActivity extends Activity implements Observer {
 		String itemToAdd = ((EditText) findViewById(R.id.editText1)).getText()
 				.toString();
 
-		adapter.add(new ShoppingItem(itemToAdd, 9, 1));
+		adapter.add(new ShoppingItem(itemToAdd, null, DataClient.getInstance().getUID()));
 
 		Toast.makeText(view.getContext(), "Added Item: " + itemToAdd,
 				Toast.LENGTH_SHORT).show();

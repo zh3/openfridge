@@ -180,4 +180,8 @@ public class DataClient extends Observable {
 	private static class DataClientHolder /* Pugh's Way */{
 		public static final DataClient client = new DataClient();
 	}
+
+	public String getUID() {
+		return "1";
+	}
 }

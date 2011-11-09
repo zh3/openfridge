@@ -32,9 +32,8 @@ public class ShoppingItemHandler extends SAXHandler<ShoppingItemTagState> {
 	@Override
 	public void endElement(String namespaceURI, String localName, String qName)
 			throws SAXException {
-		if (localName.equals("shopping-list")) { // TODO change this element to
-													// "shopping-item", for
-													// sanity's sake.
+		if (localName.equals("shopping-list")) {
+// TODO change this element to "shopping-item", for sanity's sake. EL
 			ShoppingItem newFood = new ShoppingItem(
 					getString(ShoppingItemTagState.DESC),
 					// getString(ShoppingItemTagState.CREATED_AT),
