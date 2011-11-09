@@ -8,7 +8,7 @@
         android:id="@+id/button1"
         android:layout_width="fill_parent"
         android:layout_height="75dp"
-        onClick="EditPostponeClick"
+        android:onClick="EditPostponeClick"
         android:text="@string/EditPost_button" >
     </Button>
 
@@ -50,7 +50,7 @@
             android:layout_width="fill_parent"
             android:layout_height="75dp"
             android:layout_weight="1"
-            onClick="DoneClick"
+            android:onClick="DoneClick"
             android:text="@string/Done_button" >
         </Button>
 
@@ -59,7 +59,7 @@
             android:layout_width="fill_parent"
             android:layout_height="75dp"
             android:layout_weight="1"
-            onClick="CancelClick"
+            android:onClick="CancelClick"
             android:text="@string/Cancel_button" >
         </Button>
     </LinearLayout>

@@ -3,6 +3,7 @@ package com.openfridge;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 //TODO Add the name of the item to the activity    ZH
@@ -36,6 +37,6 @@ public class ExpireActivity extends Activity {
 	}
 	
 	public void CancelClick(View view){
-		startActivity(expirationList);
+		finish();
 	}
 }
