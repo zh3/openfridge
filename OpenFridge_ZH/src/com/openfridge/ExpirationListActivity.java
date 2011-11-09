@@ -34,8 +34,6 @@ public class ExpirationListActivity extends Activity implements Observer {
 		expire = new Intent(this, ExpireActivity.class);
 		itemEdit = new Intent(this, ItemEditActivity.class);
 		
-		DataClient.getInstance().addObserver(this);
-		DataClient.getInstance().reloadFoods();
 		setContentView(R.layout.expiration_list);
 
 		for (ExpState key : ExpState.values()) {
@@ -57,6 +55,11 @@ public class ExpirationListActivity extends Activity implements Observer {
 
 		// Make items not focusable to avoid listitem / button conflicts
 		listView.setItemsCanFocus(false);
+		setHeight(viewId);
+	}
+
+	private void setHeight(int viewID) {
+		ListView listView = (ListView) findViewById(viewID);
 
 		ListAdapter listAdapter = listView.getAdapter();
 
@@ -70,6 +73,29 @@ public class ExpirationListActivity extends Activity implements Observer {
 		params.height = height;
 		listView.setLayoutParams(params);
 		listView.requestLayout();
+	}
+	@Override
+	protected void onPause() {
+		super.onPause();
+		DataClient.getInstance().deleteObserver(this);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		DataClient.getInstance().addObserver(this);
+		update(null,null);
+		DataClient.getInstance().reloadFoods();
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
 	}
 
 	public void loadItemEdit(View view) {
@@ -108,6 +134,9 @@ public class ExpirationListActivity extends Activity implements Observer {
 	public void update(Observable observable, Object data) {
 		for (ArrayAdapter<?> a : arrayAdapters) {
 			a.notifyDataSetChanged();
+		}
+		for (ExpState key : ExpState.values()) {
+			setHeight(key.getListViewID());
 		}
 	}
 }

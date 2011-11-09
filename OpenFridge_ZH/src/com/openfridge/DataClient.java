@@ -20,6 +20,7 @@ import org.xml.sax.XMLReader;
 
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.SystemClock;
 
 /**
  * A class which facilitates communication with the server, allowing the
@@ -31,10 +32,10 @@ import android.os.AsyncTask;
 public class DataClient extends Observable {
 
 	private static final int RED = Color.parseColor("#ED1C24");
-	private static final int YELLOW = Color.parseColor("#FFD300"); 
+	private static final int YELLOW = Color.parseColor("#FFD300");
 	private static final int GREEN = Color.parseColor("#228B22");
 	// ArrayLists for the data from the XML
-	private Map<ExpState, List<FridgeFood>> foods = new HashMap<ExpState, List<FridgeFood>>(); 
+	private Map<ExpState, List<FridgeFood>> foods = new HashMap<ExpState, List<FridgeFood>>();
 	private List<ShoppingItem> shoppingList = new ArrayList<ShoppingItem>();
 	// Parsing stuff
 	private XMLReader xr;
@@ -43,20 +44,26 @@ public class DataClient extends Observable {
 	private URL fridgeFoodURL, shoppingItemURL;
 	// Update notification stuff
 	private GetDataAsyncTask getDataTask;
+	private long lastRunTime = 0;
+	private long nextRunTime = 0;
 	{
 		for (ExpState key : ExpState.values()) {
 			foods.put(key, new ArrayList<FridgeFood>());
 		}
 		/* Create the URLs we want to load xml-data from. */
-		/* If you check them, you'll see they are mini-xml documents generated from elvin's database. */
-			try {
-				fridgeFoodURL = new URL("http://openfridge.heroku.com/fridge_foods.xml");
-				shoppingItemURL = new URL("http://openfridge.heroku.com/shopping_lists.xml");
-			} catch (MalformedURLException e) {
-				throw new RuntimeException(e);
-			}
-			
-		
+		/*
+		 * If you check them, you'll see they are mini-xml documents generated
+		 * from elvin's database.
+		 */
+		try {
+			fridgeFoodURL = new URL(
+					"http://openfridge.heroku.com/fridge_foods.xml");
+			shoppingItemURL = new URL(
+					"http://openfridge.heroku.com/shopping_lists.xml");
+		} catch (MalformedURLException e) {
+			throw new RuntimeException(e);
+		}
+
 		/* Get a SAXParser from the SAXPArserFactory. */
 		spf = SAXParserFactory.newInstance();
 		try {
@@ -80,14 +87,15 @@ public class DataClient extends Observable {
 		} catch (SAXException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
+
 	private class GetDataAsyncTask extends AsyncTask<Void, Void, Void> {
 		@Override
 		protected Void doInBackground(Void... arg0) {
 
 			FridgeFoodHandler ffH = new FridgeFoodHandler();
-			parse(ffH,fridgeFoodURL);
+			parse(ffH, fridgeFoodURL);
 
 			// Changes the contents of the ArrayList's,
 			// rather than re-assigning them.
@@ -112,14 +120,17 @@ public class DataClient extends Observable {
 		}
 	}
 
-
 	public void reloadFoods() {
-		if (getDataTask==null) {
+		long now = SystemClock.uptimeMillis();
+		if (getDataTask == null && (now > nextRunTime || now < lastRunTime)) {
+			// 2nd check is in case the clock's been reset.
+			lastRunTime = SystemClock.uptimeMillis();
+			nextRunTime = lastRunTime + 60 * 60 * 1000;
 			getDataTask = new GetDataAsyncTask();
 			getDataTask.execute();
 		}
 	}
-	
+
 	/**
 	 * Post an item of food to the cloud database. If the id of the given food
 	 * exists already, the existing record will be updated in the database.
@@ -142,28 +153,31 @@ public class DataClient extends Observable {
 	public List<ShoppingItem> getShoppingList() {
 		return shoppingList;
 	}
+
 	public List<FridgeFood> getFoods(ExpState key) {
 		return foods.get(key);
 	}
+
 	public int getExpirationListColor() {
 		if (!getFoods(ExpState.EXPIRED).isEmpty()) {
-			//There are expired items:
+			// There are expired items:
 			return RED;
 		} else if (!getFoods(ExpState.NEAR).isEmpty()) {
-			//There are stale items:
+			// There are stale items:
 			return YELLOW;
 		}
 		return GREEN;
 	}
+
 	public int getShoppingListColor() {
 		return Color.parseColor("#FFFFFF");
 	}
-	
+
 	public static DataClient getInstance() {
 		return DataClientHolder.client;
 	}
-	
-	private static class DataClientHolder /* Pugh's Way */ {
+
+	private static class DataClientHolder /* Pugh's Way */{
 		public static final DataClient client = new DataClient();
 	}
 }

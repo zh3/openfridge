@@ -1,5 +1,8 @@
 package com.openfridge;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
@@ -18,7 +21,7 @@ import android.widget.Toast;
 //TODO Make delete post to server SC/JW
 //DONE Parse shopping list JW
 
-public class ShoppingListActivity extends Activity {
+public class ShoppingListActivity extends Activity implements Observer {
 	private ArrayAdapter<ShoppingItem> adapter;
 	
 	public void onCreate(Bundle savedInstanceState) {
@@ -29,7 +32,7 @@ public class ShoppingListActivity extends Activity {
 		adapter = new ArrayAdapter<ShoppingItem>(this,
 				android.R.layout.simple_list_item_multiple_choice,
 				DataClient.getInstance().getShoppingList());
-
+		
 		ListView lv = (ListView) findViewById(R.id.shoppingLV);
 		//lv.setTextFilterEnabled(true);
 		lv.setAdapter(adapter);
@@ -46,6 +49,19 @@ public class ShoppingListActivity extends Activity {
 		}); 
 		
 
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		DataClient.getInstance().deleteObserver(this);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		DataClient.getInstance().addObserver(this);
+		DataClient.getInstance().reloadFoods();
 	}
 
 	public void addItemToList(View view) {
@@ -89,5 +105,10 @@ public class ShoppingListActivity extends Activity {
         Toast.makeText(view.getContext(), itemsToDelete,
                 Toast.LENGTH_SHORT).show();
     }
+
+	@Override
+	public void update(Observable observable, Object data) {
+		adapter.notifyDataSetChanged();
+	}
 
 }

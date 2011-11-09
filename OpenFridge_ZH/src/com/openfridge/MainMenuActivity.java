@@ -30,17 +30,22 @@ public class MainMenuActivity extends Activity implements Observer {
         //itemEdit = new Intent(this, ItemEditActivity.class);
         //shopping = new Intent(this, ShoppingActivity.class);
         shoppingList = new Intent(this, ShoppingListActivity.class);
-        
-        DataClient.getInstance().addObserver(this);
-        
-        DataClient.getInstance().reloadFoods(); //to keep the colors up to date
         setContentView(R.layout.main);
 	}
 	
 	@Override
+	protected void onPause() {
+		super.onPause();
+		DataClient.getInstance().deleteObserver(this);
+	}
+
+	@Override
 	protected void onResume() {
 		super.onResume();
-    }
+		DataClient.getInstance().addObserver(this);
+		update(null,null);
+		DataClient.getInstance().reloadFoods();
+	}
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
