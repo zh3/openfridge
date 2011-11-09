@@ -5,8 +5,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -44,9 +46,7 @@ import android.widget.ArrayAdapter;
 public class DataClient {
 
 	// ArrayLists for the data from the XML
-	private ArrayList<FridgeFood> goodFoods = new ArrayList<FridgeFood>();
-	private ArrayList<FridgeFood> nearFoods = new ArrayList<FridgeFood>();
-	private ArrayList<FridgeFood> expiredFoods = new ArrayList<FridgeFood>();
+	private Map<ExpState, List<FridgeFood>> foods = new HashMap<ExpState, List<FridgeFood>>(); 
 	private List<ShoppingItem> shoppingList = new ArrayList<ShoppingItem>();
 	// Parsing stuff
 	private XMLReader xr;
@@ -56,13 +56,19 @@ public class DataClient {
 	// Update notification stuff
 	private Set<ArrayAdapter<?>> listeners = new HashSet<ArrayAdapter<?>>();
 	{
+		for (ExpState key : ExpState.values()) {
+			foods.put(key, new ArrayList<FridgeFood>());
+		}
 		/* Create the URLs we want to load xml-data from. */
 		/* If you check them, you'll see they are mini-xml documents generated from elvin's database. */
-		try {
-			fridgeFoodURL = new URL("http://openfridge.heroku.com/fridge_foods.xml");
-			shoppingItemURL = new URL("http://openfridge.heroku.com/shopping_lists.xml");
-		} catch (MalformedURLException e) {
-		}
+			try {
+				fridgeFoodURL = new URL("http://openfridge.heroku.com/fridge_foods.xml");
+				shoppingItemURL = new URL("http://openfridge.heroku.com/shopping_lists.xml");
+			} catch (MalformedURLException e) {
+				throw new RuntimeException(e);
+			}
+			
+		
 		/* Get a SAXParser from the SAXPArserFactory. */
 		spf = SAXParserFactory.newInstance();
 		try {
@@ -93,16 +99,15 @@ public class DataClient {
 		protected Void doInBackground(Void... arg0) {
 
 			FridgeFoodHandler ffH = new FridgeFoodHandler();
+			//Log.i("OpenFridge", String.format("ffH:%s\nURL:%s",ffH, fridgeFoodURL));
 			parse(ffH,fridgeFoodURL);
 
 			// Changes the contents of the ArrayList's,
 			// rather than re-assigning them.
-			goodFoods.clear();
-			goodFoods.addAll(ffH.getGoodFoods());
-			nearFoods.clear();
-			nearFoods.addAll(ffH.getNearFoods());
-			expiredFoods.clear();
-			expiredFoods.addAll(ffH.getExpiredFoods());
+			for (ExpState key : ExpState.values()) {
+				foods.get(key).clear();
+				foods.get(key).addAll(ffH.getFoods(key));
+			}
 
 			ShoppingItemHandler siH = new ShoppingItemHandler();
 			parse(siH, shoppingItemURL);
@@ -137,39 +142,6 @@ public class DataClient {
 	}
 	
 	/**
-	 * Get an ArrayList containing records of all the Foods that have expired,
-	 * based on the information from the server available at the last call to
-	 * reloadFoods()
-	 * 
-	 * @return An ArrayList of expired foods
-	 */
-	public ArrayList<FridgeFood> getExpiredFoods() {
-		return expiredFoods;
-	}
-
-	/**
-	 * Get an ArrayList containing records of all the Foods that are close to,
-	 * expiration based on the information from the server available at the last
-	 * call to reloadFoods()
-	 * 
-	 * @return An ArrayList of foods soon to expire
-	 */
-	public ArrayList<FridgeFood> getNearFoods() {
-		return nearFoods;
-	}
-
-	/**
-	 * Get an ArrayList containing records of all the Foods that are fresh,
-	 * based on the information from the server available at the last call to
-	 * reloadFoods()
-	 * 
-	 * @return An ArrayList of fresh foods
-	 */
-	public ArrayList<FridgeFood> getGoodFoods() {
-		return goodFoods;
-	}
-
-	/**
 	 * Post an item of food to the cloud database. If the id of the given food
 	 * exists already, the existing record will be updated in the database.
 	 * 
@@ -191,7 +163,9 @@ public class DataClient {
 	public List<ShoppingItem> getShoppingList() {
 		return shoppingList;
 	}
-
+	public List<FridgeFood> getFoods(ExpState key) {
+		return foods.get(key);
+	}
 	public static DataClient getInstance() {
 		return DataClientHolder.client;
 	}

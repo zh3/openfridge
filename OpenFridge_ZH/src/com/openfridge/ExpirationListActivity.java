@@ -31,32 +31,11 @@ public class ExpirationListActivity extends Activity {
 		
 		DataClient.getInstance().reloadFoods();
 		setContentView(R.layout.expiration_list);
-		
-		/*
-		// Setup the Listview
-		List<FridgeFood> good = Arrays.asList(new FridgeFood("2011-10-28",
-				"Milk", "2011-11-01", "2", "2011-10-28", "1"), new FridgeFood(
-				"2011-10-28", "Eggs", "2011-11-01", "2", "2011-10-28", "1"),
-				new FridgeFood("2011-10-28", "Leftovers", "2011-11-01", "2",
-						"2011-10-28", "1"), new FridgeFood("2011-10-28",
-						"Kale", "2011-11-01", "2", "2011-10-28", "1"),
-				new FridgeFood("2011-10-28", "Beef", "2011-11-01", "2",
-						"2011-10-28", "1")
-	
-		);
-		List<FridgeFood> nearly = Arrays.asList(new FridgeFood("2011-10-28",
-				"Leftovers", "2011-11-01", "1", "2011-10-28", "1"));
-		List<FridgeFood> expired = Collections.<FridgeFood> emptyList();
-		*/
-		
-		//Log.d(DEBUG_TAG, "number of good items: " + good.size());
-		
-		initFridgeFoodListView(R.id.pastLV, DataClient.getInstance().getExpiredFoods(),
-				new PastFridgeItemClickListener());
-		initFridgeFoodListView(R.id.nearLV, DataClient.getInstance().getNearFoods(),
-				new PastFridgeItemClickListener());
-		initFridgeFoodListView(R.id.goodLV, DataClient.getInstance().getGoodFoods(),
-				new PastFridgeItemClickListener());
+				
+		for (ExpState key : ExpState.values()) {
+			initFridgeFoodListView(key.getListViewID(), DataClient.getInstance().getFoods(key),
+					new PastFridgeItemClickListener());
+		}
 	}
 
 	private void initFridgeFoodListView(int viewId, List<FridgeFood> foods,

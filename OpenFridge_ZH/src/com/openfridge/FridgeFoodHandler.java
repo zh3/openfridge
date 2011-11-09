@@ -3,6 +3,7 @@ package com.openfridge;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 
 import org.xml.sax.Attributes;
@@ -18,39 +19,15 @@ public class FridgeFoodHandler extends SAXHandler<FridgeFoodTagState> {
 				FridgeFoodTagState.class);
 		values = Arrays.asList(FridgeFoodTagState.values());
 	}
-	private ExpireState expirationState;
+	private ExpState expState;
 
-	private enum ExpireState {
-		NEAR, GOOD, EXPIRED
-	}
-
-	private Map<ExpireState, ArrayList<FridgeFood>> foodLists = new EnumMap<ExpireState, ArrayList<FridgeFood>>(
-			ExpireState.class);
-
-	private void logNumber(ExpireState e) {
-		Log.d("OpenFridge", String.format("Number of %s Foods: %d\n", e,
-				foodLists.get(e).size()));
-	}
-
-	public ArrayList<FridgeFood> getGoodFoods() {
-		logNumber(ExpireState.GOOD);
-		return foodLists.get(ExpireState.GOOD);
-	}
-
-	public ArrayList<FridgeFood> getNearFoods() {
-		logNumber(ExpireState.NEAR);
-		return foodLists.get(ExpireState.NEAR);
-	}
-
-	public ArrayList<FridgeFood> getExpiredFoods() {
-		logNumber(ExpireState.EXPIRED);
-		return foodLists.get(ExpireState.EXPIRED);
-	}
+	private Map<ExpState, ArrayList<FridgeFood>> foodLists = new EnumMap<ExpState, ArrayList<FridgeFood>>(
+			ExpState.class);
 
 	@Override
 	public void startDocument() throws SAXException {
-		expirationState = null;
-		for (ExpireState key : ExpireState.values()) {
+		expState = null;
+		for (ExpState key : ExpState.values()) {
 			foodLists.put(key, new ArrayList<FridgeFood>());
 		}
 		super.startDocument();
@@ -61,11 +38,11 @@ public class FridgeFoodHandler extends SAXHandler<FridgeFoodTagState> {
 			String qName, Attributes atts) throws SAXException {
 		super.startElement(namespaceURI, localName, qName, atts);
 		try {
-			expirationState = ExpireState.valueOf(normalize(localName));
+			expState = ExpState.valueOf(normalize(localName));
 		} catch (IllegalArgumentException e) {
 		}
 		// Log.d("OpenFridge", String.format("expireState%s\n",
-		// expirationState));
+		// expState));
 	}
 
 	@Override
@@ -80,7 +57,7 @@ public class FridgeFoodHandler extends SAXHandler<FridgeFoodTagState> {
 					getString(FridgeFoodTagState.ID),
 					getString(FridgeFoodTagState.USER_ID));
 
-			foodLists.get(expirationState).add(newFood);
+			foodLists.get(expState).add(newFood);
 
 			clearTagBuffers();
 		}
@@ -89,5 +66,11 @@ public class FridgeFoodHandler extends SAXHandler<FridgeFoodTagState> {
 	@Override
 	protected FridgeFoodTagState valueOf(String s) {
 		return FridgeFoodTagState.valueOf(normalize(s));
+	}
+
+	public List<FridgeFood> getFoods(ExpState key) {
+		Log.d("OpenFridge", String.format("Number of %s Foods: %d\n", key,
+				foodLists.get(key).size()));
+		return foodLists.get(key);
 	}
 }

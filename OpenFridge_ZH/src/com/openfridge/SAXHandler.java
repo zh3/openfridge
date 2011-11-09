@@ -15,7 +15,6 @@ public abstract class SAXHandler<T extends Enum<T> & TagStateEnum> extends Defau
 	
 	@Override
 	public void startDocument() throws SAXException {
-		super.startDocument();
 		clearTagBuffers();
 	}
 
