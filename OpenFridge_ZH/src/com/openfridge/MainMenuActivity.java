@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-//TODO no color icons SC
+//DONE no color icons FR
 //DONE Colors need to actually return correctly JW
 //TODO Checking database on regular basis  SC/JW
 //TODO Come up with way to link to a hidden shopping list    :later
