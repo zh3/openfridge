@@ -15,13 +15,14 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-//TODO Don't let it add blank SC
+//DONE Don't let it add blank JW
 //TODO Make enter enter the item SC
-//TODO Limit a max number of characters SC
+//DONE Limit a max number of characters JW 
 //TODO Make delete post to server SC/JW
 //DONE Parse shopping list JW
 
 public class ShoppingListActivity extends Activity implements Observer {
+	private static final int MAX_LENGTH = 30;
 	private ArrayAdapter<ShoppingItem> adapter;
 	
 	public void onCreate(Bundle savedInstanceState) {
@@ -65,11 +66,16 @@ public class ShoppingListActivity extends Activity implements Observer {
 	public void addItemToList(View view) {
 		String itemToAdd = ((EditText) findViewById(R.id.editText1)).getText()
 				.toString();
+		if (itemToAdd.length()!=0 && itemToAdd.length()<MAX_LENGTH) {
+			adapter.add(new ShoppingItem(itemToAdd, null, DataClient.getInstance().getUID()));
 
-		adapter.add(new ShoppingItem(itemToAdd, null, DataClient.getInstance().getUID()));
-
-		Toast.makeText(view.getContext(), "Added Item: " + itemToAdd,
-				Toast.LENGTH_SHORT).show();
+			Toast.makeText(view.getContext(), "Added Item: " + itemToAdd,
+					Toast.LENGTH_SHORT).show();
+		} else {
+			Toast.makeText(view.getContext(), "Item was empty or too long!",
+					Toast.LENGTH_SHORT).show();
+			
+		}
 	}
 
     public void deleteChecked(View view) {

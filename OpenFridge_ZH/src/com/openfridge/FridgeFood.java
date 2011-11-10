@@ -2,6 +2,7 @@ package com.openfridge;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import android.os.Bundle;
@@ -21,6 +22,10 @@ public class FridgeFood implements Cloneable {
 	private GregorianCalendar lastUpdateDateTime;
 	private int userId = -1;
 
+	public FridgeFood() {
+		this("", "", "", "", "", "");
+	}
+
 	public FridgeFood(String descriptionString, String expirationDateString,
 			String userIdString) {
 		this(descriptionString, expirationDateString, "", "", "", userIdString);
@@ -31,17 +36,29 @@ public class FridgeFood implements Cloneable {
 			String idString, String userIdString) {
 
 		description = descriptionString.trim();
-		expirationDate = parseXMLDateTime(expirationDateString);
-		creationDateTime = parseXMLDateTime(creationDateTimeString);
-		lastUpdateDateTime = parseXMLDateTime(lastUpdateDateTimeString);
+		creationDateTime = defaultDate(creationDateTimeString, new GregorianCalendar());
+		lastUpdateDateTime = defaultDate(lastUpdateDateTimeString, new GregorianCalendar());
+		GregorianCalendar weekLater = getCreationDateTime();
+		weekLater.roll(Calendar.DAY_OF_YEAR, 7);
+		expirationDate = defaultDate(expirationDateString, weekLater);
 		try {
 			id = Integer.parseInt(idString.trim());
-		} catch (NumberFormatException e) {}
+		} catch (NumberFormatException e) {
+		}
 		try {
 			userId = Integer.parseInt(userIdString.trim());
-		} catch (NumberFormatException e) {}
+		} catch (NumberFormatException e) {
+		}
 	}
 
+	private GregorianCalendar defaultDate (String dateString, GregorianCalendar defaultDateValue) {
+		GregorianCalendar ans = parseXMLDateTime(dateString);
+		if (ans==null) {
+			return defaultDateValue;
+		} else {
+			return ans;
+		}
+	}
 	/**
 	 * Parse a string containing date and time information from the XML format
 	 * to a GregorianCalendar object representation
@@ -51,54 +68,31 @@ public class FridgeFood implements Cloneable {
 	 *            yyyy-mm-ddThh:mm:ssZ.
 	 * @return An object representation of the given Date and Time string
 	 */
-	public static GregorianCalendar parseXMLDateTime(String xmlDateTime) {
-		if (xmlDateTime.length() == 0) {
-			return null;
-		}
-		String dateTimeString = getSpaceDelimitedDateTime(xmlDateTime);
+	private GregorianCalendar parseXMLDateTime(String xmlDateTime) {
+		String dateTimeString = xmlDateTime.replace('-', ' ').replace('T', ' ')
+				.replace('Z', ' ').replace(':', ' ');
 		Scanner s = new Scanner(dateTimeString);
 
-		int year = s.nextInt();
-		int month = s.nextInt();
-		int day = s.nextInt();
+		try {
+			int year = s.nextInt();
+			int month = s.nextInt();
+			int day = s.nextInt();
 
-		// Return if only the date is included
-		if (!s.hasNext())
-			return new GregorianCalendar(year, month, day);
-		int hour = s.nextInt();
-		int minute = s.nextInt();
-		int second = s.nextInt();
+			// Return if only the date is included
+			if (!s.hasNext())
+				return new GregorianCalendar(year, month, day);
+			int hour = s.nextInt();
+			int minute = s.nextInt();
+			int second = s.nextInt();
 
-		return new GregorianCalendar(year, month, day, hour, minute, second);
+			return new GregorianCalendar(year, month, day, hour, minute, second);
+		} catch (IllegalStateException e) {
+			return null;
+		} catch (NoSuchElementException e) {
+			return null;
+		}
 	}
-
-	/**
-	 * Parse a simple date time string into a GregorianCalendar object
-	 * 
-	 * @param dateTime
-	 *            A date time string in the form YYYY-MM-DD
-	 * @return a GregorianCalendar object representing the given string
-	 */
-	public static GregorianCalendar parseSimpleDateTime(String dateTime) {
-		String spacedDateTime = getSpaceDelimitedDateTime(dateTime);
-		Scanner s = new Scanner(spacedDateTime);
-
-		int year = s.nextInt();
-		int month = s.nextInt();
-		int day = s.nextInt();
-
-		return new GregorianCalendar(year, month, day);
-	}
-
-	private static String getSpaceDelimitedDateTime(String xmlDateTime) {
-		String dateTime = xmlDateTime.replace('-', ' ');
-		dateTime = dateTime.replace('T', ' ');
-		dateTime = dateTime.replace('Z', ' ');
-		dateTime = dateTime.replace(':', ' ');
-
-		return dateTime;
-	}
-
+	
 	public GregorianCalendar getCreationDateTime() {
 		return (GregorianCalendar) creationDateTime.clone();
 	}
@@ -189,37 +183,39 @@ public class FridgeFood implements Cloneable {
 			return null;
 		}
 	}
-	
+
 	public static Bundle bundleFood(FridgeFood f) {
-	    Bundle b = new Bundle();
-	    b.putString("foodDescription", f.getDescription());
-	    b.putString("expirationDate", f.getExpirationDateString());
-	    b.putString("userId", Integer.toString(f.getUserId()));
-	    
-	    return b;
+		Bundle b = new Bundle();
+		b.putString("foodDescription", f.getDescription());
+		b.putString("expirationDate", f.getExpirationDateString());
+		b.putString("userId", Integer.toString(f.getUserId()));
+		return b;
 	}
-	
+
 	private static String getBundledFoodDescription(Bundle b) {
-	    return b.getString("foodDescription");
+		return b.getString("foodDescription");
 	}
-	
+
 	private static String getBundledExpirationDateString(Bundle b) {
-	    return b.getString("expirationDate");
+		return b.getString("expirationDate");
 	}
-	
+
 	private static String getBundledUserIdString(Bundle b) {
-	    return b.getString("userId");
+		return b.getString("userId");
 	}
-	
+
+	/**
+	 * Return a newly created FridgeFood item, initialized with the data from
+	 * the Bundle, if it exists, otherwise default.
+	 */
 	public static FridgeFood getFoodFromBundle(Bundle b) {
-	    if (b != null && b.containsKey("foodDescription") 
-	            && b.containsKey("expirationDate")
-	            && b.containsKey("userId")) {
-	        return new FridgeFood(getBundledFoodDescription(b), 
-                    getBundledExpirationDateString(b), 
-                    getBundledUserIdString(b));
-	    } else {
-	        return null;
-	    }
+		if (b != null && b.containsKey("foodDescription")
+				&& b.containsKey("expirationDate") && b.containsKey("userId")) {
+			return new FridgeFood(getBundledFoodDescription(b),
+					getBundledExpirationDateString(b),
+					getBundledUserIdString(b));
+		} else {
+			return new FridgeFood();
+		}
 	}
 }
