@@ -8,7 +8,7 @@
     <string name="EditPost_button">Edit/Postpone</string>
     <string name="Done_button">Apply</string>
     <string name="Cancel_button">Cancel</string>
-    <string name="Send_Shopping">Add to list</string>
+    <string name="Send_Shopping">Add to shopping list</string>
     <string name="Item_disposed">Thrown out</string>
     <string name="Item_consumed">Eaten</string>
     <string name="expiredTitle">Spoiled Food</string>
