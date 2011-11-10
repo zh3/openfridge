@@ -5,13 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 //TODO Make the add to list push to shopping list  EL
 //DONE Change add to list to add to shopping list  FR
 //TODO Log action (Thrown/Eaten)                   EL
-//TODO Thrown/Eaten should delete from web         EL
+//DONE Thrown/Eaten should delete from web         FR
 
 public class ExpireActivity extends Activity {
 	private FridgeFood food;
@@ -42,9 +43,18 @@ public class ExpireActivity extends Activity {
 			//add to shopping list
 		}
 		
+		boolean eaten;
+		RadioGroup group = (RadioGroup)findViewById(R.id.radioGroup1);
+		
+		if(group.getCheckedRadioButtonId() == R.id.radioButton2){ //check if the button checked is the eaten button
+			eaten = true;
+		}else{
+			eaten = false;
+		}
+		
 		//Remove from expire list and be happy
 		try {
-			DataClient.getInstance().removeFood(food);
+			DataClient.getInstance().removeFood(food, eaten);
 		} catch (Exception e) {
 			Toast.makeText( toShopping.getContext(),
 					"Connection error occurred", Toast.LENGTH_SHORT);
