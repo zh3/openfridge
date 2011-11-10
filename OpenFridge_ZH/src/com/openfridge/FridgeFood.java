@@ -2,7 +2,6 @@ package com.openfridge;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -190,7 +189,6 @@ public class FridgeFood implements Cloneable {
 		b.putString("foodDescription", f.getDescription());
 		b.putString("expirationDate", f.getExpirationDateString());
 		b.putString("userId", Integer.toString(f.getUserId()));
-
 		return b;
 	}
 
