@@ -16,7 +16,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 //DONE Don't let it add blank JW
-//TODO Make enter enter the item SC
+//DONE Make enter enter the item SC
 //DONE Limit a max number of characters JW 
 //TODO Make delete post to server SC/JW
 //DONE Parse shopping list JW

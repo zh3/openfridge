@@ -125,7 +125,7 @@ public class DataClient extends Observable {
 		if (getDataTask == null && (now > nextRunTime || now < lastRunTime)) {
 			// 2nd check is in case the clock's been reset.
 			lastRunTime = SystemClock.uptimeMillis();
-			nextRunTime = lastRunTime + 60 * 60 * 1000;
+			nextRunTime = lastRunTime + 1000 * 5; // 5 seconds
 			getDataTask = new GetDataAsyncTask();
 			getDataTask.execute();
 		}
