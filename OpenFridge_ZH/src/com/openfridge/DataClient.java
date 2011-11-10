@@ -149,6 +149,12 @@ public class DataClient extends Observable {
 						food.getExpirationYear(), food.getExpirationMonth(),
 						food.getExpirationDay()))).openStream().read();
 	}
+	
+	public void removeFood(FridgeFood food) throws MalformedURLException, IOException{
+		(new URL(
+				String.format("")
+				)).openStream().read();
+	}
 
 	public List<ShoppingItem> getShoppingList() {
 		return shoppingList;
