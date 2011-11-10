@@ -150,9 +150,16 @@ public class DataClient extends Observable {
 						food.getExpirationDay()))).openStream().read();
 	}
 	
-	public void removeFood(FridgeFood food) throws MalformedURLException, IOException{
+	public void removeFood(FridgeFood food, boolean eaten) throws MalformedURLException, IOException{
+		String op = "";
+		if(eaten)
+			op = "eat";
+		else
+			op = "throw";
 		(new URL(
-				String.format("")
+				String.format("http://openfridge.heroku.com/fridge_foods/%s/%s",
+						food.getId(),
+						op)
 				)).openStream().read();
 	}
 
