@@ -149,7 +149,7 @@ public class ItemEditActivity extends Activity {
 		FridgeFood food = new FridgeFood(desc, expirationDate,
 				Integer.toString(userId));
 
-		client.postFood(food);
+		client.pushFridgeFood(food);
 
 	}
 

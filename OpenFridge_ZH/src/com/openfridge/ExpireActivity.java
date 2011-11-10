@@ -40,7 +40,7 @@ public class ExpireActivity extends Activity {
 		CheckBox toShopping = (CheckBox)findViewById(R.id.checkBox1);
 		
 		if(toShopping.isChecked()){
-			//add to shopping list
+			addToShoppingList();
 		}
 		
 		boolean eaten;
@@ -54,7 +54,7 @@ public class ExpireActivity extends Activity {
 		
 		//Remove from expire list and be happy
 		try {
-			DataClient.getInstance().removeFood(food, eaten);
+			DataClient.getInstance().removeFridgeFood(food, eaten);
 		} catch (Exception e) {
 			Toast.makeText( toShopping.getContext(),
 					"Connection error occurred", Toast.LENGTH_SHORT);
@@ -64,6 +64,13 @@ public class ExpireActivity extends Activity {
 		finish();
 	}
 	
+	private void addToShoppingList() {
+		ShoppingItem x = new ShoppingItem(food.getDescription());
+		DataClient.getInstance().getShoppingList().add(x);
+		DataClient.getInstance().pushShoppingItem(x);
+		DataClient.getInstance().reloadFoods();
+	}
+
 	public void CancelClick(View view){
 		finish();
 	}

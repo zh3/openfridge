@@ -100,14 +100,17 @@ public class ShoppingListActivity extends Activity implements Observer {
         final boolean isChecked = checkedItems.valueAt(i);
 
         // And we can get our data from the adapter like that
-        if (isChecked)
-            itemsToDelete += " " + adapter.getItem(position).toString();
-        
-        
+        if (isChecked) {
+        	ShoppingItem x = adapter.getItem(position);
+        	DataClient.getInstance().removeShoppingItem(x);
+            itemsToDelete += " " + x.toString();
+            adapter.remove(x);
+        }
     }
 
         Toast.makeText(view.getContext(), itemsToDelete,
                 Toast.LENGTH_SHORT).show();
+        
     }
 
 	@Override

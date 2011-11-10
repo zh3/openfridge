@@ -5,18 +5,19 @@ public class ShoppingItem {
 	private int id = -1;
 	private int userId = -1;
 
+	public ShoppingItem(String des) {
+		this(des,"",DataClient.getInstance().getUID());
+	}
 	public ShoppingItem(String des, String i, String uid) {
-		description = des;
+		this(des, defaultInt(i), defaultInt(uid));		
+	}
+	private static int defaultInt(String i) {
 		try {
-			id = Integer.parseInt(i);
+			return Integer.parseInt(i);
 		} catch (NumberFormatException e) {
-		}
-		try {
-			userId = Integer.parseInt(uid);
-		} catch (NumberFormatException e) {
+			return -1;
 		}
 	}
-
 	public ShoppingItem(String des, int i, int uid) {
 		description = des;
 		id = i;

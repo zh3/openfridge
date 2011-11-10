@@ -120,7 +120,7 @@ public class ExpirationListActivity extends Activity implements Observer {
 
 				DataClient client = DataClient.getInstance();
 				try {
-					client.postFood(food);
+					client.pushFridgeFood(food);
 				} catch (Exception e) {
 					Toast.makeText(parentList.getContext(),
 							"Connection error occurred", Toast.LENGTH_SHORT);

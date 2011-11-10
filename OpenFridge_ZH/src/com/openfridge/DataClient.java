@@ -78,37 +78,11 @@ public class DataClient extends Observable {
 	private DataClient() {
 	}
 
-	private void parse(SAXHandler<?> h, URL url) {
-		xr.setContentHandler(h);
-		try {
-			xr.parse(new InputSource(url.openStream()));
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (SAXException e) {
-			e.printStackTrace();
-		}
-
-	}
-
 	private class GetDataAsyncTask extends AsyncTask<Void, Void, Void> {
 		@Override
 		protected Void doInBackground(Void... arg0) {
-
-			FridgeFoodHandler ffH = new FridgeFoodHandler();
-			parse(ffH, fridgeFoodURL);
-
-			// Changes the contents of the ArrayList's,
-			// rather than re-assigning them.
-			for (ExpState key : ExpState.values()) {
-				foods.get(key).clear();
-				foods.get(key).addAll(ffH.getFoods(key));
-			}
-
-			ShoppingItemHandler siH = new ShoppingItemHandler();
-			parse(siH, shoppingItemURL);
-
-			shoppingList.clear();
-			shoppingList.addAll(siH.getFoods());
+			reloadFridgeFoods();
+			reloadShoppingItems();
 			return null;
 		}
 
@@ -131,6 +105,9 @@ public class DataClient extends Observable {
 		}
 	}
 
+	//FridgeFood routes
+	//-----------------
+	
 	/**
 	 * Post an item of food to the cloud database. If the id of the given food
 	 * exists already, the existing record will be updated in the database.
@@ -139,7 +116,7 @@ public class DataClient extends Observable {
 	 *            The FridgeFood object with the fields to be posted to
 	 *            database.
 	 */
-	public void postFood(FridgeFood food) throws MalformedURLException,
+	public int pushFridgeFood(FridgeFood food) throws MalformedURLException,
 			IOException {
 		(new URL(
 				String.format(
@@ -148,9 +125,11 @@ public class DataClient extends Observable {
 						URLEncoder.encode(food.getDescription(), "UTF-8"),
 						food.getExpirationYear(), food.getExpirationMonth(),
 						food.getExpirationDay()))).openStream().read();
+		return 0;
 	}
+	public void updateFridgeFood(FridgeFood food) {}
 	
-	public void removeFood(FridgeFood food, boolean eaten) throws MalformedURLException, IOException{
+	public void removeFridgeFood(FridgeFood food, boolean eaten) throws MalformedURLException, IOException{
 		String op = "";
 		if(eaten)
 			op = "eat";
@@ -163,6 +142,46 @@ public class DataClient extends Observable {
 				)).openStream().read();
 	}
 
+	private void reloadFridgeFoods() {
+		FridgeFoodHandler ffH = new FridgeFoodHandler();
+		parse(ffH, fridgeFoodURL);
+
+		// Changes the contents of the ArrayList's,
+		// rather than re-assigning them.
+		for (ExpState key : ExpState.values()) {
+			foods.get(key).clear();
+			foods.get(key).addAll(ffH.getFoods(key));
+		}
+	}
+
+	//Saved food routes
+	//-----------------
+	public int pushSavedFood(FridgeFood food) {
+		return 0;
+	}
+
+	//ShoppingItem routes
+	//-----------------
+	public void pushShoppingItem(ShoppingItem x) {
+		//TODO get proper URL to actually post items to the shopping list EL		
+	}
+	public void removeShoppingItem(ShoppingItem x) {
+		//TODO get proper URL to actually remove items from the shopping list EL
+		
+	}
+
+
+	private void reloadShoppingItems() {
+		ShoppingItemHandler siH = new ShoppingItemHandler();
+		parse(siH, shoppingItemURL);
+
+		shoppingList.clear();
+		shoppingList.addAll(siH.getFoods());
+	}
+
+	//Field getters
+	//-------------
+	
 	public List<ShoppingItem> getShoppingList() {
 		return shoppingList;
 	}
@@ -186,6 +205,9 @@ public class DataClient extends Observable {
 		return Color.parseColor("#FFFFFF");
 	}
 
+
+	//Singleton & utility stuff
+	//-------------------------
 	public static DataClient getInstance() {
 		return DataClientHolder.client;
 	}
@@ -197,4 +219,18 @@ public class DataClient extends Observable {
 	public String getUID() {
 		return "1";
 	}
+
+
+	private void parse(SAXHandler<?> h, URL url) {
+		xr.setContentHandler(h);
+		try {
+			xr.parse(new InputSource(url.openStream()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (SAXException e) {
+			e.printStackTrace();
+		}
+
+	}
+
 }
