@@ -222,14 +222,14 @@ public class DataClient extends Observable {
     // -----------------
     public int pushShoppingItem(ShoppingItem x) throws IOException {
         URL url = new URL(String.format(
-                "http://openfridge.heroku.com/fridge_foods/push/%d/%s",
+                "http://openfridge.heroku.com/shopping_lists/push/%d/%s",
                 x.getUserId(), URLEncoder.encode(x.getDescription(), "UTF-8")));
         return (new DataInputStream(url.openStream())).readInt();
     }
 
     public void removeShoppingItem(ShoppingItem x) throws IOException {
         URL url = new URL(String.format(
-                "http://openfridge.heroku.com/fridge_foods/destroy/%d",
+                "http://openfridge.heroku.com/shopping_lists/destroy/%d",
                 x.getId()));
         url.openStream().read();
     }
