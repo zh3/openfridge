@@ -37,7 +37,7 @@ public class ShoppingItemHandler extends SAXHandler<ShoppingItemTagState> {
 			ShoppingItem newFood = new ShoppingItem(
 					getString(ShoppingItemTagState.DESC),
 					// getString(ShoppingItemTagState.CREATED_AT),
-					// getString(ShoppingItemTagState.UPDATED_AT),
+					// getString(ShoppingItemTagState.UPDATED_AT),	
 					getString(ShoppingItemTagState.ID),
 					getString(ShoppingItemTagState.USER_ID));
 
