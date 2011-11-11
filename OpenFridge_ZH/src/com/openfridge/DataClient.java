@@ -278,9 +278,13 @@ public class DataClient extends Observable {
         return GREEN;
     }
 
-    public int getShoppingListColor() {
-        return Color.parseColor("#FFFFFF");
-    }
+	public int getShoppingListColor() {
+		if(!getShoppingList().isEmpty()){
+			return GREEN;
+		}
+		return Color.parseColor("#FFFFFF");
+	}
+
 
     // Singleton & utility stuff
     // -------------------------
