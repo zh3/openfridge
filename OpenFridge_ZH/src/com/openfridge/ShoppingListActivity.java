@@ -6,6 +6,7 @@ import java.util.Observer;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.KeyEvent;
 import android.view.View;
@@ -136,6 +137,7 @@ public class ShoppingListActivity extends Activity implements Observer {
 				} catch (IOException e) {
 					Toast.makeText(getBaseContext(), "Communication Error",
 							Toast.LENGTH_SHORT).show();
+					Log.e("OpenFridge", e.getLocalizedMessage());
 				}
 			}
 		}

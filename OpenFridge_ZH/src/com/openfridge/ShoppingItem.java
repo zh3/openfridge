@@ -21,7 +21,7 @@ public class ShoppingItem {
 
 	private static int defaultInt(String i) {
 		try {
-			return Integer.parseInt(i);
+			return Integer.parseInt(i.trim());
 		} catch (NumberFormatException e) {
 			return -1;
 		}
