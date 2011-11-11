@@ -6,7 +6,9 @@ import java.util.Observer;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnKeyListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -33,13 +35,14 @@ public class ShoppingListActivity extends Activity implements Observer {
 				android.R.layout.simple_list_item_multiple_choice,
 				DataClient.getInstance().getShoppingList());
 		
-		ListView lv = (ListView) findViewById(R.id.shoppingLV);
-		//lv.setTextFilterEnabled(true);
+		final ListView lv = (ListView) findViewById(R.id.shoppingLV);		
 		lv.setAdapter(adapter);
+		
 	    // Make items not focusable to avoid listitem / button conflicts
         lv.setItemsCanFocus(false);
         lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 		
+        //Listen for checked items
 		lv.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View v, int arg2,
@@ -47,6 +50,19 @@ public class ShoppingListActivity extends Activity implements Observer {
                       CheckedTextView textView = (CheckedTextView)v;
                       textView.setChecked(!textView.isChecked());			}
 		}); 
+		
+		final EditText itemNameTxt = (EditText) findViewById(R.id.itemName);
+		itemNameTxt.setOnKeyListener(new OnKeyListener() {
+		    public boolean onKey(View v, int keyCode, KeyEvent event) {
+		        // If the event is a key-down event on the "enter" button
+		        if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+		            (keyCode == KeyEvent.KEYCODE_ENTER)) {
+		            addItemToList(v);
+		          return true;
+		        }
+		        return false;
+		    }
+		});
 	}
 
 	@Override
@@ -64,7 +80,7 @@ public class ShoppingListActivity extends Activity implements Observer {
 	}
 
 	public void addItemToList(View view) {
-		String itemToAdd = ((EditText) findViewById(R.id.editText1)).getText()
+		String itemToAdd = ((EditText) findViewById(R.id.itemName)).getText()
 				.toString();
 		if (itemToAdd.length()!=0 && itemToAdd.length()<MAX_LENGTH) {
 			adapter.add(new ShoppingItem(itemToAdd, null, DataClient.getInstance().getUID()));

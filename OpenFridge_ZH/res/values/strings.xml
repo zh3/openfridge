@@ -31,7 +31,12 @@
         <item>rrrrrrr</item>
         <item>aaaaaaaaaaaaaaaaaaaaaa</item>
     </string-array>
-        <string name="deleteChecked">Delete Checked</string>
+    <string-array name="timePeriodArray">
+        <item>days</item>
+        <item>weeks</item>
+        <item>months</item>
+    </string-array>
+    <string name="deleteChecked">Delete Checked</string>
     <string name="commonItemsTitle">Add Common Item</string>
     <string name="customItemsTitle">Add Custom Item</string>
 </resources>
