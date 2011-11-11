@@ -42,9 +42,10 @@ public class ExpireActivity extends Activity {
 			addToShoppingList();
 		}
 		
+		boolean eaten = (((RadioGroup)findViewById(R.id.radioGroup1)).getCheckedRadioButtonId() == R.id.radioButton2);
 		//Remove from expire list and be happy
 		try {
-			DataClient.getInstance().removeFridgeFood(food, (((RadioGroup)findViewById(R.id.radioGroup1)).getCheckedRadioButtonId() == R.id.radioButton2));
+			DataClient.getInstance().removeFridgeFood(food, eaten);
 		} catch (Exception e) {
 			Toast.makeText(getBaseContext(),
 					"Connection error occurred", Toast.LENGTH_SHORT);

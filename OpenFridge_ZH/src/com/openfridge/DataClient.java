@@ -23,6 +23,7 @@ import org.xml.sax.XMLReader;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.SystemClock;
+import android.util.Log;
 
 /**
  * A class which facilitates communication with the server, allowing the
@@ -132,31 +133,15 @@ public class DataClient extends Observable {
         
         int itemId = scan.nextInt();
         String expirationState = scan.next();
-        
-        addLocalFridgeFood(food, expirationState);
+
+        addLocalFridgeFood(food, ExpState.valueOf(expirationState.trim().toUpperCase()));
         notifyObservers();
         return itemId;
     }
 
-    private boolean addLocalFridgeFood(FridgeFood food, String expirationState) 
-    {
-        List<FridgeFood> foodList = null;
-        
-        if (expirationState.equals("expired")) {
-             foodList = foods.get(ExpState.EXPIRED);
-        } else if (expirationState.equals("good")) {
-             foodList = foods.get(ExpState.GOOD);
-        } else if (expirationState.equals("near")) {
-             foodList = foods.get(ExpState.NEAR);
-        }
-        
-        if (foodList != null) {
-            // Add a copy in case the reference is already in the client
-            foodList.add((FridgeFood) food.clone());
-            return true;
-        } else {
-            return false;
-        }
+    private boolean addLocalFridgeFood(FridgeFood food, ExpState expirationState) 
+    {      
+        return foods.get(expirationState).add(food);
     }
 
     public void updateFridgeFood(FridgeFood food) throws IOException {
@@ -194,6 +179,7 @@ public class DataClient extends Observable {
         URL url = new URL(String.format(
                 "http://openfridge.heroku.com/fridge_foods/%d/%s",
                 food.getId(), eaten ? "eat" : "throw"));
+        Log.d("OpenFridge", url.toString());
         url.openStream().read();
         
         removeLocalFridgeFood(food);
@@ -212,6 +198,7 @@ public class DataClient extends Observable {
             
             if (i < foodList.size()) {
                 foodList.remove(i);
+                Log.d("OpenFridge", String.format("Removed #%d", i));
                 return true;
             }
         }
@@ -277,9 +264,13 @@ public class DataClient extends Observable {
         return GREEN;
     }
 
-    public int getShoppingListColor() {
-        return Color.parseColor("#FFFFFF");
-    }
+	public int getShoppingListColor() {
+		if(!getShoppingList().isEmpty()){
+			return GREEN;
+		}
+		return Color.parseColor("#FFFFFF");
+	}
+
 
     // Singleton & utility stuff
     // -------------------------

@@ -117,14 +117,6 @@ public class ExpirationListActivity extends Activity implements Observer {
 				expire = new Intent(parentContext, ExpireActivity.class);
 				expire.putExtras(bundledFood);
 				startActivity(expire);
-
-				DataClient client = DataClient.getInstance();
-				try {
-					client.pushFridgeFood(food);
-				} catch (Exception e) {
-					Toast.makeText(parentList.getContext(),
-							"Connection error occurred", Toast.LENGTH_SHORT);
-				}
 			}
 		}
 
