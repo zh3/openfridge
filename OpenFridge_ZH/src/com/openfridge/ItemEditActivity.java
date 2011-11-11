@@ -2,7 +2,6 @@ package com.openfridge;
 
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 import android.app.Activity;
@@ -17,7 +16,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 //TODO Need to post updates correctly from item edit menu rather than always
@@ -28,7 +26,6 @@ import android.widget.Toast;
 public class ItemEditActivity extends Activity {
 	private EditText descField;
 	private DatePicker datePicker;
-	private FridgeFood food;
 	private static final int MAX_WIDTH_OFFSET = 10;
 	private static final int USER_ID = 1;
 
