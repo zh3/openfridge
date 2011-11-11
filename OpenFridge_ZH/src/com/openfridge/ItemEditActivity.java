@@ -120,7 +120,8 @@ public class ItemEditActivity extends Activity {
 
 	// Utility methods
 	private String getSimpleDateString() {
-		return datePicker.getYear() + "-" + datePicker.getMonth() + "-"
+		//Months start from 0 -- WTF?
+		return datePicker.getYear() + "-" + (datePicker.getMonth()+1) + "-"
 				+ datePicker.getDayOfMonth();
 	}
 
