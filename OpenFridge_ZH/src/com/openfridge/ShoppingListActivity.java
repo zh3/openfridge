@@ -86,10 +86,12 @@ public class ShoppingListActivity extends Activity implements Observer {
 		String itemToAdd = ((EditText) findViewById(R.id.itemName)).getText()
 				.toString();
 		if (itemToAdd.length() != 0 && itemToAdd.length() < MAX_LENGTH) {
-			ShoppingItem toAdd = new ShoppingItem(itemToAdd, null, DataClient.getInstance().getUID());
+			ShoppingItem toAdd = new ShoppingItem(itemToAdd, "", DataClient.getInstance().getUID());
 			
 			try {
-				DataClient.getInstance().pushShoppingItem(toAdd);
+				int id = DataClient.getInstance().pushShoppingItem(toAdd);
+				
+				toAdd.setId(id);
 				adapter.add(toAdd);
 
 				Toast.makeText(view.getContext(), "Added Item: " + itemToAdd,
