@@ -26,7 +26,6 @@ import android.widget.Toast;
 public class ItemEditActivity extends Activity {
 	private EditText descField;
 	private DatePicker datePicker;
-	private FridgeFood food;
 	private static final int MAX_WIDTH_OFFSET = 10;
 
 	public void onCreate(Bundle savedInstanceState) {
