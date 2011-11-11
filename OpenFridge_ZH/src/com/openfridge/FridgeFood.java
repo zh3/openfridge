@@ -1,5 +1,6 @@
 package com.openfridge;
 
+import java.net.URLDecoder;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.NoSuchElementException;
@@ -35,7 +36,7 @@ public class FridgeFood implements Cloneable {
 			String creationDateTimeString, String lastUpdateDateTimeString,
 			String idString, String userIdString) {
 
-		setDescription(descriptionString);
+		setDescription(URLDecoder.decode(descriptionString));
 		creationDateTime = defaultDate(creationDateTimeString, new GregorianCalendar());
 		lastUpdateDateTime = defaultDate(lastUpdateDateTimeString, new GregorianCalendar());
 		GregorianCalendar weekLater = getCreationDateTime();

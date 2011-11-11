@@ -2,7 +2,6 @@ package com.openfridge;
 //slightly more
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -133,31 +132,15 @@ public class DataClient extends Observable {
         
         int itemId = scan.nextInt();
         String expirationState = scan.next();
-        
-        addLocalFridgeFood(food, expirationState);
+
+        addLocalFridgeFood(food, ExpState.valueOf(expirationState.trim().toUpperCase()));
         notifyObservers();
         return itemId;
     }
 
-    private boolean addLocalFridgeFood(FridgeFood food, String expirationState) 
-    {
-        List<FridgeFood> foodList = null;
-        
-        if (expirationState.equals("expired")) {
-             foodList = foods.get(ExpState.EXPIRED);
-        } else if (expirationState.equals("good")) {
-             foodList = foods.get(ExpState.GOOD);
-        } else if (expirationState.equals("near")) {
-             foodList = foods.get(ExpState.NEAR);
-        }
-        
-        if (foodList != null) {
-            // Add a copy in case the reference is already in the client
-            foodList.add((FridgeFood) food.clone());
-            return true;
-        } else {
-            return false;
-        }
+    private boolean addLocalFridgeFood(FridgeFood food, ExpState expirationState) 
+    {      
+        return foods.get(expirationState).add(food);
     }
 
     public void updateFridgeFood(FridgeFood food) throws IOException {
