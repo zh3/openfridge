@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
+import java.util.Scanner;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -126,36 +127,36 @@ public class DataClient extends Observable {
                         URLEncoder.encode(food.getDescription(), "UTF-8"),
                         food.getExpirationYear(), food.getExpirationMonth(),
                         food.getExpirationDay()));
-        return (new DataInputStream(url.openStream())).readInt();
-    }
-
-    private void addLocalFridgeFood(FridgeFood food) {
+        
+        Scanner scan = new Scanner((new DataInputStream(url.openStream())));
+        
+        int itemId = scan.nextInt();
+        String expirationState = scan.next();
+        
+        addLocalFridgeFood(food, expirationState);
         notifyObservers();
+        return itemId;
     }
 
-    private boolean updateLocalFridgeFood(FridgeFood updatedFood) {
-        // Copy the FridgeFood in case the reference passed is part of the
-        // data client lists already.
-        FridgeFood updatedFoodCopy = (FridgeFood) updatedFood.clone();
-
-        for (ExpState key : ExpState.values()) {
-            List<FridgeFood> foodList = foods.get(key);
-
-            int i;
-            for (i = 0; i < foodList.size(); i++) {
-                FridgeFood f = foodList.get(i);
-                if (f.getId() == updatedFood.getId())
-                    break;
-            }
-
-            if (i < foodList.size()) {
-                foodList.remove(i);
-                foodList.add(updatedFoodCopy);
-                return true;
-            }
+    private boolean addLocalFridgeFood(FridgeFood food, String expirationState) 
+    {
+        List<FridgeFood> foodList = null;
+        
+        if (expirationState.equals("expired")) {
+             foodList = foods.get(ExpState.EXPIRED);
+        } else if (expirationState.equals("good")) {
+             foodList = foods.get(ExpState.GOOD);
+        } else if (expirationState.equals("near")) {
+             foodList = foods.get(ExpState.NEAR);
         }
-
-        return false;
+        
+        if (foodList != null) {
+            // Add a copy in case the reference is already in the client
+            foodList.add((FridgeFood) food.clone());
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void updateFridgeFood(FridgeFood food) throws IOException {
@@ -170,7 +171,22 @@ public class DataClient extends Observable {
                         food.getExpirationDay()));
         url.openStream().read();
         notifyObservers();
+    }
+    
+    private boolean updateLocalFridgeFood(FridgeFood updatedFood) {
+        for (ExpState key : ExpState.values()) {
+            List<FridgeFood> foodList = foods.get(key);
 
+            for (FridgeFood f : foodList) {
+                if (f.getId() == updatedFood.getId()) {
+                    f.setDescription(updatedFood.getDescription());
+                    f.setExpirationDate(updatedFood.getExpirationDateString());
+                    return true;
+                }
+            }
+        }
+        
+        return false;
     }
 
     public void removeFridgeFood(FridgeFood food, boolean eaten)
@@ -179,6 +195,28 @@ public class DataClient extends Observable {
                 "http://openfridge.heroku.com/fridge_foods/%d/%s",
                 food.getId(), eaten ? "eat" : "throw"));
         url.openStream().read();
+        
+        removeLocalFridgeFood(food);
+    }
+    
+    private boolean removeLocalFridgeFood(FridgeFood food) {
+        for (ExpState key : ExpState.values()) {
+            List<FridgeFood> foodList = foods.get(key);
+
+            int i;
+            for (i = 0; i < foodList.size(); i++) {
+                FridgeFood f = foodList.get(i);
+                
+                if (f.getId() == food.getId()) break;
+            }
+            
+            if (i < foodList.size()) {
+                foodList.remove(i);
+                return true;
+            }
+        }
+        
+        return false;
     }
 
     private void reloadFridgeFoods() {
