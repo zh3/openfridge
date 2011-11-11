@@ -1,7 +1,8 @@
 package com.openfridge;
-
+//slightly
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -306,5 +307,4 @@ public class DataClient extends Observable {
         }
 
     }
-
 }

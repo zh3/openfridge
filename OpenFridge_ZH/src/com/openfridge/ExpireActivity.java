@@ -24,17 +24,14 @@ public class ExpireActivity extends Activity {
         setContentView(R.layout.expire);
         
         TextView fdTV = (TextView) findViewById(R.id.foodDescription);
-        Bundle bundledFood = getIntent().getExtras();
-        food = FridgeFood.getFoodFromBundle(bundledFood);
+        food = FridgeFood.getFoodFromBundle(getIntent().getExtras());
         
         fdTV.setText(food.getDescription());
 	}
 	
 	public void EditPostponeClick(View view){
-	    Intent itemEdit = new Intent(this, ItemEditActivity.class);
-	    Bundle bundledFood = FridgeFood.bundleFood(food);
-	    
-	    itemEdit.putExtras(bundledFood);
+	    Intent itemEdit = new Intent(this, ItemEditActivity.class);	    
+	    itemEdit.putExtras(FridgeFood.bundleFood(food));
 		startActivity(itemEdit);
 	}
 	
@@ -45,20 +42,11 @@ public class ExpireActivity extends Activity {
 			addToShoppingList();
 		}
 		
-		boolean eaten;
-		RadioGroup group = (RadioGroup)findViewById(R.id.radioGroup1);
-		
-		if(group.getCheckedRadioButtonId() == R.id.radioButton2){ //check if the button checked is the eaten button
-			eaten = true;
-		}else{
-			eaten = false;
-		}
-		
 		//Remove from expire list and be happy
 		try {
-			DataClient.getInstance().removeFridgeFood(food, eaten);
+			DataClient.getInstance().removeFridgeFood(food, (((RadioGroup)findViewById(R.id.radioGroup1)).getCheckedRadioButtonId() == R.id.radioButton2));
 		} catch (Exception e) {
-			Toast.makeText( toShopping.getContext(),
+			Toast.makeText(getBaseContext(),
 					"Connection error occurred", Toast.LENGTH_SHORT);
 		}
 		
