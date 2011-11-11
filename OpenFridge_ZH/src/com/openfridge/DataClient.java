@@ -23,6 +23,7 @@ import org.xml.sax.XMLReader;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.SystemClock;
+import android.util.Log;
 
 /**
  * A class which facilitates communication with the server, allowing the
@@ -178,6 +179,7 @@ public class DataClient extends Observable {
         URL url = new URL(String.format(
                 "http://openfridge.heroku.com/fridge_foods/%d/%s",
                 food.getId(), eaten ? "eat" : "throw"));
+        Log.d("OpenFridge", url.toString());
         url.openStream().read();
         
         removeLocalFridgeFood(food);
@@ -196,6 +198,7 @@ public class DataClient extends Observable {
             
             if (i < foodList.size()) {
                 foodList.remove(i);
+                Log.d("OpenFridge", String.format("Removed #%d", i));
                 return true;
             }
         }

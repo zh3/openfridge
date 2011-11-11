@@ -127,6 +127,9 @@ public class FridgeFood implements Cloneable {
 	}
 
 	public int getId() {
+		if (id==-1) {
+			throw new RuntimeException("Invalid ID!");
+		}
 		return id;
 	}
 
@@ -139,6 +142,10 @@ public class FridgeFood implements Cloneable {
 	}
 
 	public int getUserId() {
+		if (userId==-1) {
+			throw new RuntimeException("Invalid userID!");
+		}
+
 		return userId;
 	}
 
