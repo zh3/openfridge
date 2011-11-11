@@ -30,7 +30,6 @@ import android.os.SystemClock;
  */
 
 public class DataClient extends Observable {
-
 	private static final int RED = Color.parseColor("#ED1C24");
 	private static final int YELLOW = Color.parseColor("#FFD300");
 	private static final int GREEN = Color.parseColor("#228B22");
@@ -118,6 +117,7 @@ public class DataClient extends Observable {
 	 */
 	public int pushFridgeFood(FridgeFood food) throws MalformedURLException,
 			IOException {
+	    
 		(new URL(
 				String.format(
 						"http://openfridge.heroku.com/fridge_foods/push/%d/%s/%d/%d/%d",
@@ -125,9 +125,45 @@ public class DataClient extends Observable {
 						URLEncoder.encode(food.getDescription(), "UTF-8"),
 						food.getExpirationYear(), food.getExpirationMonth(),
 						food.getExpirationDay()))).openStream().read();
+		
+		addLocalFridgeFood(food);
+		
 		return 0;
 	}
-	public void updateFridgeFood(FridgeFood food) {}
+	
+	private void addLocalFridgeFood(FridgeFood food) {
+	    
+	    notifyObservers();
+	}
+	
+	public void updateFridgeFood(FridgeFood food) {
+	    updateLocalFridgeFood(food);
+	    notifyObservers();
+	}
+	
+	private boolean updateLocalFridgeFood(FridgeFood updatedFood) {
+	    // Copy the FridgeFood in case the reference passed is part of the
+	    // data client lists already.
+	    FridgeFood updatedFoodCopy = (FridgeFood) updatedFood.clone();
+	    
+	    for (ExpState key : ExpState.values()) {
+            List<FridgeFood> foodList = foods.get(key);
+            
+            int i;
+            for (i = 0; i < foodList.size(); i++) {
+                FridgeFood f = foodList.get(i);
+                if (f.getId() == updatedFood.getId()) break;
+            }
+            
+            if (i < foodList.size()) {
+                foodList.remove(i);
+                foodList.add(updatedFoodCopy);
+                return true;
+            }
+        }
+	    
+	    return false;
+	}
 	
 	public void removeFridgeFood(FridgeFood food, boolean eaten) throws MalformedURLException, IOException{
 		String op = "";
