@@ -1,49 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/scrollV"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_weight="1"
     android:fillViewport="true" >
-    
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	    android:orientation="vertical"
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent">
-	    
-	    <TextView
-                android:id="@+id/custom_items_title"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/customItemsTitle" />
-	    
-	    <EditText android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/editText1" android:maxLines="1" android:minLines="1" android:cursorVisible="true">
-            <requestFocus></requestFocus>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/custom_items_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/customItemsTitle" />
+
+        <EditText
+            android:id="@+id/editText1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:cursorVisible="true"
+            android:maxLines="1"
+            android:minLines="1" >
+
+            <requestFocus >
+            </requestFocus>
         </EditText>
 
-	    <DatePicker android:id="@+id/datePicker1" 
-	                android:layout_width="wrap_content" 
-	                android:layout_height="wrap_content"></DatePicker>       
-	                
-	    <Button android:layout_height="wrap_content" 
-	            android:layout_width="fill_parent" 
-	            android:text="@string/Done_button" 
-	            android:id="@+id/button1" 
-	            android:onClick="doneEditClick"/>
-	   
-	   <TextView
-	            android:id="@+id/common_items_title"
-	            android:layout_width="fill_parent"
-	            android:layout_height="wrap_content"
-	            android:text="@string/commonItemsTitle" />
-	   <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	            android:id="@+id/common_items_buttons"
-	            android:orientation="vertical"
-	            android:layout_width="fill_parent"
-	            android:layout_height="wrap_content" >
-	   </LinearLayout>
-	    
-	</LinearLayout>
-        
+        <DatePicker
+            android:id="@+id/datePicker1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+        </DatePicker>
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:onClick="doneBtnCallback"
+            android:text="@string/Done_button" />
+
+        <TextView
+            android:id="@+id/common_items_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/commonItemsTitle" />
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/common_items_buttons"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+        </LinearLayout>
+    </LinearLayout>
+
 </ScrollView>

@@ -2,7 +2,6 @@ package com.openfridge;
 
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 import android.app.Activity;
@@ -17,7 +16,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 //TODO Need to post updates correctly from item edit menu rather than always
@@ -30,7 +28,6 @@ public class ItemEditActivity extends Activity {
 	private DatePicker datePicker;
 	private FridgeFood food;
 	private static final int MAX_WIDTH_OFFSET = 10;
-	private static final int USER_ID = 1;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -121,54 +118,42 @@ public class ItemEditActivity extends Activity {
 		return ll;
 	}
 
+	// Utility methods
 	private String getSimpleDateString() {
 		return datePicker.getYear() + "-" + datePicker.getMonth() + "-"
 				+ datePicker.getDayOfMonth();
 	}
 
-	public void doneEditClick(View view) {
-		String description = descField.getText().toString();
-		if (!description.equals("")) {
-			try {
-
-				postNewFood(description.toString(), getSimpleDateString(),
-						USER_ID);
-			} catch (IOException e) {
-				Toast.makeText(getApplicationContext(), "Communication Error",
-						Toast.LENGTH_SHORT).show();
-			}
-			finish();
-		} else {
-			Toast.makeText(view.getContext(),
-					"Please enter a food description", Toast.LENGTH_SHORT)
-					.show();
+	private void postNewFood(FridgeFood newOne) {
+		try {
+			DataClient.getInstance().pushFridgeFood(newOne);
+		} catch (IOException e) {
+			Toast.makeText(getBaseContext(), "Communication Error",
+					Toast.LENGTH_SHORT).show();
 		}
 	}
 
-	private void postNewFood(String desc, String expirationDate, int userId)
-			throws IOException {
-		DataClient client = DataClient.getInstance();
-		FridgeFood food = new FridgeFood(desc, expirationDate,
-				Integer.toString(userId));
-
-		client.pushFridgeFood(food);
-
+	// Callbacks
+	public void doneBtnCallback(View view) {
+		String description = descField.getText().toString();
+		if (!description.equals("")) {
+			food.setDescription(description.toString());
+			food.setExpirationDate(getSimpleDateString());
+			postNewFood(food);
+			finish();
+		} else {
+			Toast.makeText(getBaseContext(), "Please enter a food description",
+					Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	private class CommonFoodButtonOnClickListener implements OnClickListener {
 		@Override
 		public void onClick(View v) {
-			try {
-				// Currently just add the food based on button name and
-				// datepicker
-
-				postNewFood(((Button) v).getText().toString(),
-						getSimpleDateString(), USER_ID);
-			} catch (IOException e) {
-				Toast.makeText(v.getContext(), "Communication Error",
-						Toast.LENGTH_SHORT).show();
-			}
-
+			// Currently just add the food based on button name and
+			// datepicker
+			postNewFood(new FridgeFood(((Button) v).getText().toString(),
+					getSimpleDateString(), ""));
 			finish();
 		}
 	}

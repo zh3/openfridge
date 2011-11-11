@@ -1,6 +1,8 @@
 package com.openfridge;
 
+import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -105,9 +107,9 @@ public class DataClient extends Observable {
 		}
 	}
 
-	//FridgeFood routes
-	//-----------------
-	
+	// FridgeFood routes
+	// -----------------
+
 	/**
 	 * Post an item of food to the cloud database. If the id of the given food
 	 * exists already, the existing record will be updated in the database.
@@ -115,31 +117,36 @@ public class DataClient extends Observable {
 	 * @param food
 	 *            The FridgeFood object with the fields to be posted to
 	 *            database.
+	 * @throws IOException 
 	 */
-	public int pushFridgeFood(FridgeFood food) throws MalformedURLException,
-			IOException {
-		(new URL(
+	public int pushFridgeFood(FridgeFood food) throws IOException  {
+		URL url = new URL(
 				String.format(
 						"http://openfridge.heroku.com/fridge_foods/push/%d/%s/%d/%d/%d",
 						food.getUserId(),
 						URLEncoder.encode(food.getDescription(), "UTF-8"),
 						food.getExpirationYear(), food.getExpirationMonth(),
-						food.getExpirationDay()))).openStream().read();
-		return 0;
+						food.getExpirationDay()));
+		return (new DataInputStream(url.openStream())).readInt();
 	}
-	public void updateFridgeFood(FridgeFood food) {}
-	
-	public void removeFridgeFood(FridgeFood food, boolean eaten) throws MalformedURLException, IOException{
-		String op = "";
-		if(eaten)
-			op = "eat";
-		else
-			op = "throw";
-		(new URL(
-				String.format("http://openfridge.heroku.com/fridge_foods/%s/%s",
+
+	public void updateFridgeFood(FridgeFood food) throws IOException {
+		URL url = new URL(
+				String.format(
+						"http://openfridge.heroku.com/fridge_foods/update/%d/%s/%d/%d/%d",
 						food.getId(),
-						op)
-				)).openStream().read();
+						URLEncoder.encode(food.getDescription(), "UTF-8"),
+						food.getExpirationYear(), food.getExpirationMonth(),
+						food.getExpirationDay()));
+		url.openStream().read();
+	}
+
+	public void removeFridgeFood(FridgeFood food, boolean eaten)
+			throws MalformedURLException, IOException {
+		URL url = new URL(String.format(
+				"http://openfridge.heroku.com/fridge_foods/%d/%s",
+				food.getId(), eaten ? "eat" : "throw"));
+		url.openStream().read();
 	}
 
 	private void reloadFridgeFoods() {
@@ -154,22 +161,24 @@ public class DataClient extends Observable {
 		}
 	}
 
-	//Saved food routes
-	//-----------------
-	public int pushSavedFood(FridgeFood food) {
-		return 0;
+	// ShoppingItem routes
+	// -----------------
+	public int pushShoppingItem(ShoppingItem x) throws IOException {
+		URL url = new URL(
+				String.format(
+						"http://openfridge.heroku.com/fridge_foods/push/%d/%s",
+						x.getUserId(),
+						URLEncoder.encode(x.getDescription(), "UTF-8")));
+		return (new DataInputStream(url.openStream())).readInt();		
 	}
 
-	//ShoppingItem routes
-	//-----------------
-	public void pushShoppingItem(ShoppingItem x) {
-		//TODO get proper URL to actually post items to the shopping list EL		
+	public void removeShoppingItem(ShoppingItem x) throws IOException {
+		URL url = new URL(
+				String.format(
+						"http://openfridge.heroku.com/fridge_foods/destroy/%d",
+						x.getId()));
+		url.openStream().read();
 	}
-	public void removeShoppingItem(ShoppingItem x) {
-		//TODO get proper URL to actually remove items from the shopping list EL
-		
-	}
-
 
 	private void reloadShoppingItems() {
 		ShoppingItemHandler siH = new ShoppingItemHandler();
@@ -179,9 +188,9 @@ public class DataClient extends Observable {
 		shoppingList.addAll(siH.getFoods());
 	}
 
-	//Field getters
-	//-------------
-	
+	// Field getters
+	// -------------
+
 	public List<ShoppingItem> getShoppingList() {
 		return shoppingList;
 	}
@@ -205,9 +214,8 @@ public class DataClient extends Observable {
 		return Color.parseColor("#FFFFFF");
 	}
 
-
-	//Singleton & utility stuff
-	//-------------------------
+	// Singleton & utility stuff
+	// -------------------------
 	public static DataClient getInstance() {
 		return DataClientHolder.client;
 	}
@@ -219,7 +227,6 @@ public class DataClient extends Observable {
 	public String getUID() {
 		return "1";
 	}
-
 
 	private void parse(SAXHandler<?> h, URL url) {
 		xr.setContentHandler(h);
