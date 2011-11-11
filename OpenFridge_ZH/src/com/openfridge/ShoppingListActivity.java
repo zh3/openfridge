@@ -85,11 +85,19 @@ public class ShoppingListActivity extends Activity implements Observer {
 		String itemToAdd = ((EditText) findViewById(R.id.itemName)).getText()
 				.toString();
 		if (itemToAdd.length() != 0 && itemToAdd.length() < MAX_LENGTH) {
-			adapter.add(new ShoppingItem(itemToAdd, null, DataClient
-					.getInstance().getUID()));
+			ShoppingItem toAdd = new ShoppingItem(itemToAdd, null, DataClient.getInstance().getUID());
+			
+			try {
+				DataClient.getInstance().pushShoppingItem(toAdd);
+				adapter.add(toAdd);
 
-			Toast.makeText(view.getContext(), "Added Item: " + itemToAdd,
-					Toast.LENGTH_SHORT).show();
+				Toast.makeText(view.getContext(), "Added Item: " + itemToAdd,
+						Toast.LENGTH_SHORT).show();
+			} catch (IOException e) {
+				Toast.makeText(getBaseContext(), "Communication Error",
+						Toast.LENGTH_SHORT).show();
+			}
+
 		} else {
 			Toast.makeText(view.getContext(), "Item was empty or too long!",
 					Toast.LENGTH_SHORT).show();
@@ -123,12 +131,12 @@ public class ShoppingListActivity extends Activity implements Observer {
 				ShoppingItem x = adapter.getItem(position);
 				try {
 					DataClient.getInstance().removeShoppingItem(x);
+					itemsToDelete += " " + x.toString();
+					adapter.remove(x);
 				} catch (IOException e) {
 					Toast.makeText(getBaseContext(), "Communication Error",
 							Toast.LENGTH_SHORT).show();
 				}
-				itemsToDelete += " " + x.toString();
-				adapter.remove(x);
 			}
 		}
 

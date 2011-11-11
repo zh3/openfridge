@@ -211,6 +211,9 @@ public class DataClient extends Observable {
 	}
 
 	public int getShoppingListColor() {
+		if(!getShoppingList().isEmpty()){
+			return GREEN;
+		}
 		return Color.parseColor("#FFFFFF");
 	}
 
