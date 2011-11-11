@@ -133,20 +133,25 @@ public class DataClient extends Observable {
         
         int itemId = scan.nextInt();
         String expirationState = scan.next();
-
-        addLocalFridgeFood(food, ExpState.valueOf(expirationState.trim().toUpperCase()));
+        
+        food.setId(itemId);
+        foods.get(ExpState.valueOf(expirationState.trim().toUpperCase())).add(food);
         notifyObservers();
         return itemId;
     }
 
-    private boolean addLocalFridgeFood(FridgeFood food, ExpState expirationState) 
-    {      
-        return foods.get(expirationState).add(food);
-    }
-
     public void updateFridgeFood(FridgeFood food) throws IOException {
-        updateLocalFridgeFood(food);
-        URL url = new URL(
+        for (ExpState key : ExpState.values()) {
+		    List<FridgeFood> foodList = foods.get(key);
+		
+		    for (FridgeFood f : foodList) {
+		        if (f.getId() == food.getId()) {
+		            f.setDescription(food.getDescription());
+		            f.setExpirationDate(food.getExpirationDateString());
+		        }
+		    }
+		}
+		URL url = new URL(
                 String.format(
                         "http://openfridge.heroku.com/fridge_foods/update/%d/%s/%d/%d/%d",
 
@@ -158,63 +163,44 @@ public class DataClient extends Observable {
         notifyObservers();
     }
     
-    private boolean updateLocalFridgeFood(FridgeFood updatedFood) {
-        for (ExpState key : ExpState.values()) {
-            List<FridgeFood> foodList = foods.get(key);
-
-            for (FridgeFood f : foodList) {
-                if (f.getId() == updatedFood.getId()) {
-                    f.setDescription(updatedFood.getDescription());
-                    f.setExpirationDate(updatedFood.getExpirationDateString());
-                    return true;
-                }
-            }
-        }
-        
-        return false;
-    }
-
     public void removeFridgeFood(FridgeFood food, boolean eaten)
-            throws MalformedURLException, IOException {
+            throws IOException {
         URL url = new URL(String.format(
                 "http://openfridge.heroku.com/fridge_foods/%d/%s",
                 food.getId(), eaten ? "eat" : "throw"));
         Log.d("OpenFridge", url.toString());
         url.openStream().read();
-        
-        removeLocalFridgeFood(food);
+		for (ExpState key : ExpState.values()) {
+		    List<FridgeFood> foodList = foods.get(key);
+		
+		    int i;
+		    for (i = 0; i < foodList.size(); i++) {
+		        FridgeFood f = foodList.get(i);
+		        
+		        if (f.getId() == food.getId()) break;
+		    }
+		    
+		    if (i < foodList.size()) {
+		        foodList.remove(i);
+		        Log.d("OpenFridge", String.format("Removed #%d", i));
+		
+		    }
+		}
     }
     
-    private boolean removeLocalFridgeFood(FridgeFood food) {
-        for (ExpState key : ExpState.values()) {
-            List<FridgeFood> foodList = foods.get(key);
-
-            int i;
-            for (i = 0; i < foodList.size(); i++) {
-                FridgeFood f = foodList.get(i);
-                
-                if (f.getId() == food.getId()) break;
-            }
-            
-            if (i < foodList.size()) {
-                foodList.remove(i);
-                Log.d("OpenFridge", String.format("Removed #%d", i));
-                return true;
-            }
-        }
-        
-        return false;
-    }
-
     private void reloadFridgeFoods() {
         FridgeFoodHandler ffH = new FridgeFoodHandler();
         parse(ffH, fridgeFoodURL);
 
+        
         // Changes the contents of the ArrayList's,
         // rather than re-assigning them.
         for (ExpState key : ExpState.values()) {
             foods.get(key).clear();
             foods.get(key).addAll(ffH.getFoods(key));
+            for (FridgeFood f : ffH.getFoods(key)) {
+            	f.getId();
+            }
         }
     }
 

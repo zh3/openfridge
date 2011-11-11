@@ -46,7 +46,7 @@ public class ExpireActivity extends Activity {
 		//Remove from expire list and be happy
 		try {
 			DataClient.getInstance().removeFridgeFood(food, eaten);
-		} catch (Exception e) {
+		} catch (IOException e) {
 			Toast.makeText(getBaseContext(),
 					"Connection error occurred", Toast.LENGTH_SHORT);
 		}

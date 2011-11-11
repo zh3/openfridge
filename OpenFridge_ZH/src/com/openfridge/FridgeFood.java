@@ -7,6 +7,7 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import android.os.Bundle;
+import android.util.Log;
 
 /**
  * Encapsulates the data associated with an item of food, including description
@@ -128,6 +129,7 @@ public class FridgeFood implements Cloneable {
 
 	public int getId() {
 		if (id==-1) {
+			Log.w("OpenFridge", "Invalid ID!");
 			throw new RuntimeException("Invalid ID!");
 		}
 		return id;
@@ -143,6 +145,7 @@ public class FridgeFood implements Cloneable {
 
 	public int getUserId() {
 		if (userId==-1) {
+			Log.w("OpenFridge", "Invalid userID!");
 			throw new RuntimeException("Invalid userID!");
 		}
 
