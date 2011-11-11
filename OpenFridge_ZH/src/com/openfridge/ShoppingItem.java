@@ -1,5 +1,7 @@
 package com.openfridge;
 
+import java.net.URLDecoder;
+
 public class ShoppingItem {
 	private String description;
 	private int id = -1;
@@ -11,17 +13,18 @@ public class ShoppingItem {
 	public ShoppingItem(String des, String i, String uid) {
 		this(des, defaultInt(i), defaultInt(uid));		
 	}
+	public ShoppingItem(String des, int i, int uid) {
+		description = URLDecoder.decode(des);
+		id = i;
+		userId = uid;
+	}
+
 	private static int defaultInt(String i) {
 		try {
 			return Integer.parseInt(i);
 		} catch (NumberFormatException e) {
 			return -1;
 		}
-	}
-	public ShoppingItem(String des, int i, int uid) {
-		description = des;
-		id = i;
-		userId = uid;
 	}
 
 	public String getDescription() {
