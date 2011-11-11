@@ -132,14 +132,29 @@ public class ItemEditActivity extends Activity {
 					Toast.LENGTH_SHORT).show();
 		}
 	}
+	
+	private void updateExistingFood(FridgeFood food) {
+	    try {
+            DataClient.getInstance().updateFridgeFood(food);
+        } catch (IOException e) {
+            Toast.makeText(getBaseContext(), "Communication Error",
+                    Toast.LENGTH_SHORT).show();
+        }
+	}
 
 	// Callbacks
 	public void doneBtnCallback(View view) {
 		String description = descField.getText().toString();
 		if (!description.equals("")) {
-			food.setDescription(description.toString());
-			food.setExpirationDate(getSimpleDateString());
-			postNewFood(food);
+		    food.setDescription(description.toString());
+            food.setExpirationDate(getSimpleDateString());
+            
+		    if (food.getId() == -1) {
+		        postNewFood(food);
+		    } else {
+		        updateExistingFood(food);
+		    }
+			
 			finish();
 		} else {
 			Toast.makeText(getBaseContext(), "Please enter a food description",
