@@ -1,5 +1,7 @@
 package com.openfridge;
 
+import java.io.IOException;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -67,7 +69,12 @@ public class ExpireActivity extends Activity {
 	private void addToShoppingList() {
 		ShoppingItem x = new ShoppingItem(food.getDescription());
 		DataClient.getInstance().getShoppingList().add(x);
-		DataClient.getInstance().pushShoppingItem(x);
+		try {
+			DataClient.getInstance().pushShoppingItem(x);
+		} catch (IOException e) {
+			Toast.makeText(getBaseContext(), "Communication Error",
+					Toast.LENGTH_SHORT).show();
+		}
 		DataClient.getInstance().reloadFoods();
 	}
 

@@ -35,19 +35,17 @@ public class FridgeFood implements Cloneable {
 			String creationDateTimeString, String lastUpdateDateTimeString,
 			String idString, String userIdString) {
 
-		description = descriptionString.trim();
+		setDescription(descriptionString);
 		creationDateTime = defaultDate(creationDateTimeString, new GregorianCalendar());
 		lastUpdateDateTime = defaultDate(lastUpdateDateTimeString, new GregorianCalendar());
 		GregorianCalendar weekLater = getCreationDateTime();
 		weekLater.roll(Calendar.DAY_OF_YEAR, 7);
 		expirationDate = defaultDate(expirationDateString, weekLater);
-		try {
-			id = Integer.parseInt(idString.trim());
-		} catch (NumberFormatException e) {
-		}
+		setId(idString);
 		try {
 			userId = Integer.parseInt(userIdString.trim());
 		} catch (NumberFormatException e) {
+			userId = Integer.parseInt(DataClient.getInstance().getUID());
 		}
 	}
 
@@ -218,4 +216,38 @@ public class FridgeFood implements Cloneable {
 			return new FridgeFood();
 		}
 	}
+
+	public void setDescription(String description) {
+		markAsUpdated();
+		this.description = description.trim();
+	}
+
+	public void setExpirationDate(String expirationDate) {
+		setExpirationDate(parseXMLDateTime(expirationDate));
+		
+	}
+
+	public void setExpirationDate(GregorianCalendar expirationDate) {
+		if (expirationDate!=null) {
+			markAsUpdated();
+			this.expirationDate = expirationDate;
+		}
+	}
+
+	public void setId(String id) {
+		try {
+			setId(Integer.parseInt(id.trim()));
+		} catch (NumberFormatException e) {
+		}
+	}
+
+	public void setId(int id) {
+		markAsUpdated();
+		this.id = id;
+	}
+	
+	private void markAsUpdated() {
+		lastUpdateDateTime = new GregorianCalendar();
+	}
+	
 }
