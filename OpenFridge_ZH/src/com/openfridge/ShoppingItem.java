@@ -4,6 +4,9 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Scanner;
+
+import android.util.Log;
 
 public class ShoppingItem extends DataObject {
 	private static final long serialVersionUID = -6023850383266657691L;
@@ -25,7 +28,12 @@ public class ShoppingItem extends DataObject {
 		URL url = new URL(String.format(
 				"http://openfridge.heroku.com/shopping_lists/push/%d/%s",
 				getUserId(), URLEncoder.encode(getDescription(), "UTF-8")));
-		int id = (new DataInputStream(url.openStream())).readInt();
+		
+		Scanner scan = new Scanner((new DataInputStream(url.openStream())));
+
+		int id = scan.nextInt();
+
+		Log.d("OpenFridge",String.format("shopping ID: %d",id));
 		setId(id);
 		DataClient.getInstance().getShoppingList().add(this);
 	}

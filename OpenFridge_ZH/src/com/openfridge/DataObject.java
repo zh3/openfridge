@@ -68,4 +68,14 @@ public abstract class DataObject implements Serializable {
 	public void update() throws IOException {}
 
 	public abstract void remove() throws IOException;
+
+	@Override
+	public boolean equals(Object o) {
+		return (o.getClass().equals(getClass()) & ((DataObject)o).getId()==getId());
+	}
+
+	@Override
+	public int hashCode() {
+		return getId();
+	}
 }

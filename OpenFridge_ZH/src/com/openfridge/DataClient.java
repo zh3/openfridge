@@ -103,7 +103,7 @@ public class DataClient extends Observable {
 		if (getDataTask == null && (now > nextRunTime || now < lastRunTime)) {
 			// 2nd check is in case the clock's been reset.
 			lastRunTime = SystemClock.uptimeMillis();
-			nextRunTime = lastRunTime + 1000 * 5; // 5 seconds
+			nextRunTime = lastRunTime + 1000 * 60 * 5; // 5 minutes
 			getDataTask = new GetDataAsyncTask();
 			getDataTask.execute();
 		}
@@ -112,14 +112,16 @@ public class DataClient extends Observable {
 	// FridgeFood routes
 	// -----------------
 
-	public void doNetOp(Context c, NetOp op, DataObject to) {
+	public boolean doNetOp(Context c, NetOp op, DataObject to) {
 		try {
 			op.doIt(to);
 			clientNotifyObservers();
+			return true;
 		} catch (IOException e) {
 			Toast.makeText(c, "Communication Error",
 					Toast.LENGTH_SHORT).show();
 			e.printStackTrace();
+			return false;
 		}
 
 	}

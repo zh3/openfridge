@@ -1,7 +1,9 @@
 package com.openfridge;
 
+import java.util.HashSet;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Set;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -85,7 +87,7 @@ public class ShoppingListActivity extends Activity implements Observer {
 	public void addItemToList(View view) {
 		String itemToAdd = ((EditText) findViewById(R.id.itemName)).getText()
 				.toString();
-		if (itemToAdd.length() != 0 && itemToAdd.length() < MAX_LENGTH) {
+		if (itemToAdd.length() > 0 && itemToAdd.length() < MAX_LENGTH) {
 			DataClient.getInstance().doNetOp(this, NetOp.PUSH,
 					new ShoppingItem(itemToAdd));
 		} else {
@@ -106,28 +108,24 @@ public class ShoppingListActivity extends Activity implements Observer {
 			return;
 		}
 
-		// For each element in the status array
-		final int checkedItemsCount = checkedItems.size();
-		String itemsToDelete = "Delete from DB :";
-		for (int i = 0; i < checkedItemsCount; ++i) {
-			// This tells us the item position we are looking at
-			final int position = checkedItems.keyAt(i);
-
-			// And this tells us the item status at the above position
-			final boolean isChecked = checkedItems.valueAt(i);
-
-			// And we can get our data from the adapter like that
-			if (isChecked) {
-				ShoppingItem x = adapter.getItem(position);
-				DataClient.getInstance().doNetOp(this, NetOp.REMOVE, x);
-				itemsToDelete += " " + x.toString();
-				adapter.remove(x);
+		Set<ShoppingItem> itemsToDelete = new HashSet<ShoppingItem>();
+		for (int i = 0; i < checkedItems.size(); ++i) {
+			if (checkedItems.valueAt(i)) { //if it is checked:
+				itemsToDelete.add(adapter.getItem(checkedItems.keyAt(i)));				
 			}
 		}
+		Toast.makeText(this, "Delete from DB :"+itemsToDelete.toString(), Toast.LENGTH_SHORT)
+		.show();
 
-		Toast.makeText(view.getContext(), itemsToDelete, Toast.LENGTH_SHORT)
-				.show();
-
+		for (ShoppingItem si : itemsToDelete) {
+			if (DataClient.getInstance().doNetOp(this, NetOp.REMOVE, si)) {
+				adapter.remove(si);
+			}
+		}
+		//Unset all the checkboxes
+		for (int i = 0; i < lv.getAdapter().getCount() ; i++) {
+			lv.setItemChecked(i, false);
+		}
 	}
 
 	@Override

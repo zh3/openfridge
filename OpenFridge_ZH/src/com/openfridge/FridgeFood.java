@@ -217,7 +217,8 @@ public class FridgeFood extends DataObject implements Cloneable {
 		x.read();
 
 		for (ExpState key : ExpState.values()) {
-			DataClient.getInstance().getFoods(key).remove(this);
+			boolean y = DataClient.getInstance().getFoods(key).remove(this);
+			Log.d("OpenFridge",String.format("%s:%s:%s",this,key,y));
 			// List<FridgeFood> foodList = foods.get(key);
 			//
 			// int i;
@@ -235,4 +236,5 @@ public class FridgeFood extends DataObject implements Cloneable {
 			// }
 		}
 	}
+	
 }
