@@ -41,7 +41,6 @@ public class ExpireActivity extends Activity {
 
 		if (toShopping.isChecked()) {
 			ShoppingItem x = new ShoppingItem(food.getDescription());
-			DataClient.getInstance().getShoppingList().add(x);
 			try {
 				DataClient.getInstance().pushShoppingItem(x);
 			} catch (IOException e) {

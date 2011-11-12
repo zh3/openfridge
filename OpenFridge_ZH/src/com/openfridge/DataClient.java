@@ -216,6 +216,7 @@ public class DataClient extends Observable {
         int id = (new DataInputStream(url.openStream())).readInt();
         x.setId(id);
 		DataClient.getInstance().getShoppingList().add(x);
+		setChanged();notifyObservers();
     }
 
     public void removeShoppingItem(ShoppingItem x) throws IOException {
@@ -223,6 +224,8 @@ public class DataClient extends Observable {
                 "http://openfridge.heroku.com/shopping_lists/destroy/%d",
                 x.getId()));
         url.openStream().read();
+        DataClient.getInstance().getShoppingList().remove(x);
+		setChanged();notifyObservers();
     }
 
     private void reloadShoppingItems() {
