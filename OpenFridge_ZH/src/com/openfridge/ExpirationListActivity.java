@@ -108,14 +108,14 @@ public class ExpirationListActivity extends Activity implements Observer {
 				Context parentContext = parentList.getContext();
 				FridgeFood food = (FridgeFood) parentList
 						                        .getItemAtPosition(position);
-				Bundle bundledFood = FridgeFood.bundleFood(food);
+	
 
 				Toast.makeText(parentContext,
 						"Expiration Date: " + food.getExpirationDateString(),
 						Toast.LENGTH_SHORT).show();
 
 				expire = new Intent(parentContext, ExpireActivity.class);
-				expire.putExtras(bundledFood);
+				expire.putExtras(food.bundle());
 				startActivity(expire);
 			}
 		}

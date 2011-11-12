@@ -120,7 +120,7 @@ public class DataClient extends Observable {
      * @throws IOException
      */
 
-    public int pushFridgeFood(FridgeFood food) throws IOException {
+    public void pushFridgeFood(FridgeFood food) throws IOException {
         URL url = new URL(
                 String.format(
                         "http://openfridge.heroku.com/fridge_foods/push/%d/%s/%d/%d/%d",
@@ -137,7 +137,6 @@ public class DataClient extends Observable {
         food.setId(itemId);
         foods.get(ExpState.valueOf(expirationState.trim().toUpperCase())).add(food);
         notifyObservers();
-        return itemId;
     }
 
     public void updateFridgeFood(FridgeFood food) throws IOException {
@@ -206,11 +205,13 @@ public class DataClient extends Observable {
 
     // ShoppingItem routes
     // -----------------
-    public int pushShoppingItem(ShoppingItem x) throws IOException {
+    public void pushShoppingItem(ShoppingItem x) throws IOException {
         URL url = new URL(String.format(
                 "http://openfridge.heroku.com/shopping_lists/push/%d/%s",
                 x.getUserId(), URLEncoder.encode(x.getDescription(), "UTF-8")));
-        return (new DataInputStream(url.openStream())).readInt();
+        int id = (new DataInputStream(url.openStream())).readInt();
+        x.setId(id);
+		DataClient.getInstance().getShoppingList().add(x);
     }
 
     public void removeShoppingItem(ShoppingItem x) throws IOException {

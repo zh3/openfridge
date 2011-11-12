@@ -198,12 +198,9 @@ public class FridgeFood implements Cloneable, Serializable {
 		}
 	}
 
-	public static Bundle bundleFood(FridgeFood f) {
+	public Bundle bundle() {
 		Bundle b = new Bundle();
-		b.putString("id", Integer.toString(f.getId()));
-		b.putString("foodDescription", f.getDescription());
-		b.putString("expirationDate", f.getExpirationDateString());
-		b.putString("userId", Integer.toString(f.getUserId()));
+		b.putSerializable("food", this);
 		return b;
 	}
 
@@ -212,14 +209,7 @@ public class FridgeFood implements Cloneable, Serializable {
 	 * the Bundle, if it exists, otherwise default.
 	 */
 	public static FridgeFood getFoodFromBundle(Bundle b) {
-		if (b != null && b.containsKey("foodDescription")
-				&& b.containsKey("expirationDate") && b.containsKey("userId")) {
-			return new FridgeFood(b.getString("foodDescription"),
-					b.getString("expirationDate"), "", "",
-					b.getString("id"), b.getString("userId"));
-		} else {
-			return new FridgeFood();
-		}
+		return (FridgeFood)b.getSerializable("food");
 	}
 
 	public void setDescription(String description) {
