@@ -12,7 +12,9 @@
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@+id/newItemButton"
         android:layout_weight="1"
-        android:singleLine="true" android:maxLines="1" android:inputType="text"/>
+        android:inputType="text"
+        android:maxLines="1"
+        android:singleLine="true" />
 
     <Button
         android:id="@+id/newItemButton"

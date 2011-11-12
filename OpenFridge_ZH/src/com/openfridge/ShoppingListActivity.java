@@ -96,7 +96,7 @@ public class ShoppingListActivity extends Activity implements Observer {
 			} catch (IOException e) {
 				Toast.makeText(getBaseContext(), "Communication Error",
 						Toast.LENGTH_SHORT).show();
-				Log.e("OpenFridge", e.getMessage()+"");
+				e.printStackTrace();
 			}
 
 		} else {
