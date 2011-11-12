@@ -2,6 +2,7 @@ package com.openfridge;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Calendar;
@@ -158,7 +159,10 @@ public class FridgeFood extends DataObject implements Cloneable {
 	}
 
 	public static FridgeFood getFoodFromBundle(Bundle b) {
-		return (FridgeFood) b.getSerializable("food");
+		if (b!=null && b.containsKey("food")) {
+			return (FridgeFood) b.getSerializable("food");
+		}
+		return new FridgeFood();
 	}
 
 	public void setExpirationDate(String expirationDate) {
@@ -206,10 +210,11 @@ public class FridgeFood extends DataObject implements Cloneable {
 	@Override
 	public void remove() throws IOException {
 		URL url = new URL(String.format(
-				"http://openfridge.heroku.com/fridge_foods/%d/%s", getId(),
+				"http://openfridge.heroku.com/fridge_foods/%d/%d/%s", getId(), getUserId(),
 				isEaten() ? "eat" : "throw"));
 		Log.d("OpenFridge", url.toString());
-		url.openStream().read();
+		InputStream x = url.openStream();
+		x.read();
 
 		for (ExpState key : ExpState.values()) {
 			DataClient.getInstance().getFoods(key).remove(this);
