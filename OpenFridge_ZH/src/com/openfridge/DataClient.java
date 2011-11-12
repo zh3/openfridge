@@ -91,9 +91,13 @@ public class DataClient extends Observable {
         @Override
         protected void onPostExecute(Void result) {
             getDataTask = null;
-            setChanged();
-            notifyObservers();
+            clientNotifyObservers();
         }
+    }
+    
+    private void clientNotifyObservers() {
+        setChanged();
+        notifyObservers();
     }
 
     public void reloadFoods() {
@@ -136,7 +140,7 @@ public class DataClient extends Observable {
         
         food.setId(itemId);
         foods.get(ExpState.valueOf(expirationState.trim().toUpperCase())).add(food);
-        notifyObservers();
+        clientNotifyObservers();
     }
 
     public void updateFridgeFood(FridgeFood food) throws IOException {
@@ -159,7 +163,7 @@ public class DataClient extends Observable {
                         food.getExpirationYear(), food.getExpirationMonth(),
                         food.getExpirationDay()));
         url.openStream().read();
-        notifyObservers();
+        clientNotifyObservers();
     }
     
     public void removeFridgeFood(FridgeFood food, boolean eaten)
