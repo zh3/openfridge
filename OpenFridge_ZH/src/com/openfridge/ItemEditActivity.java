@@ -1,6 +1,5 @@
 package com.openfridge;
 
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -120,42 +119,21 @@ public class ItemEditActivity extends Activity {
 
 	// Utility methods
 	private String getSimpleDateString() {
-		//Months start from 0 -- WTF?
-		return datePicker.getYear() + "-" + (datePicker.getMonth()+1) + "-"
+		// Months start from 0 -- WTF?
+		return datePicker.getYear() + "-" + (datePicker.getMonth() + 1) + "-"
 				+ datePicker.getDayOfMonth();
-	}
-
-	private void postNewFood(FridgeFood newOne) {
-		try {
-			DataClient.getInstance().pushFridgeFood(newOne);
-		} catch (IOException e) {
-			Toast.makeText(getBaseContext(), "Communication Error",
-					Toast.LENGTH_SHORT).show();
-		}
-	}
-	
-	private void updateExistingFood(FridgeFood food) {
-	    try {
-            DataClient.getInstance().updateFridgeFood(food);
-        } catch (IOException e) {
-            Toast.makeText(getBaseContext(), "Communication Error",
-                    Toast.LENGTH_SHORT).show();
-        }
 	}
 
 	// Callbacks
 	public void doneBtnCallback(View view) {
 		String description = descField.getText().toString();
 		if (!description.equals("")) {
-		    food.setDescription(description.toString());
-            food.setExpirationDate(getSimpleDateString());
-            
-		    if (food.getId() == -1) {
-		        postNewFood(food);
-		    } else {
-		        updateExistingFood(food);
-		    }
-			
+			food.setDescription(description.toString());
+			food.setExpirationDate(getSimpleDateString());
+
+			DataClient.getInstance().doNetOp(this,
+					(food.getId() == -1) ? NetOp.PUSH : NetOp.UPDATE, food);
+
 			finish();
 		} else {
 			Toast.makeText(getBaseContext(), "Please enter a food description",
@@ -168,8 +146,11 @@ public class ItemEditActivity extends Activity {
 		public void onClick(View v) {
 			// Currently just add the food based on button name and
 			// datepicker
-			postNewFood(new FridgeFood(((Button) v).getText().toString(),
-					getSimpleDateString()));
+			DataClient.getInstance().doNetOp(
+					ItemEditActivity.this,
+					NetOp.PUSH,
+					new FridgeFood(((Button) v).getText().toString(),
+							getSimpleDateString()));
 			finish();
 		}
 	}

@@ -1,5 +1,6 @@
 package com.openfridge;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.net.URLDecoder;
 
@@ -61,5 +62,10 @@ public abstract class DataObject implements Serializable {
 	public String toString() {
 		return description;
 	}
+	
+	public abstract void push() throws IOException;
 
+	public void update() throws IOException {}
+
+	public abstract void remove() throws IOException;
 }

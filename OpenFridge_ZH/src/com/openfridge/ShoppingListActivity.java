@@ -1,12 +1,10 @@
 package com.openfridge;
 
-import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.KeyEvent;
 import android.view.View;
@@ -88,19 +86,8 @@ public class ShoppingListActivity extends Activity implements Observer {
 		String itemToAdd = ((EditText) findViewById(R.id.itemName)).getText()
 				.toString();
 		if (itemToAdd.length() != 0 && itemToAdd.length() < MAX_LENGTH) {
-			ShoppingItem toAdd = new ShoppingItem(itemToAdd);
-			
-			try {
-				DataClient.getInstance().pushShoppingItem(toAdd);
-
-				Toast.makeText(view.getContext(), "Added Item: " + itemToAdd,
-						Toast.LENGTH_SHORT).show();
-			} catch (IOException e) {
-				Toast.makeText(getBaseContext(), "Communication Error",
-						Toast.LENGTH_SHORT).show();
-				e.printStackTrace();
-			}
-
+			DataClient.getInstance().doNetOp(this, NetOp.PUSH,
+					new ShoppingItem(itemToAdd));
 		} else {
 			Toast.makeText(view.getContext(), "Item was empty or too long!",
 					Toast.LENGTH_SHORT).show();
@@ -132,15 +119,9 @@ public class ShoppingListActivity extends Activity implements Observer {
 			// And we can get our data from the adapter like that
 			if (isChecked) {
 				ShoppingItem x = adapter.getItem(position);
-				try {
-					DataClient.getInstance().removeShoppingItem(x);
-					itemsToDelete += " " + x.toString();
-					adapter.remove(x);
-				} catch (IOException e) {
-					Toast.makeText(getBaseContext(), "Communication Error",
-							Toast.LENGTH_SHORT).show();
-					Log.e("OpenFridge", e.getLocalizedMessage());
-				}
+				DataClient.getInstance().doNetOp(this, NetOp.REMOVE, x);
+				itemsToDelete += " " + x.toString();
+				adapter.remove(x);
 			}
 		}
 

@@ -1,7 +1,5 @@
 package com.openfridge;
 
-import java.io.IOException;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +7,6 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 //TODO Make the add to list push to shopping list  EL
 //DONE Change add to list to add to shopping list  FR
@@ -40,27 +37,15 @@ public class ExpireActivity extends Activity {
 		CheckBox toShopping = (CheckBox) findViewById(R.id.checkBox1);
 
 		if (toShopping.isChecked()) {
-			ShoppingItem x = new ShoppingItem(food.getDescription());
-			try {
-				DataClient.getInstance().pushShoppingItem(x);
-			} catch (IOException e) {
-				Toast.makeText(getBaseContext(), "Communication Error",
-						Toast.LENGTH_SHORT).show();
-			}
+			DataClient.getInstance().doNetOp(this, NetOp.PUSH,
+					new ShoppingItem(food.getDescription()));
 			DataClient.getInstance().reloadFoods();
 		}
 
-		boolean eaten = (((RadioGroup) findViewById(R.id.radioGroup1))
+		food.setEaten(((RadioGroup) findViewById(R.id.radioGroup1))
 				.getCheckedRadioButtonId() == R.id.radioButton2);
-		// Remove from expire list and be happy
-		try {
-			DataClient.getInstance().removeFridgeFood(food, eaten);
-		} catch (IOException e) {
-			Toast.makeText(getBaseContext(), "Connection error occurred",
-					Toast.LENGTH_SHORT);
-		}
+		DataClient.getInstance().doNetOp(this, NetOp.REMOVE, food);
 
-		// log action
 		finish();
 	}
 
