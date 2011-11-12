@@ -1,5 +1,5 @@
 package com.openfridge;
-//slightly more
+
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -198,7 +198,7 @@ public class DataClient extends Observable {
         for (ExpState key : ExpState.values()) {
             foods.get(key).clear();
             foods.get(key).addAll(ffH.getFoods(key));
-            for (FridgeFood f : ffH.getFoods(key)) {
+            for (FridgeFood f : foods.get(key)) {
             	f.getId();
             }
         }

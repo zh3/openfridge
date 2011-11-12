@@ -1,5 +1,6 @@
 package com.openfridge;
 
+import java.io.Serializable;
 import java.net.URLDecoder;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -16,7 +17,11 @@ import android.util.Log;
  * @author Tom, Jesse
  * 
  */
-public class FridgeFood implements Cloneable {
+public class FridgeFood implements Cloneable, Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 336833461080537069L;
 	private GregorianCalendar creationDateTime;
 	private String description;
 	private GregorianCalendar expirationDate;
@@ -195,22 +200,11 @@ public class FridgeFood implements Cloneable {
 
 	public static Bundle bundleFood(FridgeFood f) {
 		Bundle b = new Bundle();
+		b.putString("id", Integer.toString(f.getId()));
 		b.putString("foodDescription", f.getDescription());
 		b.putString("expirationDate", f.getExpirationDateString());
 		b.putString("userId", Integer.toString(f.getUserId()));
 		return b;
-	}
-
-	private static String getBundledFoodDescription(Bundle b) {
-		return b.getString("foodDescription");
-	}
-
-	private static String getBundledExpirationDateString(Bundle b) {
-		return b.getString("expirationDate");
-	}
-
-	private static String getBundledUserIdString(Bundle b) {
-		return b.getString("userId");
 	}
 
 	/**
@@ -220,9 +214,9 @@ public class FridgeFood implements Cloneable {
 	public static FridgeFood getFoodFromBundle(Bundle b) {
 		if (b != null && b.containsKey("foodDescription")
 				&& b.containsKey("expirationDate") && b.containsKey("userId")) {
-			return new FridgeFood(getBundledFoodDescription(b),
-					getBundledExpirationDateString(b),
-					getBundledUserIdString(b));
+			return new FridgeFood(b.getString("foodDescription"),
+					b.getString("expirationDate"), "", "",
+					b.getString("id"), b.getString("userId"));
 		} else {
 			return new FridgeFood();
 		}
