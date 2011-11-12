@@ -169,7 +169,7 @@ public class ItemEditActivity extends Activity {
 			// Currently just add the food based on button name and
 			// datepicker
 			postNewFood(new FridgeFood(((Button) v).getText().toString(),
-					getSimpleDateString(), ""));
+					getSimpleDateString()));
 			finish();
 		}
 	}

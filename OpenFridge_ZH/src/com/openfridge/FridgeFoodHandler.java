@@ -55,8 +55,6 @@ public class FridgeFoodHandler extends SAXHandler<FridgeFoodTagState> {
 			FridgeFood newFood = new FridgeFood(
 					getString(FridgeFoodTagState.DESC),
 					getString(FridgeFoodTagState.EXPIRATION),
-					getString(FridgeFoodTagState.CREATED_AT),
-					getString(FridgeFoodTagState.UPDATED_AT),
 					getString(FridgeFoodTagState.ID),
 					getString(FridgeFoodTagState.USER_ID));
 

@@ -1,14 +1,11 @@
 package com.openfridge;
 
-import java.io.Serializable;
-import java.net.URLDecoder;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import android.os.Bundle;
-import android.util.Log;
 
 /**
  * Encapsulates the data associated with an item of food, including description
@@ -17,53 +14,60 @@ import android.util.Log;
  * @author Tom, Jesse
  * 
  */
-public class FridgeFood implements Cloneable, Serializable {
-	/**
-	 * 
-	 */
+public class FridgeFood extends DataObject implements Cloneable {
+
 	private static final long serialVersionUID = 336833461080537069L;
-	private GregorianCalendar creationDateTime;
-	private String description;
 	private GregorianCalendar expirationDate;
-	private int id = -1;
-	private GregorianCalendar lastUpdateDateTime;
-	private int userId = -1;
 
 	public FridgeFood() {
-		this("", "", "", "", "", "");
+		this("");
 	}
 
-	public FridgeFood(String descriptionString, String expirationDateString,
-			String userIdString) {
-		this(descriptionString, expirationDateString, "", "", "", userIdString);
+	public FridgeFood(String description) {
+		this(description, weekLater());
 	}
 
-	public FridgeFood(String descriptionString, String expirationDateString,
-			String creationDateTimeString, String lastUpdateDateTimeString,
-			String idString, String userIdString) {
-
-		setDescription(URLDecoder.decode(descriptionString));
-		creationDateTime = defaultDate(creationDateTimeString, new GregorianCalendar());
-		lastUpdateDateTime = defaultDate(lastUpdateDateTimeString, new GregorianCalendar());
-		GregorianCalendar weekLater = getCreationDateTime();
-		weekLater.roll(Calendar.DAY_OF_YEAR, 7);
-		expirationDate = defaultDate(expirationDateString, weekLater);
-		setId(idString);
-		try {
-			userId = Integer.parseInt(userIdString.trim());
-		} catch (NumberFormatException e) {
-			userId = Integer.parseInt(DataClient.getInstance().getUID());
-		}
+	public FridgeFood(String description, String expirationDate) {
+		this(description, defaultDate(expirationDate, weekLater()));
 	}
 
-	private GregorianCalendar defaultDate (String dateString, GregorianCalendar defaultDateValue) {
+	public FridgeFood(String description, GregorianCalendar expirationDate) {
+		this(description, expirationDate, "", "");
+	}
+
+	public FridgeFood(String description, String expirationDate,
+			String id, String userId) {
+		this(description, defaultDate(expirationDate, weekLater()), id, userId);
+	}
+
+	public FridgeFood(String description, GregorianCalendar expirationDate,
+			String id, String userId) {
+		super(description, id, userId);
+		this.expirationDate = expirationDate;
+	}
+
+	public FridgeFood(String description, GregorianCalendar expirationDate,
+			int id, int userId) {
+		super(description, id, userId);
+		this.expirationDate = expirationDate;
+	}
+
+	private static GregorianCalendar weekLater() {
+		GregorianCalendar aWeekLater = new GregorianCalendar();
+		aWeekLater.roll(Calendar.DAY_OF_YEAR, 7);
+		return aWeekLater;
+	}
+
+	private static GregorianCalendar defaultDate(String dateString,
+			GregorianCalendar defaultDateValue) {
 		GregorianCalendar ans = parseXMLDateTime(dateString);
-		if (ans==null) {
+		if (ans == null) {
 			return defaultDateValue;
 		} else {
 			return ans;
 		}
 	}
+
 	/**
 	 * Parse a string containing date and time information from the XML format
 	 * to a GregorianCalendar object representation
@@ -73,7 +77,7 @@ public class FridgeFood implements Cloneable, Serializable {
 	 *            yyyy-mm-ddThh:mm:ssZ.
 	 * @return An object representation of the given Date and Time string
 	 */
-	private GregorianCalendar parseXMLDateTime(String xmlDateTime) {
+	private static GregorianCalendar parseXMLDateTime(String xmlDateTime) {
 		String dateTimeString = xmlDateTime.replace('-', ' ').replace('T', ' ')
 				.replace('Z', ' ').replace(':', ' ');
 		Scanner s = new Scanner(dateTimeString);
@@ -96,18 +100,6 @@ public class FridgeFood implements Cloneable, Serializable {
 		} catch (NoSuchElementException e) {
 			return null;
 		}
-	}
-	
-	public GregorianCalendar getCreationDateTime() {
-		return (GregorianCalendar) creationDateTime.clone();
-	}
-
-	public String getCreationDateTimeString() {
-		return creationDateTime.toString();
-	}
-
-	public String getDescription() {
-		return description;
 	}
 
 	public GregorianCalendar getExpirationDate() {
@@ -132,35 +124,6 @@ public class FridgeFood implements Cloneable, Serializable {
 		return expirationDate.get(Calendar.DAY_OF_MONTH);
 	}
 
-	public int getId() {
-		if (id==-1) {
-			Log.w("OpenFridge", "Invalid ID!");
-			throw new RuntimeException("Invalid ID!");
-		}
-		return id;
-	}
-
-	public GregorianCalendar getLastUpdateDateTime() {
-		return (GregorianCalendar) lastUpdateDateTime.clone();
-	}
-
-	public String getLastUpdateDateTimeString() {
-		return lastUpdateDateTime.toString();
-	}
-
-	public int getUserId() {
-		if (userId==-1) {
-			Log.w("OpenFridge", "Invalid userID!");
-			throw new RuntimeException("Invalid userID!");
-		}
-
-		return userId;
-	}
-
-	public String toString() {
-		return description;
-	}
-
 	/**
 	 * Get a short string summary of this food item, including its description
 	 * and expiration date.
@@ -176,18 +139,6 @@ public class FridgeFood implements Cloneable, Serializable {
 	public Object clone() {
 		try {
 			FridgeFood o = (FridgeFood) super.clone();
-			o.creationDateTime = null;
-			o.lastUpdateDateTime = null;
-
-			if (creationDateTime != null) {
-				o.creationDateTime = (GregorianCalendar) creationDateTime
-						.clone();
-			}
-
-			if (lastUpdateDateTime != null) {
-				o.lastUpdateDateTime = (GregorianCalendar) lastUpdateDateTime
-						.clone();
-			}
 
 			o.expirationDate = (GregorianCalendar) expirationDate.clone();
 
@@ -204,45 +155,17 @@ public class FridgeFood implements Cloneable, Serializable {
 		return b;
 	}
 
-	/**
-	 * Return a newly created FridgeFood item, initialized with the data from
-	 * the Bundle, if it exists, otherwise default.
-	 */
 	public static FridgeFood getFoodFromBundle(Bundle b) {
-		return (FridgeFood)b.getSerializable("food");
-	}
-
-	public void setDescription(String description) {
-		markAsUpdated();
-		this.description = description.trim();
+		return (FridgeFood) b.getSerializable("food");
 	}
 
 	public void setExpirationDate(String expirationDate) {
 		setExpirationDate(parseXMLDateTime(expirationDate));
-		
 	}
 
 	public void setExpirationDate(GregorianCalendar expirationDate) {
-		if (expirationDate!=null) {
-			markAsUpdated();
+		if (expirationDate != null) {
 			this.expirationDate = expirationDate;
 		}
 	}
-
-	public void setId(String id) {
-		try {
-			setId(Integer.parseInt(id.trim()));
-		} catch (NumberFormatException e) {
-		}
-	}
-
-	public void setId(int id) {
-		markAsUpdated();
-		this.id = id;
-	}
-	
-	private void markAsUpdated() {
-		lastUpdateDateTime = new GregorianCalendar();
-	}
-	
 }

@@ -166,7 +166,7 @@ public class DataClient extends Observable {
         clientNotifyObservers();
     }
     
-    public void removeFridgeFood(FridgeFood food, boolean eaten)
+    public void removeFridgeFood(DataObject food, boolean eaten)
             throws IOException {
         URL url = new URL(String.format(
                 "http://openfridge.heroku.com/fridge_foods/%d/%s",
@@ -178,7 +178,7 @@ public class DataClient extends Observable {
 		
 		    int i;
 		    for (i = 0; i < foodList.size(); i++) {
-		        FridgeFood f = foodList.get(i);
+		        DataObject f = foodList.get(i);
 		        
 		        if (f.getId() == food.getId()) break;
 		    }
@@ -201,7 +201,7 @@ public class DataClient extends Observable {
         for (ExpState key : ExpState.values()) {
             foods.get(key).clear();
             foods.get(key).addAll(ffH.getFoods(key));
-            for (FridgeFood f : foods.get(key)) {
+            for (DataObject f : foods.get(key)) {
             	f.getId();
             }
         }
@@ -219,7 +219,7 @@ public class DataClient extends Observable {
 		setChanged();notifyObservers();
     }
 
-    public void removeShoppingItem(ShoppingItem x) throws IOException {
+    public void removeShoppingItem(DataObject x) throws IOException {
         URL url = new URL(String.format(
                 "http://openfridge.heroku.com/shopping_lists/destroy/%d",
                 x.getId()));
@@ -276,8 +276,8 @@ public class DataClient extends Observable {
         public static final DataClient client = new DataClient();
     }
 
-    public String getUID() {
-        return "1";
+    public int getUID() {
+        return 1;
     }
 
     private void parse(SAXHandler<?> h, URL url) {

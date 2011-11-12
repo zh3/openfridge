@@ -1,49 +1,14 @@
 package com.openfridge;
 
-import java.net.URLDecoder;
-
-public class ShoppingItem {
-	private String description;
-	private int id = -1;
-	private int userId = -1;
-
+public class ShoppingItem extends DataObject {
+	private static final long serialVersionUID = -6023850383266657691L;
 	public ShoppingItem(String des) {
-		this(des,"",DataClient.getInstance().getUID());
+		super(des);
 	}
-	public ShoppingItem(String des, String i, String uid) {
-		this(des, defaultInt(i), defaultInt(uid));		
+	public ShoppingItem(String des, String id, String userId) {
+		super(des, id, userId);
 	}
-	public ShoppingItem(String des, int i, int uid) {
-		description = URLDecoder.decode(des);
-		id = i;
-		userId = uid;
-	}
-
-	private static int defaultInt(String i) {
-		try {
-			return Integer.parseInt(i.trim());
-		} catch (NumberFormatException e) {
-			return -1;
-		}
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public int getId() {
-		return id;
-	}
-	
-	public void setId(int id){
-		this.id = id;
-	}
-
-	public int getUserId() {
-		return userId;
-	}
-
-	public String toString() {
-		return description;
+	public ShoppingItem(String des, int id, int uid) {
+		super(des, id, uid);
 	}
 }

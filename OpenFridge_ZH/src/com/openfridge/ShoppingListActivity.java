@@ -22,7 +22,7 @@ import android.widget.Toast;
 //DONE Don't let it add blank JW
 //DONE Make enter enter the item SC
 //DONE Limit a max number of characters JW 
-//TODO Make delete post to server SC/JW
+//DONE Make delete post to server SC/JW
 //DONE Parse shopping list JW
 
 public class ShoppingListActivity extends Activity implements Observer {
@@ -49,8 +49,7 @@ public class ShoppingListActivity extends Activity implements Observer {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View v, int arg2,
 					long arg3) {
-				CheckedTextView textView = (CheckedTextView) v;
-				textView.setChecked(!textView.isChecked());
+				((CheckedTextView)v).toggle();
 			}
 		});
 
@@ -81,12 +80,15 @@ public class ShoppingListActivity extends Activity implements Observer {
 		update(null, null);
 		DataClient.getInstance().reloadFoods();
 	}
-
+	
+	//Callbacks
+	///////////////
+	
 	public void addItemToList(View view) {
 		String itemToAdd = ((EditText) findViewById(R.id.itemName)).getText()
 				.toString();
 		if (itemToAdd.length() != 0 && itemToAdd.length() < MAX_LENGTH) {
-			ShoppingItem toAdd = new ShoppingItem(itemToAdd, "", DataClient.getInstance().getUID());
+			ShoppingItem toAdd = new ShoppingItem(itemToAdd);
 			
 			try {
 				DataClient.getInstance().pushShoppingItem(toAdd);
