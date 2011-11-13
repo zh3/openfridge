@@ -30,31 +30,54 @@
             </requestFocus>
         </EditText>
 
-        <DatePicker
-            android:id="@+id/datePicker1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-        </DatePicker>
-
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:onClick="doneBtnCallback"
-            android:text="@string/Done_button" />
-
-        <TextView
-            android:id="@+id/common_items_title"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/commonItemsTitle" />
-
         <LinearLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/common_items_buttons"
+            android:id="@+id/MainLayout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:gravity="center_horizontal"
+            android:orientation="horizontal" >
+
+            <net.technologichron.android.control.NumberPicker
+                android:id="@+id/numPicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal" />
+
+            <Spinner
+                android:id="@+id/timePeriodSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:drawSelectorOnTop="true" />
+
+            <DatePicker
+                android:id="@+id/datePicker1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+            </DatePicker>
+
+            <Button
+                android:id="@+id/button1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:onClick="doneBtnCallback"
+                android:text="@string/Done_button" />
+
+            <TextView
+                android:id="@+id/common_items_title"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/commonItemsTitle" />
+
+            <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/common_items_buttons"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
