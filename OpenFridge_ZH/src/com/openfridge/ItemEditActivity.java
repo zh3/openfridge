@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 //TODO Need to post updates correctly from item edit menu rather than always
@@ -27,13 +28,17 @@ public class ItemEditActivity extends Activity {
 	private DatePicker datePicker;
 	private FridgeFood food;
 	private static final int MAX_WIDTH_OFFSET = 10;
+	private boolean isUpdate;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		food = FridgeFood.getFoodFromBundle(getIntent().getExtras());
+		isUpdate = (food.getId() != -1);
 
 		setContentView(R.layout.item_edit);
+		
+		if (isUpdate) setUpdateText();
 
 		descField = (EditText) findViewById(R.id.descriptionEditText);
 
@@ -59,6 +64,15 @@ public class ItemEditActivity extends Activity {
 		// Add the common items buttons which can be clicked to instantly
 		// add a common item
 		addCommonItemButtons(adapter);
+	}
+	
+	private void setUpdateText() {
+	    TextView customItemsTitle 
+	        = (TextView) findViewById(R.id.custom_items_title);
+	    customItemsTitle.setText(R.string.updateItemTitle);
+	    
+	    Button apply = (Button) findViewById(R.id.button1);
+	    apply.setText(R.string.updateButtonTitle);
 	}
 
 	private void addCommonItemButtons(ArrayAdapter<CharSequence> descriptions) {
@@ -135,7 +149,7 @@ public class ItemEditActivity extends Activity {
 				food.setExpirationDate(getSimpleDateString());
 
 				DataClient.getInstance().doNetOp(this,
-						(food.getId() == -1) ? NetOp.PUSH : NetOp.UPDATE, food);
+						(!isUpdate) ? NetOp.PUSH : NetOp.UPDATE, food);
 
 				finish();
 			} else {

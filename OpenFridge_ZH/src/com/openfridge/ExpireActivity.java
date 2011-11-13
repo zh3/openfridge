@@ -31,6 +31,7 @@ public class ExpireActivity extends Activity {
 		Intent itemEdit = new Intent(this, ItemEditActivity.class);
 		itemEdit.putExtras(food.bundle());
 		startActivity(itemEdit);
+		finish();
 	}
 
 	public void DoneClick(View view) {

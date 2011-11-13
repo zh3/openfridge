@@ -58,7 +58,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:onClick="doneBtnCallback"
-                android:text="@string/Done_button" />
+                android:text="@string/addButtonTitle" />
         </LinearLayout>
 
         <TextView
