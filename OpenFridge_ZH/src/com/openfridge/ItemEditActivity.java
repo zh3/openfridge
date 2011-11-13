@@ -31,7 +31,7 @@ public class ItemEditActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		FridgeFood food = FridgeFood.getFoodFromBundle(getIntent().getExtras());
+		food = FridgeFood.getFoodFromBundle(getIntent().getExtras());
 
 		setContentView(R.layout.item_edit);
 
@@ -127,18 +127,24 @@ public class ItemEditActivity extends Activity {
 
 	// Callbacks
 	public void doneBtnCallback(View view) {
-		String description = descField.getText().toString();
-		if (!description.equals("")) {
-			food.setDescription(description.toString());
-			food.setExpirationDate(getSimpleDateString());
+		
+		try {
+			String description = descField.getText().toString();
+			if (!description.equals("")) {
+				food.setDescription(description.toString());
+				food.setExpirationDate(getSimpleDateString());
 
-			DataClient.getInstance().doNetOp(this,
-					(food.getId() == -1) ? NetOp.PUSH : NetOp.UPDATE, food);
+				DataClient.getInstance().doNetOp(this,
+						(food.getId() == -1) ? NetOp.PUSH : NetOp.UPDATE, food);
 
-			finish();
-		} else {
-			Toast.makeText(getBaseContext(), "Please enter a food description",
-					Toast.LENGTH_SHORT).show();
+				finish();
+			} else {
+				Toast.makeText(getBaseContext(), "Please enter a food description",
+						Toast.LENGTH_SHORT).show();
+			}
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			throw e;
 		}
 	}
 
