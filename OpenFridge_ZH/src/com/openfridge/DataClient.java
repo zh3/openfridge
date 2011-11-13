@@ -57,9 +57,9 @@ public class DataClient extends Observable {
 		 */
 		try {
 			fridgeFoodURL = new URL(
-					"http://openfridge.heroku.com/fridge_foods.xml");
+					"http://openfridge.heroku.com/users/"+this.getUID()+"/fridge_foods.xml");
 			shoppingItemURL = new URL(
-					"http://openfridge.heroku.com/shopping_lists.xml");
+					"http://openfridge.heroku.com/users/"+this.getUID()+"/shopping_lists.xml");
 		} catch (MalformedURLException e) {
 			throw new RuntimeException(e);
 		}
@@ -189,7 +189,7 @@ public class DataClient extends Observable {
 	}
 
 	public int getUID() {
-		return 1;
+		return 3;
 	}
 
 	private void parse(SAXHandler<?> h, URL url) {
