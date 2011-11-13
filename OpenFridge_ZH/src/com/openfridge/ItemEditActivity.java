@@ -1,10 +1,8 @@
 package com.openfridge;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
-import net.technologichron.android.control.NumberPicker;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Display;
@@ -17,7 +15,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 //TODO Need to post updates correctly from item edit menu rather than always
@@ -39,13 +36,6 @@ public class ItemEditActivity extends Activity {
 		setContentView(R.layout.item_edit);
 
 		descField = (EditText) findViewById(R.id.editText1);
-		
-		//Setup the spinner
-        Spinner s1 = (Spinner) findViewById(R.id.timePeriodSpinner);
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String> (this,
-                android.R.layout.simple_spinner_item,
-                getResources().getStringArray(R.array.timePeriodArray)); 
-        s1.setAdapter(spinnerAdapter);
 
 		datePicker = (DatePicker) findViewById(R.id.datePicker1);
 		// Prepopulate date and description field if this menu was accessed
@@ -130,36 +120,9 @@ public class ItemEditActivity extends Activity {
 
 	// Utility methods
 	private String getSimpleDateString() {
-        NumberPicker np = (NumberPicker) findViewById(R.id.numPicker);
-        Spinner s1 = (Spinner) findViewById(R.id.timePeriodSpinner);
-        String DATE_FORMAT = "yyyy-MM-dd";
-        java.text.SimpleDateFormat sdf = 
-              new java.text.SimpleDateFormat(DATE_FORMAT);
+        DatePicker dp = (DatePicker) findViewById(R.id.datePicker1);
         
-        //Get the current date
-        Calendar cal = Calendar.getInstance(); 
-        Date today = cal.getTime();
-        String result;
-        
-        //Read the controls
-        int timePeriodIndex = s1.getSelectedItemPosition();
-        
-        //Calculate date in future
-        if (timePeriodIndex == 0) //days
-        {
-            cal.add(Calendar.DATE, np.getValue());
-        }
-        else if (timePeriodIndex == 1) //weeks
-        {
-            cal.add(Calendar.DATE, np.getValue() * 7);
-        }
-        else if (timePeriodIndex == 2) //months
-        {
-            cal.add(Calendar.MONTH, np.getValue());
-        }
-        //Get date in string
-        result = sdf.format(cal.getTime());
-		return result;
+        return dp.getYear() + "-" + dp.getMonth() + "-" +dp.getDayOfMonth();
 	}
 
 	// Callbacks

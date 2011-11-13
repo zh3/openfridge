@@ -38,20 +38,6 @@
             android:gravity="center_horizontal"
             android:orientation="horizontal" >
 
-            <net.technologichron.android.control.NumberPicker
-                android:id="@+id/numPicker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:orientation="horizontal" />
-
-            <Spinner
-                android:id="@+id/timePeriodSpinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:drawSelectorOnTop="true" />
-
             <DatePicker
                 android:id="@+id/datePicker1"
                 android:layout_width="wrap_content"
