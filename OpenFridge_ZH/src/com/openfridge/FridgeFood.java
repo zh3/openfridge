@@ -7,6 +7,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -205,6 +206,22 @@ public class FridgeFood extends DataObject implements Cloneable {
 						expirationDate.get(Calendar.MONTH),
 						expirationDate.get(Calendar.DAY_OF_MONTH)));
 		url.openStream().read();
+	
+        for (ExpState key : ExpState.values()) {
+            List<FridgeFood> foodList = DataClient.getInstance().getFoods(key);
+
+            for (FridgeFood f : foodList) {
+                if (f.getId() == getId()) {
+                	Log.d("OpenFridge", "updating:"+f.fullString()+" from:"+fullString());
+                    f.setDescription(getDescription());
+                    f.setExpirationDate(getExpirationDateString());
+                }
+            }
+        }
+	}
+
+	public String fullString() {
+		return String.format("(id:%d; userId:%d; description:%s; expire:%s)", id, userId, description, expirationDate);
 	}
 
 	@Override
