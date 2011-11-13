@@ -35,7 +35,7 @@ public class ItemEditActivity extends Activity {
 
 		setContentView(R.layout.item_edit);
 
-		descField = (EditText) findViewById(R.id.editText1);
+		descField = (EditText) findViewById(R.id.descriptionEditText);
 
 		datePicker = (DatePicker) findViewById(R.id.datePicker1);
 		// Prepopulate date and description field if this menu was accessed

@@ -19,7 +19,7 @@
             android:text="@string/customItemsTitle" />
 
         <EditText
-            android:id="@+id/editText1"
+            android:id="@+id/descriptionEditText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:cursorVisible="true"
@@ -43,6 +43,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" >
             </DatePicker>
+        </LinearLayout>
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/MainLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal" >
 
             <Button
                 android:id="@+id/button1"
@@ -50,20 +59,20 @@
                 android:layout_height="wrap_content"
                 android:onClick="doneBtnCallback"
                 android:text="@string/Done_button" />
+        </LinearLayout>
 
-            <TextView
-                android:id="@+id/common_items_title"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/commonItemsTitle" />
+        <TextView
+            android:id="@+id/common_items_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/commonItemsTitle" />
 
-            <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/common_items_buttons"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" >
-            </LinearLayout>
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/common_items_buttons"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
         </LinearLayout>
     </LinearLayout>
 
