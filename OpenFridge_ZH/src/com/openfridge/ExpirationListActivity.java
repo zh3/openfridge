@@ -44,12 +44,13 @@ public class ExpirationListActivity extends Activity implements Observer {
 
 	private void initFridgeFoodListView(int viewId, List<FridgeFood> foods,
 			OnItemClickListener listener) {
+		ListView listView = (ListView) findViewById(viewId);
+
 		ArrayAdapter<FridgeFood> a = new ArrayAdapter<FridgeFood>(this,
 				android.R.layout.simple_list_item_1, foods);
 		arrayAdapters.add(a);
-		ListView listView = (ListView) findViewById(viewId);
-		listView.setTextFilterEnabled(true);
 		listView.setAdapter(a);
+		listView.setTextFilterEnabled(true);
 		listView.setOnItemClickListener(listener);
 
 		// Make items not focusable to avoid listitem / button conflicts

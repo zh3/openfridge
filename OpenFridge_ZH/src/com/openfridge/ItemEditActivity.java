@@ -24,7 +24,6 @@ import android.widget.Toast;
 //
 public class ItemEditActivity extends Activity {
 	private EditText descField;
-	private DatePicker datePicker;
 	private FridgeFood food;
 	private static final int MAX_WIDTH_OFFSET = 10;
 
@@ -37,9 +36,7 @@ public class ItemEditActivity extends Activity {
 
 		descField = (EditText) findViewById(R.id.descriptionEditText);
 
-		datePicker = (DatePicker) findViewById(R.id.datePicker1);
-		// Prepopulate date and description field if this menu was accessed
-		// from the ExpireActivity
+		// Prepopulate date and description field
 
 		String description = food.getDescription();
 		GregorianCalendar expirationDate = food.getExpirationDate();
@@ -47,21 +44,22 @@ public class ItemEditActivity extends Activity {
 		descField.setText(description);
 		descField.setSelection(description.length());
 
-		datePicker.updateDate(expirationDate.get(Calendar.YEAR),
-				expirationDate.get(Calendar.MONTH) - 1, // Month from 0
+		((DatePicker) findViewById(R.id.datePicker1)).updateDate(expirationDate.get(Calendar.YEAR),
+				expirationDate.get(Calendar.MONTH), // Month from 0
 				expirationDate.get(Calendar.DAY_OF_MONTH));
 
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-				this, R.array.Common_items,
-				android.R.layout.simple_spinner_item);
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-		// Add the common items buttons which can be clicked to instantly
-		// add a common item
-		addCommonItemButtons(adapter);
+		//only show commonItems if you are creating a new item
+		if (food.getId()==-1) { addCommonItemButtons(); } 
 	}
 
-	private void addCommonItemButtons(ArrayAdapter<CharSequence> descriptions) {
+	/** Add the common items buttons which can be clicked to instantly
+	 add a common item */
+	private void addCommonItemButtons() {
+		ArrayAdapter<CharSequence> descriptions = ArrayAdapter.createFromResource(
+				this, R.array.Common_items,
+				android.R.layout.simple_spinner_item);
+		descriptions.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); 
+
 		LinearLayout layout = (LinearLayout) findViewById(R.id.common_items_buttons);
 		Display display = getWindowManager().getDefaultDisplay();
 		int maxWidth = display.getWidth() - MAX_WIDTH_OFFSET;
@@ -146,6 +144,10 @@ public class ItemEditActivity extends Activity {
 			e.printStackTrace();
 			throw e;
 		}
+	}
+
+	public void CancelClick(View view) {
+		finish();
 	}
 
 	private class CommonFoodButtonOnClickListener implements OnClickListener {

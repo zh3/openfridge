@@ -51,15 +51,21 @@ public class FridgeFood extends DataObject implements Cloneable {
 	public FridgeFood(String description, GregorianCalendar expirationDate,
 			String id, String userId) {
 		super(description, id, userId);
-		this.expirationDate = expirationDate;
+		construct(this, expirationDate);
 	}
 
 	public FridgeFood(String description, GregorianCalendar expirationDate,
 			int id, int userId) {
 		super(description, id, userId);
-		this.expirationDate = expirationDate;
+		construct(this, expirationDate);
 	}
 
+	private static void construct(FridgeFood f, GregorianCalendar expirationDate) {
+		f.expirationDate = expirationDate;
+		if (DataClient.getInstance().getFFById(f.getId())!=null) {
+			throw new RuntimeException("Tried to create a FridgeFoods with an existing ID!");
+		}
+	}
 	private static GregorianCalendar weekLater() {
 		GregorianCalendar aWeekLater = new GregorianCalendar();
 		aWeekLater.roll(Calendar.DAY_OF_YEAR, 7);
@@ -116,7 +122,7 @@ public class FridgeFood extends DataObject implements Cloneable {
 
 	public String getExpirationDateString() {
 		return expirationDate.get(Calendar.YEAR) + "-"
-				+ expirationDate.get(Calendar.MONTH) + "-"
+				+ expirationMonth() + "-"
 				+ expirationDate.get(Calendar.DAY_OF_MONTH);
 	}
 
@@ -136,7 +142,7 @@ public class FridgeFood extends DataObject implements Cloneable {
 	 */
 	public String getSummary() {
 		return description + "\nExpires: " + expirationDate.get(Calendar.YEAR)
-				+ "-" + expirationDate.get(Calendar.MONTH) + "-"
+				+ "-" + expirationMonth() + "-"
 				+ expirationDate.get(Calendar.DAY_OF_MONTH) + "\n";
 	}
 
@@ -152,16 +158,16 @@ public class FridgeFood extends DataObject implements Cloneable {
 			return null;
 		}
 	}
-
+	private static final String bundleKey = "foodID";
 	public Bundle bundle() {
 		Bundle b = new Bundle();
-		b.putSerializable("food", this);
+		b.putInt(bundleKey, this.getId());
 		return b;
 	}
 
 	public static FridgeFood getFoodFromBundle(Bundle b) {
-		if (b!=null && b.containsKey("food")) {
-			return (FridgeFood) b.getSerializable("food");
+		if (b != null && b.containsKey(bundleKey)) {
+			return DataClient.getInstance().getFFById(b.getInt(bundleKey));
 		}
 		return new FridgeFood();
 	}
@@ -184,7 +190,7 @@ public class FridgeFood extends DataObject implements Cloneable {
 						getUserId(),
 						URLEncoder.encode(getDescription(), "UTF-8"),
 						expirationDate.get(Calendar.YEAR),
-						expirationDate.get(Calendar.MONTH),
+						expirationMonth(),
 						expirationDate.get(Calendar.DAY_OF_MONTH)));
 
 		Scanner scan = new Scanner((new DataInputStream(url.openStream())));
@@ -193,7 +199,13 @@ public class FridgeFood extends DataObject implements Cloneable {
 		String expirationState = scan.next();
 
 		setId(itemId);
-		DataClient.getInstance().getFoods(ExpState.valueOf(expirationState.trim().toUpperCase())).add(this);
+		DataClient.getInstance().addFF(
+				ExpState.valueOf(expirationState.trim().toUpperCase()), this);
+	}
+
+	/** Month, starting from 1, NOT 0. */
+	private int expirationMonth() {
+		return expirationDate.get(Calendar.MONTH)+1;
 	}
 
 	@Override
@@ -203,55 +215,25 @@ public class FridgeFood extends DataObject implements Cloneable {
 						"http://openfridge.heroku.com/fridge_foods/update/%d/%s/%d/%d/%d",
 						getId(), URLEncoder.encode(getDescription(), "UTF-8"),
 						expirationDate.get(Calendar.YEAR),
-						expirationDate.get(Calendar.MONTH),
+						expirationMonth(),
 						expirationDate.get(Calendar.DAY_OF_MONTH)));
 		url.openStream().read();
-	
-        for (ExpState key : ExpState.values()) {
-            List<FridgeFood> foodList = DataClient.getInstance().getFoods(key);
-
-            for (FridgeFood f : foodList) {
-                if (f.getId() == getId()) {
-                	Log.d("OpenFridge", "updating:"+f.fullString()+" from:"+fullString());
-                    f.setDescription(getDescription());
-                    f.setExpirationDate(getExpirationDateString());
-                }
-            }
-        }
 	}
 
 	public String fullString() {
-		return String.format("(id:%d; userId:%d; description:%s; expire:%s)", id, userId, description, expirationDate);
+		return String.format("(id:%d; userId:%d; description:%s; expire:%s)",
+				id, userId, description, expirationDate);
 	}
 
 	@Override
 	public void remove() throws IOException {
 		URL url = new URL(String.format(
-				"http://openfridge.heroku.com/fridge_foods/%d/%d/%s", getId(), getUserId(),
-				isEaten() ? "eat" : "throw"));
+				"http://openfridge.heroku.com/fridge_foods/%d/%d/%s", getId(),
+				getUserId(), isEaten() ? "eat" : "throw"));
 		Log.d("OpenFridge", url.toString());
 		InputStream x = url.openStream();
 		x.read();
-
-		for (ExpState key : ExpState.values()) {
-			boolean y = DataClient.getInstance().getFoods(key).remove(this);
-			Log.d("OpenFridge",String.format("%s:%s:%s",this,key,y));
-			// List<FridgeFood> foodList = foods.get(key);
-			//
-			// int i;
-			// for (i = 0; i < foodList.size(); i++) {
-			// DataObject f = foodList.get(i);
-			//
-			// if (f.getId() == food.getId())
-			// break;
-			// }
-			//
-			// if (i < foodList.size()) {
-			// foodList.remove(i);
-			// Log.d("OpenFridge", String.format("Removed #%d", i));
-			//
-			// }
-		}
+		
+		DataClient.getInstance().removeFF(this);
 	}
-	
 }

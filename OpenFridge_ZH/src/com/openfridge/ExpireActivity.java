@@ -1,5 +1,8 @@
 package com.openfridge;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,18 +16,29 @@ import android.widget.TextView;
 //TODO Log action (Thrown/Eaten)                   EL
 //DONE Thrown/Eaten should delete from web         FR
 
-public class ExpireActivity extends Activity {
+public class ExpireActivity extends Activity implements Observer {
 	private FridgeFood food;
 
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.expire);
 
 		food = FridgeFood.getFoodFromBundle(getIntent().getExtras());
+		update(null, null);
+	}
 
-		TextView fdTV = (TextView) findViewById(R.id.foodDescription);
-		fdTV.setText(food.getDescription() + ":"
-				+ Integer.toString(food.getId()));
+	@Override
+	protected void onPause() {
+		super.onPause();
+		DataClient.getInstance().deleteObserver(this);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		DataClient.getInstance().addObserver(this);
+		update(null, null);
 	}
 
 	public void EditPostponeClick(View view) {
@@ -48,8 +62,14 @@ public class ExpireActivity extends Activity {
 
 		finish();
 	}
-
 	public void CancelClick(View view) {
 		finish();
+	}
+
+	@Override
+	public void update(Observable observable, Object data) {
+		TextView fdTV = (TextView) findViewById(R.id.foodDescription);
+		fdTV.setText(food.getDescription() + ":"
+				+ Integer.toString(food.getId()));
 	}
 }

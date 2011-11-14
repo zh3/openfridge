@@ -36,6 +36,7 @@ public class DataClient extends Observable {
 	private static final int GREEN = Color.parseColor("#228B22");
 	// ArrayLists for the data from the XML
 	private Map<ExpState, List<FridgeFood>> foods = new HashMap<ExpState, List<FridgeFood>>();
+	private Map<Integer, FridgeFood> foodsById = new HashMap<Integer, FridgeFood>();
 	private List<ShoppingItem> shoppingList = new ArrayList<ShoppingItem>();
 	// Parsing stuff
 	private XMLReader xr;
@@ -135,12 +136,25 @@ public class DataClient extends Observable {
 		for (ExpState key : ExpState.values()) {
 			foods.get(key).clear();
 			foods.get(key).addAll(ffH.getFoods(key));
-			for (DataObject f : foods.get(key)) {
-				f.getId();
+			for (FridgeFood f : foods.get(key)) {
+				foodsById.put(f.getId(), f);
 			}
 		}
 	}
 
+	public FridgeFood getFFById(int id) {
+		return foodsById.get(id);
+	}
+	public void addFF(ExpState key, FridgeFood f) {
+		foods.get(key).add(f);
+		foodsById.put(f.getId(), f);
+	}
+	public void removeFF(FridgeFood f) {
+		for (List<FridgeFood> l : foods.values()) {
+			l.remove(f);
+		}
+		foodsById.remove(f.getId());
+	}
 	private void reloadShoppingItems() {
 		ShoppingItemHandler siH = new ShoppingItemHandler();
 		parse(siH, shoppingItemURL);
