@@ -2,6 +2,8 @@ package com.openfridge;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.TimeZone;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -18,12 +20,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-//TODO Need to post updates correctly from item edit menu rather than always
-// adding new ones ZH/EL
 //TODO Change date picker to simpler version SC
 //TODO Implement saved food behaviour        ZH/EL/JW
 //
 public class ItemEditActivity extends Activity {
+    private HashMap<String, Integer> favoritesExpiry;
 	private EditText descField;
 	private DatePicker datePicker;
 	private FridgeFood food;
@@ -33,6 +34,7 @@ public class ItemEditActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		populateFavorites();
 		food = FridgeFood.getFoodFromBundle(getIntent().getExtras());
 		isUpdate = (food.getId() != -1);
 
@@ -53,7 +55,7 @@ public class ItemEditActivity extends Activity {
 		descField.setSelection(description.length());
 
 		datePicker.updateDate(expirationDate.get(Calendar.YEAR),
-				expirationDate.get(Calendar.MONTH) - 1, // Month from 0
+				expirationDate.get(Calendar.MONTH), // Month from 0
 				expirationDate.get(Calendar.DAY_OF_MONTH));
 
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
@@ -64,6 +66,16 @@ public class ItemEditActivity extends Activity {
 		// Add the common items buttons which can be clicked to instantly
 		// add a common item
 		addCommonItemButtons(adapter);
+	}
+	
+	// Add default expiry offsets in number of days
+	private void populateFavorites() {
+	    favoritesExpiry = new HashMap<String, Integer>();
+	    
+	    favoritesExpiry.put("Eggs", 28);
+	    favoritesExpiry.put("Milk", 14);
+	    favoritesExpiry.put("Cheese", 21);
+	    favoritesExpiry.put("Tomatoes", 5);
 	}
 	
 	private void setUpdateText() {
@@ -161,18 +173,38 @@ public class ItemEditActivity extends Activity {
 			throw e;
 		}
 	}
+	
+	private Calendar getOffsetDate(int offset) {
+	    Calendar cal = Calendar.getInstance();
+	    cal.add(Calendar.DATE, offset);
+	    return cal;
+	}
 
 	private class CommonFoodButtonOnClickListener implements OnClickListener {
 		@Override
 		public void onClick(View v) {
-			// Currently just add the food based on button name and
-			// datepicker
+			// Populate the form fields based on stored values
+		    String food = ((Button) v).getText().toString();
+		    int daysToExpire = favoritesExpiry.get(food);
+		    
+		    Calendar expiryDate = getOffsetDate(daysToExpire);
+		    
+		    descField.setText(food);
+		    descField.setSelection(food.length());
+		    //ToDO
+		    
+		    datePicker.updateDate(expiryDate.get(Calendar.YEAR), 
+		                          expiryDate.get(Calendar.MONTH), 
+		                          expiryDate.get(Calendar.DAY_OF_MONTH));
+		    
+		    
+		    /*
 			DataClient.getInstance().doNetOp(
 					ItemEditActivity.this,
 					NetOp.PUSH,
 					new FridgeFood(((Button) v).getText().toString(),
 							getSimpleDateString()));
-			finish();
+			finish();*/
 		}
 	}
 }
