@@ -203,7 +203,7 @@ public class DataClient extends Observable {
 	}
 
 	public int getUID() {
-		return 3;
+		return 4;
 	}
 
 	private void parse(SAXHandler<?> h, URL url) {

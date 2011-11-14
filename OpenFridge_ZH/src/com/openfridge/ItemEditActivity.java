@@ -34,7 +34,7 @@ public class ItemEditActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 		populateFavorites();
-		datePicker = ((DatePicker) findViewById(R.id.datePicker1));
+		
 		food = FridgeFood.getFoodFromBundle(getIntent().getExtras());
 		isUpdate = (food.getId() != -1);
 
@@ -52,6 +52,7 @@ public class ItemEditActivity extends Activity {
 		descField.setText(description);
 		descField.setSelection(description.length());
 
+		datePicker = ((DatePicker) findViewById(R.id.datePicker1));
 		datePicker.updateDate(expirationDate.get(Calendar.YEAR),
 				expirationDate.get(Calendar.MONTH), // Month from 0
 				expirationDate.get(Calendar.DAY_OF_MONTH));
