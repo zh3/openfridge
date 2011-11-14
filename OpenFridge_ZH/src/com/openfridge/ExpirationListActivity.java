@@ -1,5 +1,7 @@
 package com.openfridge;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Observable;
@@ -17,6 +19,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 //DONE Make list headers colored only JW
@@ -24,7 +27,7 @@ import android.widget.Toast;
 public class ExpirationListActivity extends Activity implements Observer {
 	private static final int ROW_HEIGHT = 100;
 	private Intent itemEdit;
-	private Set<ArrayAdapter<?>> arrayAdapters = new HashSet<ArrayAdapter<?>>();
+	private Set<SimpleAdapter> simpleAdapters = new HashSet<SimpleAdapter>();
 
 	/** Called when the activity is first created. */
 	@Override
@@ -35,21 +38,48 @@ public class ExpirationListActivity extends Activity implements Observer {
 		
 		setContentView(R.layout.expiration_list);
 
-		for (ExpState key : ExpState.values()) {
-			initFridgeFoodListView(key.getListViewID(), DataClient
-					.getInstance().getFoods(key),
-					new PastFridgeItemClickListener());
-		}
+		initFridgeFoodListViews();
 	}
-
+	
+	private void initFridgeFoodListViews() {
+	    for (ExpState key : ExpState.values()) {
+            initFridgeFoodListView(key.getListViewID(), DataClient
+                    .getInstance().getFoods(key),
+                    new PastFridgeItemClickListener());
+        }
+	}
+	
 	private void initFridgeFoodListView(int viewId, List<FridgeFood> foods,
 			OnItemClickListener listener) {
-		ArrayAdapter<FridgeFood> a = new ArrayAdapter<FridgeFood>(this,
-				android.R.layout.simple_list_item_1, foods);
-		arrayAdapters.add(a);
-		ListView listView = (ListView) findViewById(viewId);
+	    ArrayList<HashMap<String, String>> mapList 
+	        = new ArrayList<HashMap<String, String>>();
+	    
+	    for (FridgeFood f: foods) {
+	        HashMap<String, String> map;
+
+            map = new HashMap<String, String>();
+            map.put("line1", f.getDescription());
+            map.put("line2", f.getExpirationDateString());
+            map.put("foodId", Integer.toString(f.getId()));
+            mapList.add(map);
+	    }
+	    
+	    String[] from = { "line1", "line2" };
+        int[] to = { android.R.id.text1, android.R.id.text2 };
+
+        // create the adapter and assign it to the listview
+        SimpleAdapter adapter = new SimpleAdapter(this, mapList,
+                android.R.layout.simple_list_item_2, from, to);
+        
+        ListView listView = (ListView) findViewById(viewId);
+        listView.setAdapter(adapter);
+	    
+//		ArrayAdapter<FridgeFood> a = new ArrayAdapter<FridgeFood>(this,
+//				android.R.layout.simple_list_item_1, foods);
+//		arrayAdapters.add(a);
+		simpleAdapters.add(adapter);
 		listView.setTextFilterEnabled(true);
-		listView.setAdapter(a);
+//		listView.setAdapter(a);
 		listView.setOnItemClickListener(listener);
 
 		// Make items not focusable to avoid listitem / button conflicts
@@ -106,27 +136,50 @@ public class ExpirationListActivity extends Activity implements Observer {
 			    
 				ListView parentList = (ListView) parent;
 				Context parentContext = parentList.getContext();
-				FridgeFood food = (FridgeFood) parentList
+				HashMap<String, String> map 
+				    = (HashMap<String, String>) parentList
 						                        .getItemAtPosition(position);
 	
-
+				/*
 				Toast.makeText(parentContext,
 						"Expiration Date: " + food.getExpirationDateString(),
 						Toast.LENGTH_SHORT).show();
-
-				expire = new Intent(parentContext, ExpireActivity.class);
-				expire.putExtras(food.bundle());
-				startActivity(expire);
+				*/
+				FridgeFood food = getFoodFromMap(map);
+				
+				if (food != null) {
+    				expire = new Intent(parentContext, ExpireActivity.class);
+    				expire.putExtras(food.bundle());
+    				startActivity(expire);
+				} else {
+				    Toast.makeText(parentContext,
+	                        "Error: Cannot find food item",
+	                        Toast.LENGTH_SHORT).show();
+				}
 			}
 		}
-
+	}
+	
+	private FridgeFood getFoodFromMap(HashMap<String, String> map) {
+	    int foodId = Integer.parseInt(map.get("foodId"));
+	    
+	    for (ExpState key : ExpState.values()) {
+            List<FridgeFood> foods = DataClient.getInstance().getFoods(key);
+            
+            for (FridgeFood f: foods) {
+                if (f.getId() == foodId) {
+                    return f;
+                }
+            }
+	    }
+	    
+	    return null;
 	}
 
 	@Override
 	public void update(Observable observable, Object data) {
-		for (ArrayAdapter<?> a : arrayAdapters) {
-			a.notifyDataSetChanged();
-		}
+	    initFridgeFoodListViews();
+	    
 		for (ExpState key : ExpState.values()) {
 			setHeight(key.getListViewID());
 		}
