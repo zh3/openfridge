@@ -32,4 +32,6 @@
     <string name="updateItemTitle">Update Item</string>
     <string name="updateButtonTitle">Update</string>
     <string name="addButtonTitle">Add</string>
+    <string name="deletePanelTitle">Delete Item</string>
+    <string name="deleteItemButtonTitle">Delete</string>
 </resources>

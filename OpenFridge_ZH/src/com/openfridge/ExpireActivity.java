@@ -23,8 +23,8 @@ public class ExpireActivity extends Activity {
 		food = FridgeFood.getFoodFromBundle(getIntent().getExtras());
 
 		TextView fdTV = (TextView) findViewById(R.id.foodDescription);
-		fdTV.setText(food.getDescription() + ":"
-				+ Integer.toString(food.getId()));
+		fdTV.setText("Name: " + food.getDescription() + "\nExpiry date: " 
+		             + food.getExpirationDateString());
 	}
 
 	public void EditPostponeClick(View view) {
