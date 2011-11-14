@@ -27,6 +27,11 @@
         <item>months</item>
     </string-array>
     <string name="deleteChecked">Delete Checked</string>
-    <string name="commonItemsTitle">Add Common Item</string>
-    <string name="customItemsTitle">Add Custom Item</string>
+    <string name="commonItemsTitle">Favorites</string>
+    <string name="customItemsTitle">Add Item</string>
+    <string name="updateItemTitle">Update Item</string>
+    <string name="updateButtonTitle">Update</string>
+    <string name="addButtonTitle">Add</string>
+    <string name="deletePanelTitle">Delete Item</string>
+    <string name="deleteItemButtonTitle">Delete</string>
 </resources>

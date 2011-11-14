@@ -45,6 +45,7 @@ public class ExpireActivity extends Activity implements Observer {
 		Intent itemEdit = new Intent(this, ItemEditActivity.class);
 		itemEdit.putExtras(food.bundle());
 		startActivity(itemEdit);
+		finish();
 	}
 
 	public void DoneClick(View view) {

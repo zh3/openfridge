@@ -68,7 +68,7 @@ public class FridgeFood extends DataObject implements Cloneable {
 	}
 	private static GregorianCalendar weekLater() {
 		GregorianCalendar aWeekLater = new GregorianCalendar();
-		aWeekLater.roll(Calendar.DAY_OF_YEAR, 7);
+		aWeekLater.roll(Calendar.DATE, 7);
 		return aWeekLater;
 	}
 
