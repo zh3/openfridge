@@ -70,6 +70,7 @@ public class ExpireActivity extends Activity implements Observer {
 	@Override
 	public void update(Observable observable, Object data) {
 		TextView fdTV = (TextView) findViewById(R.id.foodDescription);
-		fdTV.setText(food.getDescription());
+		fdTV.setText("Name: " + food.getDescription() + "\nExpiry date: "
+                     + food.getExpirationDateString());
 	}
 }
