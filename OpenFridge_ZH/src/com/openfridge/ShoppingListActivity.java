@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 //DONE Don't let it add blank JW
@@ -34,12 +35,16 @@ public class ShoppingListActivity extends Activity implements Observer {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.shopping_list);
 
+
+		
 		adapter = new ArrayAdapter<ShoppingItem>(this,
 				android.R.layout.simple_list_item_multiple_choice, DataClient
 						.getInstance().getShoppingList());
 
 		final ListView lv = (ListView) findViewById(R.id.shoppingLV);
 		lv.setAdapter(adapter);
+	    //Set shoppinglist title
+        updateTitleText(); 
 
 		// Make items not focusable to avoid listitem / button conflicts
 		lv.setItemsCanFocus(false);
@@ -82,6 +87,14 @@ public class ShoppingListActivity extends Activity implements Observer {
 		DataClient.getInstance().reloadFoods();
 	}
 	
+	private void updateTitleText()
+	{
+	       TextView shoppingTitleTxt 
+	          = (TextView) findViewById(R.id.shoppingTitleTxt);
+	        int numItems = adapter.getCount();
+	        shoppingTitleTxt.setText(getString(R.string.shoppingTitle) + " : " + numItems
+	                                + " item" + (numItems == 1? "" : "s"));
+	}
 	//Callbacks
 	///////////////
 	
@@ -91,7 +104,11 @@ public class ShoppingListActivity extends Activity implements Observer {
 		if (itemToAdd.length() > 0 && itemToAdd.length() < MAX_LENGTH) {
 			DataClient.getInstance().doNetOp(this, NetOp.PUSH,
 					new ShoppingItem(itemToAdd));
+			updateTitleText();
 			itemName.setText(null);
+			
+	         Toast.makeText(view.getContext(), "Item " + itemToAdd + " added!",
+	                    Toast.LENGTH_SHORT).show();
 		} else {
 			Toast.makeText(view.getContext(), "Item was empty or too long!",
 					Toast.LENGTH_SHORT).show();
@@ -144,6 +161,7 @@ public class ShoppingListActivity extends Activity implements Observer {
 				adapter.remove(si);
 			}
 		}
+		updateTitleText();
 
 	}
 
