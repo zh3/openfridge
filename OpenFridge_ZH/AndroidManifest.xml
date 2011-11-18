@@ -50,5 +50,4 @@
         </activity>
         <service android:name="DataClientIntentService" android:exported="false"></service>
     </application>
-
 </manifest>

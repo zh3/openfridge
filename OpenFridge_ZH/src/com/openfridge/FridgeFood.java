@@ -31,11 +31,11 @@ public class FridgeFood extends DataObject implements Cloneable {
 	}
 
 	public FridgeFood(String description) {
-		this(description, weekLater());
+		this(description, new GregorianCalendar());
 	}
 
 	public FridgeFood(String description, String expirationDate) {
-		this(description, defaultDate(expirationDate, weekLater()));
+		this(description, defaultDate(expirationDate, new GregorianCalendar()));
 	}
 
 	public FridgeFood(String description, GregorianCalendar expirationDate) {
@@ -44,7 +44,7 @@ public class FridgeFood extends DataObject implements Cloneable {
 
 	public FridgeFood(String description, String expirationDate, String id,
 			String userId) {
-		this(description, defaultDate(expirationDate, weekLater()), id, userId);
+		this(description, defaultDate(expirationDate, new GregorianCalendar()), id, userId);
 	}
 
 	public FridgeFood(String description, GregorianCalendar expirationDate,
@@ -65,11 +65,11 @@ public class FridgeFood extends DataObject implements Cloneable {
 			throw new RuntimeException("Tried to create a FridgeFoods with an existing ID!");
 		}
 	}
-	private static GregorianCalendar weekLater() {
-		GregorianCalendar aWeekLater = new GregorianCalendar();
-		aWeekLater.roll(Calendar.DATE, 7);
-		return aWeekLater;
-	}
+//	private static GregorianCalendar weekLater() {
+//		GregorianCalendar aWeekLater = new GregorianCalendar();
+//		aWeekLater.roll(Calendar.DATE, 7);
+//		return aWeekLater;
+//	}
 
 	private static GregorianCalendar defaultDate(String dateString,
 			GregorianCalendar defaultDateValue) {
