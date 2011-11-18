@@ -5,7 +5,7 @@
     <string name="New_Item">Add</string>
     <string name="exp_button">Expiration List</string>
     <string name="shopping_button">Shopping List</string>
-    <string name="EditPost_button">Edit/Postpone</string>
+    <string name="EditPost_button">Edit</string>
     <string name="Done_button">Apply</string>
     <string name="Cancel_button">Cancel</string>
     <string name="Send_Shopping">Add to shopping list</string>
