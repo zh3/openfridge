@@ -18,7 +18,6 @@
             >
             <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -28,9 +27,8 @@
             android:icon="@android:drawable/ic_dialog_info"
             android:label="OpenFridge Expiration List">
             <intent-filter >
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.EXPIRATIONLIST" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity android:name="ItemEditActivity" >
@@ -41,9 +39,8 @@
             android:label="OpenFridge Shopping List" 
             android:icon="@android:drawable/ic_dialog_map">
             <intent-filter >
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.EXPIREITEM" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity android:name="ShoppingActivity" >
