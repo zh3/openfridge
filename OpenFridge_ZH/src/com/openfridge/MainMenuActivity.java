@@ -6,6 +6,7 @@ import java.util.Observer;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings.Secure;
 import android.view.View;
 
 //DONE no color icons FR
@@ -23,7 +24,8 @@ public class MainMenuActivity extends Activity implements Observer {
 	
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+        String android_id = Secure.getString(getContentResolver(), Secure.ANDROID_ID);
+        DataClient.getInstance().setUID(Integer.parseInt(android_id==null?"1":android_id,16));
         //mainMenu = new Intent(this, MainMenuActivity.class);
         expirationList = new Intent(this, ExpirationListActivity.class);
         //expire = new Intent(this, ExpireActivity.class);

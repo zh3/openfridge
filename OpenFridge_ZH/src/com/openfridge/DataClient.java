@@ -21,6 +21,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.SystemClock;
+import android.util.Log;
 import android.widget.Toast;
 
 /**
@@ -47,22 +48,10 @@ public class DataClient extends Observable {
 	private GetDataAsyncTask getDataTask;
 	private long lastRunTime = 0;
 	private long nextRunTime = 0;
+	private int uid;
 	{
 		for (ExpState key : ExpState.values()) {
 			foods.put(key, new ArrayList<FridgeFood>());
-		}
-		/* Create the URLs we want to load xml-data from. */
-		/*
-		 * If you check them, you'll see they are mini-xml documents generated
-		 * from elvin's database.
-		 */
-		try {
-			fridgeFoodURL = new URL(
-					"http://openfridge.heroku.com/users/"+this.getUID()+"/fridge_foods.xml");
-			shoppingItemURL = new URL(
-					"http://openfridge.heroku.com/users/"+this.getUID()+"/shopping_lists.xml");
-		} catch (MalformedURLException e) {
-			throw new RuntimeException(e);
 		}
 
 		/* Get a SAXParser from the SAXPArserFactory. */
@@ -82,6 +71,20 @@ public class DataClient extends Observable {
 	private class GetDataAsyncTask extends AsyncTask<Void, Void, Void> {
 		@Override
 		protected Void doInBackground(Void... arg0) {
+			/* Create the URLs we want to load xml-data from. */
+			/*
+			 * If you check them, you'll see they are mini-xml documents generated
+			 * from elvin's database.
+			 */
+			try {
+				fridgeFoodURL = new URL(
+						"http://openfridge.heroku.com/users/"+DataClient.this.getUID()+"/fridge_foods.xml");
+				shoppingItemURL = new URL(
+						"http://openfridge.heroku.com/users/"+DataClient.this.getUID()+"/shopping_lists.xml");
+			} catch (MalformedURLException e) {
+				throw new RuntimeException(e);
+			}
+
 			reloadFridgeFoods();
 			reloadShoppingItems();
 			return null;
@@ -100,6 +103,7 @@ public class DataClient extends Observable {
 	}
 
 	public void reloadFoods() {
+		Log.d("OpenFridge","Attempted reload.");
 		long now = SystemClock.uptimeMillis();
 		if (getDataTask == null && (now > nextRunTime || now < lastRunTime)) {
 			// 2nd check is in case the clock's been reset.
@@ -129,6 +133,7 @@ public class DataClient extends Observable {
 
 	private void reloadFridgeFoods() {
 		FridgeFoodHandler ffH = new FridgeFoodHandler();
+		foodsById.clear();
 		parse(ffH, fridgeFoodURL);
 
 		// Changes the contents of the ArrayList's,
@@ -186,10 +191,11 @@ public class DataClient extends Observable {
 	}
 
 	public int getShoppingListColor() {
-		if (!getShoppingList().isEmpty()) {
+		if (getShoppingList().isEmpty()) {
 			return GREEN;
+		} else {
+			return YELLOW;
 		}
-		return Color.parseColor("#FFFFFF");
 	}
 
 	// Singleton & utility stuff
@@ -202,13 +208,17 @@ public class DataClient extends Observable {
 		public static final DataClient client = new DataClient();
 	}
 
+	public void setUID(int uid) {
+		this.uid=uid;
+	}
 	public int getUID() {
-		return 4;
+		return uid;
 	}
 
 	private void parse(SAXHandler<?> h, URL url) {
 		xr.setContentHandler(h);
 		try {
+			Log.i("OpenFridge",url.toString());
 			xr.parse(new InputSource(url.openStream()));
 		} catch (IOException e) {
 			e.printStackTrace();
