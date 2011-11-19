@@ -14,9 +14,11 @@ import android.view.View.OnKeyListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 //DONE Don't let it add blank JW
@@ -33,12 +35,16 @@ public class ShoppingListActivity extends Activity implements Observer {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.shopping_list);
 
+
+		
 		adapter = new ArrayAdapter<ShoppingItem>(this,
 				android.R.layout.simple_list_item_multiple_choice, DataClient
 						.getInstance().getShoppingList());
 
 		final ListView lv = (ListView) findViewById(R.id.shoppingLV);
 		lv.setAdapter(adapter);
+	    //Set shoppinglist title
+        updateTitleText(); 
 
 		// Make items not focusable to avoid listitem / button conflicts
 		lv.setItemsCanFocus(false);
@@ -81,51 +87,82 @@ public class ShoppingListActivity extends Activity implements Observer {
 		DataClient.getInstance().reloadFoods();
 	}
 	
+	private void updateTitleText()
+	{
+	       TextView shoppingTitleTxt 
+	          = (TextView) findViewById(R.id.shoppingTitleTxt);
+	        int numItems = adapter.getCount();
+	        shoppingTitleTxt.setText(getString(R.string.shoppingTitle) + " : " + numItems
+	                                + " item" + (numItems == 1? "" : "s"));
+	}
 	//Callbacks
 	///////////////
 	
 	public void addItemToList(View view) {
-		String itemToAdd = ((EditText) findViewById(R.id.itemName)).getText()
-				.toString();
+	    EditText itemName = (EditText) findViewById(R.id.itemName);
+	    String itemToAdd = itemName.getText().toString();
 		if (itemToAdd.length() > 0 && itemToAdd.length() < MAX_LENGTH) {
 			DataClient.getInstance().doNetOp(this, NetOp.PUSH,
 					new ShoppingItem(itemToAdd));
+			updateTitleText();
+			itemName.setText(null);
+			
+	         Toast.makeText(view.getContext(), "Item " + itemToAdd + " added!",
+	                    Toast.LENGTH_SHORT).show();
 		} else {
 			Toast.makeText(view.getContext(), "Item was empty or too long!",
 					Toast.LENGTH_SHORT).show();
-
 		}
 	}
 
 	public void deleteChecked(View view) {
 		ListView lv = (ListView) findViewById(R.id.shoppingLV);
+		int checkedItemsCount = 0;
+		Button dc = (Button) findViewById(R.id.deleteChecked);
+		dc.setEnabled(false);
 		final SparseBooleanArray checkedItems = lv.getCheckedItemPositions();
-		if (checkedItems == null) {
-			// That means our list is not able to handle selection
-			// (choiceMode is CHOICE_MODE_NONE for example)
-			Toast.makeText(view.getContext(), "Nothing selected for deletion",
-					Toast.LENGTH_SHORT).show();
-			return;
-		}
-
 		Set<ShoppingItem> itemsToDelete = new HashSet<ShoppingItem>();
+		//Get Checked Items
+        checkedItemsCount = 0;
 		for (int i = 0; i < checkedItems.size(); ++i) {
 			if (checkedItems.valueAt(i)) { //if it is checked:
-				itemsToDelete.add(adapter.getItem(checkedItems.keyAt(i)));				
+			    checkedItemsCount++;
+				itemsToDelete.add(adapter.getItem(checkedItems.keyAt(i)));		
 			}
 		}
-		Toast.makeText(this, "Delete from DB :"+itemsToDelete.toString(), Toast.LENGTH_SHORT)
-		.show();
+		//If none, toast and return
+		if (checkedItemsCount == 0)
+		{
+	          Toast.makeText(view.getContext(), "Nothing selected for deletion",
+	                    Toast.LENGTH_SHORT).show();
+	             dc.setEnabled(true);
+	            return;
+		}
+		//Else toast number of items
+		else
+		{
+		    Toast.makeText(this, checkedItemsCount + " item" + 
+		                        (checkedItemsCount == 1? "" : "s") + 
+		                        " deleted!", Toast.LENGTH_SHORT)
+		    .show();
+		}
+		
+        //Unset all the checkboxes
+        for (int i = 0; i < lv.getAdapter().getCount() ; i++) {
+            lv.setItemChecked(i, false);
+        }
 
+        
+        //Reenable delete button
+        dc.setEnabled(true);
+        
 		for (ShoppingItem si : itemsToDelete) {
 			if (DataClient.getInstance().doNetOp(this, NetOp.REMOVE, si)) {
 				adapter.remove(si);
 			}
 		}
-		//Unset all the checkboxes
-		for (int i = 0; i < lv.getAdapter().getCount() ; i++) {
-			lv.setItemChecked(i, false);
-		}
+		updateTitleText();
+
 	}
 
 	@Override

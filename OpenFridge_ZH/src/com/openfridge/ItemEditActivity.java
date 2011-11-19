@@ -57,8 +57,15 @@ public class ItemEditActivity extends Activity {
 				expirationDate.get(Calendar.MONTH), // Month from 0
 				expirationDate.get(Calendar.DAY_OF_MONTH));
 
-		//only show commonItems if you are creating a new item
-		if (food.getId()==-1) { addCommonItemButtons(); } 
+		
+		if (!isUpdate) { 
+		    //only show commonItems if you are creating a new item
+		    addCommonItemButtons(); 
+		} else {
+		    // Hide 'favorites' heading if it's not an update
+		    ((TextView) findViewById(R.id.common_items_title))
+		                        .setVisibility(TextView.INVISIBLE);
+		}
 	}
 
 	/** Add the common items buttons which can be clicked to instantly

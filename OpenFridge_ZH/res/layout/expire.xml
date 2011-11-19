@@ -8,13 +8,17 @@
         android:id="@+id/foodDescription"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textSize="30px"
+        android:textSize="25sp"
+        android:textColor="#FFFFFF"
+        android:paddingBottom="4px"
+        android:paddingTop="4px"
     />
 
     <Button
         android:id="@+id/button1"
         android:layout_width="fill_parent"
         android:layout_height="75dp"
+        android:textSize="20sp"
         android:onClick="EditPostponeClick"
         android:text="@string/EditPost_button" >
     </Button>
@@ -24,7 +28,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/deletePanelTitle"
-        android:textSize="30px" 
+        android:textColor="#FFFFFF"
+        android:textSize="25sp" 
     />
 
     <RadioGroup
@@ -66,6 +71,7 @@
             android:layout_width="fill_parent"
             android:layout_height="75dp"
             android:layout_weight="1"
+            android:textSize="20sp"            
             android:onClick="DoneClick"
             android:text="@string/deleteItemButtonTitle" >
         </Button>
@@ -75,6 +81,7 @@
             android:layout_width="fill_parent"
             android:layout_height="75dp"
             android:layout_weight="1"
+            android:textSize="20sp"  
             android:onClick="CancelClick"
             android:text="@string/Cancel_button" >
         </Button>

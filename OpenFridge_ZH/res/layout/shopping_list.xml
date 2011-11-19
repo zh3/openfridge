@@ -25,11 +25,12 @@
         android:text="@string/New_Item" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/shoppingTitleTxt"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@layout/expire"
         android:layout_alignParentLeft="true"
+        android:textStyle="bold"
+        android:textSize="20sp"           
         android:layout_below="@+id/itemName"
         android:text="@string/shoppingTitle" />
 
@@ -39,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/linearLayout1"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView1" />
+        android:layout_below="@+id/shoppingTitleTxt" />
 
     <RelativeLayout
         android:id="@+id/linearLayout1"

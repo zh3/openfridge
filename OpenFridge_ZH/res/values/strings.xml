@@ -5,15 +5,15 @@
     <string name="New_Item">Add</string>
     <string name="exp_button">Expiration List</string>
     <string name="shopping_button">Shopping List</string>
-    <string name="EditPost_button">Edit/Postpone</string>
+    <string name="EditPost_button">Edit</string>
     <string name="Done_button">Apply</string>
     <string name="Cancel_button">Cancel</string>
     <string name="Send_Shopping">Add to shopping list</string>
     <string name="Item_disposed">Thrown out</string>
     <string name="Item_consumed">Eaten</string>
-    <string name="expiredTitle">Spoiled Food</string>
-    <string name="nearlyTitle">Old Food</string>
-    <string name="goodTitle">Fresh Food</string>
+    <string name="expiredTitle">Expired</string>
+    <string name="nearlyTitle">Nearly Expired</string>
+    <string name="goodTitle">Fresh</string>
 <string name="shoppingTitle">Shopping List</string>
     <string-array name="Common_items">
         <item>Eggs</item>
