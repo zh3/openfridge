@@ -1,5 +1,6 @@
 package com.openfridge;
 
+import java.math.BigInteger;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -25,7 +26,16 @@ public class MainMenuActivity extends Activity implements Observer {
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String android_id = Secure.getString(getContentResolver(), Secure.ANDROID_ID);
-        DataClient.getInstance().setUID(Integer.parseInt(android_id==null?"1":android_id,16));
+        
+        BigInteger idBigInt = new BigInteger(
+                ((android_id==null) ? "1" : android_id), 16
+        );
+        
+        idBigInt 
+            = idBigInt.mod(new BigInteger(Integer.toString(Integer.MAX_VALUE)));
+        int idInt = idBigInt.intValue();
+        DataClient.getInstance().setUID(idInt);
+        
         //mainMenu = new Intent(this, MainMenuActivity.class);
         expirationList = new Intent(this, ExpirationListActivity.class);
         //expire = new Intent(this, ExpireActivity.class);
