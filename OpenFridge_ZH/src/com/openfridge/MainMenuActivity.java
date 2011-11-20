@@ -34,6 +34,10 @@ public class MainMenuActivity extends Activity implements Observer {
         idBigInt 
             = idBigInt.mod(new BigInteger(Integer.toString(Integer.MAX_VALUE)));
         int idInt = idBigInt.intValue();
+        
+        // TODO bring concept of users in line with the website to properly
+        // implement users by android id
+        idInt = 1;
         DataClient.getInstance().setUID(idInt);
         
         //mainMenu = new Intent(this, MainMenuActivity.class);

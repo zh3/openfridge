@@ -216,7 +216,17 @@ public class FridgeFood extends DataObject implements Cloneable {
 						expirationDate.get(Calendar.YEAR),
 						expirationMonth(),
 						expirationDate.get(Calendar.DAY_OF_MONTH)));
-		url.openStream().read();
+		//url.openStream().read();
+		
+		Scanner scan = new Scanner((new DataInputStream(url.openStream())));
+
+        int itemId = scan.nextInt();
+        String expirationState = scan.next();
+
+        setId(itemId);
+        DataClient.getInstance().removeFF(this);
+        DataClient.getInstance().addFF(
+                ExpState.valueOf(expirationState.trim().toUpperCase()), this);
 	}
 
 	public String fullString() {
