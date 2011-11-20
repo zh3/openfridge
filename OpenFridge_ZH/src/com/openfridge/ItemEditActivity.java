@@ -151,11 +151,13 @@ public class ItemEditActivity extends Activity {
 	    apply.setText(R.string.updateButtonTitle);
 	}
 
-	// Utility methods
+	// Utility methods 
+	//Returns simple string with YYYY-MM-DD where MM is actual month
+	//i.e. 1 based NOT zero based.
 	private String getSimpleDateString() {
         DatePicker dp = (DatePicker) findViewById(R.id.datePicker1);
         
-        return dp.getYear() + "-" + dp.getMonth() + "-" +dp.getDayOfMonth();
+        return dp.getYear() + "-" + (dp.getMonth()+1) + "-" +dp.getDayOfMonth();
 	}
 
 	// Callbacks

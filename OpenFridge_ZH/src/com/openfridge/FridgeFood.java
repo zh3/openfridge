@@ -33,10 +33,11 @@ public class FridgeFood extends DataObject implements Cloneable {
 	public FridgeFood(String description) {
 		this(description, new GregorianCalendar());
 	}
-
+	/* Not called by anything 
 	public FridgeFood(String description, String expirationDate) {
 		this(description, defaultDate(expirationDate, new GregorianCalendar()));
 	}
+	*/
 
 	public FridgeFood(String description, GregorianCalendar expirationDate) {
 		this(description, expirationDate, "", "");
@@ -97,7 +98,7 @@ public class FridgeFood extends DataObject implements Cloneable {
 
 		try {
 			int year = s.nextInt();
-			int month = s.nextInt();
+			int month = s.nextInt() - 1; //String from xml is 1-based
 			int day = s.nextInt();
 
 			// Return if only the date is included
